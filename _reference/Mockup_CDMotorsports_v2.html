@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDMotorsports — Every ride tells a story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1613; --sand:#B4642C; --cream:#F6F1E9; --paper:#FBF8F3;
+  --muted:#8c8375; --line:#E4DBCD; --white:#fff;
+  --disp:'Bricolage Grotesque',sans-serif; --sans:'Hanken Grotesk',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.6;
+  overflow-x:hidden;
+  background-image:radial-gradient(120% 80% at 50% -10%,#fff 0%,var(--paper) 45%,#efe7d9 100%);}
+/* subtle grain over everything */
+body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1280px;margin:0 auto;padding:0 34px}
+*{cursor:none}
+@media(hover:none){*{cursor:auto}}
+
+/* cursor */
+.cur,.curd{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%;mix-blend-mode:difference}
+.cur{width:7px;height:7px;background:#fff;transform:translate(-50%,-50%)}
+.curd{width:38px;height:38px;border:1px solid rgba(255,255,255,.6);transform:translate(-50%,-50%);
+  transition:width .25s,height .25s,background .25s,border-color .25s}
+.curd.big{width:78px;height:78px;background:rgba(255,255,255,.08)}
+.curd .lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--disp);font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#fff;opacity:0;transition:.2s}
+.curd.big .lbl{opacity:1}
+
+/* loader */
+#loader{position:fixed;inset:0;z-index:9000;background:#141008;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#loader .l1{font-family:var(--disp);font-weight:300;color:#fff;font-size:clamp(26px,5vw,54px);letter-spacing:.5px;overflow:hidden}
+#loader .l1 span{display:inline-block;transform:translateY(110%);opacity:0}
+#loader .bar{width:0;height:1px;background:var(--sand);margin-top:26px;transition:width 1.4s cubic-bezier(.7,0,.2,1)}
+body.loaded #loader{transform:translateY(-100%);transition:transform 1s cubic-bezier(.76,0,.24,1)}
+
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:200;padding:26px 0;transition:.4s;mix-blend-mode:difference}
+header.hide{transform:translateY(-100%)}
+.nav{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--disp);font-weight:500;font-size:20px;letter-spacing:.5px;color:#fff;text-transform:uppercase}
+.logo b{color:inherit}
+.menu{display:flex;gap:34px}
+.menu a{font-family:var(--sans);font-weight:500;font-size:13px;letter-spacing:1px;color:#fff;text-transform:uppercase;position:relative}
+.menu a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:1px;background:#fff;transition:.3s}
+.menu a:hover::after{width:100%}
+.burger{display:none;flex-direction:column;gap:6px}.burger span{width:26px;height:1.5px;background:#fff}
+
+/* hero */
+.hero{position:relative;height:100vh;min-height:640px;overflow:hidden;z-index:2}
+.hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero .poster{background:url('assets/img/hero_poster.jpg') center/cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,4,.35) 0%,rgba(10,8,4,.05) 35%,rgba(10,8,4,.55) 100%)}
+.hero-c{position:absolute;left:0;right:0;bottom:12vh;z-index:3;color:#fff}
+.hero-c .k{font-family:var(--sans);text-transform:uppercase;letter-spacing:5px;font-size:12px;opacity:.85;margin-bottom:18px;overflow:hidden}
+.hero h1{font-family:var(--disp);font-weight:300;font-size:clamp(42px,8.5vw,120px);line-height:.95;letter-spacing:-1px}
+.hero h1 .ln{display:block;overflow:hidden}
+.hero h1 .ln i{display:inline-block;font-style:normal;transform:translateY(110%)}
+.hero h1 em{font-style:italic;font-weight:400;color:#fff}
+.hero-c .sc{margin-top:26px;font-size:13px;letter-spacing:1px;opacity:.8;display:flex;align-items:center;gap:10px}
+.hero-c .sc::before{content:"";width:44px;height:1px;background:#fff;display:inline-block;animation:sc 2s infinite}
+@keyframes sc{0%,100%{opacity:.3;width:20px}50%{opacity:1;width:44px}}
+
+/* marquee */
+.marq{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:14px 0;border-top:1px solid rgba(255,255,255,.18);overflow:hidden;color:#fff}
+.marq .row{display:inline-flex;gap:28px;white-space:nowrap;animation:marq 26s linear infinite;font-family:var(--disp);text-transform:uppercase;letter-spacing:2px;font-size:14px;font-weight:300;opacity:.9}
+.marq .row span::after{content:"·";margin-left:28px;color:var(--sand)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* generic section */
+section{position:relative;z-index:2}
+.pad{padding:clamp(80px,12vw,160px) 0}
+.reveal{opacity:0;transform:translateY(38px);transition:opacity 1s cubic-bezier(.5,0,.2,1),transform 1s cubic-bezier(.5,0,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:4px;font-size:12px;color:var(--sand);font-weight:600}
+.big{font-family:var(--disp);font-weight:300;font-size:clamp(32px,5.2vw,70px);line-height:1.02;letter-spacing:-.5px}
+.big em{font-style:italic;font-weight:400;color:var(--sand)}
+
+/* intro statement */
+.intro{background:var(--paper)}
+.intro .wrap{display:grid;grid-template-columns:1.4fr .9fr;gap:60px;align-items:end}
+.intro p{color:#5f574b;font-size:17px;max-width:340px}
+.hr{height:1px;background:var(--line);margin:0}
+
+/* full-bleed parallax band */
+.band{position:relative;height:100vh;min-height:560px;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center}
+.band .bg{position:absolute;inset:-12% 0;background-size:cover;background-position:center;will-change:transform}
+.bandA .bg{background-image:url('assets/img/band.jpg')}
+.bandB .bg{background-image:url('assets/img/pin.jpg')}
+.band::after{content:"";position:absolute;inset:0;background:rgba(12,9,5,.42)}
+.band .t{position:relative;z-index:3;color:#fff;padding:0 24px}
+.band .t .big{color:#fff}
+
+/* raids horizontal */
+.raids{background:var(--cream);overflow:hidden}
+.raids .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;flex-wrap:wrap;gap:20px}
+.rtrack{display:flex;gap:26px;padding:0 34px 10px;overflow-x:auto;scroll-snap-type:x mandatory;
+  cursor:grab;scrollbar-width:none}
+.rtrack::-webkit-scrollbar{display:none}
+.rtrack.drag{cursor:grabbing}
+.rcard{flex:0 0 clamp(280px,34vw,440px);scroll-snap-align:start}
+.rcard .ph{position:relative;height:clamp(360px,48vw,560px);overflow:hidden;border-radius:2px}
+.rcard .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.5,0,.2,1)}
+.rcard:hover .ph img{transform:scale(1.06)}
+.rcard .idx{position:absolute;top:16px;left:18px;color:#fff;font-family:var(--disp);font-size:15px;letter-spacing:1px;z-index:2;mix-blend-mode:difference}
+.rcard .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(10,8,4,.6))}
+.rcard .cap{position:absolute;bottom:20px;left:20px;right:20px;z-index:2;color:#fff}
+.rcard .cap h3{font-family:var(--disp);font-weight:400;font-size:26px;line-height:1}
+.rcard .cap .meta{display:flex;gap:16px;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-top:10px;opacity:.9}
+.rcard .cap .meta b{color:#fff;font-weight:600}
+.rcard .price{margin-top:14px;font-family:var(--sans);font-size:13px;letter-spacing:.5px;color:#4b4238}
+.rcard .price b{font-family:var(--disp);font-size:19px;color:var(--ink)}
+.drag-note{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--muted)}
+
+/* philosophy */
+.philo{background:var(--paper)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line)}
+.pitem{padding:34px 22px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pitem:nth-child(3n){border-right:none}
+.pitem:last-child{border-right:none}
+.pitem .n{font-family:var(--disp);font-size:13px;color:var(--sand);letter-spacing:1px}
+.pitem h4{font-family:var(--disp);font-weight:400;font-size:22px;margin:16px 0 10px;line-height:1.05}
+.pitem p{color:#6b6255;font-size:14px}
+
+/* about */
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.about .im{position:relative;overflow:hidden}
+.about .im img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.about p{color:#5f574b;margin:18px 0;max-width:400px}
+.sig{font-family:var(--disp);font-style:italic;color:var(--sand);font-size:18px}
+
+/* gallery */
+.gal{background:var(--cream)}
+.ggrid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:14vw;gap:14px}
+.ggrid a{overflow:hidden;position:relative;border-radius:2px}
+.ggrid img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.5,0,.2,1)}
+.ggrid a:hover img{transform:scale(1.07)}
+.s6{grid-column:span 6}.s4{grid-column:span 4}.s3{grid-column:span 3}.s5{grid-column:span 5}.s7{grid-column:span 7}
+.r2{grid-row:span 2}
+
+/* infos */
+.infos .wrap{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.infos .im img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.ilist{list-style:none;margin-top:20px}
+.ilist li{padding:14px 0;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:baseline;font-size:15px}
+.ilist li b{font-family:var(--disp);color:var(--sand);font-size:13px;min-width:24px}
+
+/* contact */
+.contact{position:relative;overflow:hidden;color:#fff}
+.contact .bg{position:absolute;inset:0;background:url('assets/img/team.jpg') center/cover}
+.contact::after{content:"";position:absolute;inset:0;background:rgba(12,9,5,.62)}
+.contact .wrap{position:relative;z-index:3;text-align:center}
+.contact .big{color:#fff}
+.contact .lead{color:#e8ded0;max-width:440px;margin:18px auto 34px}
+.cbtns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.btn{font-family:var(--sans);text-transform:uppercase;letter-spacing:2px;font-size:13px;font-weight:600;padding:16px 34px;border:1px solid #fff;color:#fff;border-radius:1px;transition:.3s}
+.btn:hover{background:#fff;color:var(--ink)}
+.btn.wa{background:#25D366;border-color:#25D366}
+.btn.wa:hover{background:#1eb257;color:#fff}
+.cmeta{margin-top:30px;font-size:14px;letter-spacing:1px;color:#e8ded0}
+
+/* footer */
+footer{background:#141008;color:#8c8073;padding:60px 0 30px;position:relative;z-index:2}
+footer::before{content:"";position:absolute;inset:0;opacity:.06;background-image:url('assets/img/g6.jpg');background-size:cover;background-position:center}
+footer .wrap{position:relative;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
+.flogo{font-family:var(--disp);font-size:24px;color:#fff;text-transform:uppercase;letter-spacing:1px}
+.fmenu{display:flex;gap:22px;flex-wrap:wrap}
+.fmenu a{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:#cbbfae}
+.fbtm{position:relative;text-align:center;font-size:11px;color:#6f6455;margin-top:30px;letter-spacing:.5px}
+
+/* mock bar */
+.mockbar{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(20,16,8,.85);backdrop-filter:blur(6px);
+  color:#cbb18d;text-align:center;font-family:var(--sans);text-transform:uppercase;letter-spacing:2px;font-size:10px;padding:7px}
+
+/* raid link */
+.rlink{display:inline-block;margin-top:12px;font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:12px;color:var(--sand)}
+.rlink:hover{color:var(--ink)}
+/* maroc */
+.maroc{background:var(--paper)}
+.maroc .lede{max-width:560px;margin-top:18px;color:#5f574b;font-size:17px}
+.mstrip{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px;margin-top:44px}
+.mstrip figure{position:relative;overflow:hidden;border-radius:2px}
+.mstrip img{width:100%;height:clamp(300px,34vw,460px);object-fit:cover;transition:transform .8s cubic-bezier(.5,0,.2,1)}
+.mstrip figure:hover img{transform:scale(1.06)}
+.mstrip figcaption{position:absolute;left:16px;bottom:14px;color:#fff;font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:13px;z-index:2}
+.mstrip figure::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,8,4,.55))}
+.mnote{margin-top:18px;font-size:12px;color:var(--muted);font-style:italic}
+.mfacts{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:44px;max-width:900px}
+.mfacts h4{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;color:var(--sand);font-size:14px;margin-bottom:8px}
+.mfacts p{color:#5f574b;font-size:15px}
+@media(max-width:960px){.mstrip{grid-template-columns:1fr 1fr}.mstrip figure:first-child{grid-column:span 2}.mfacts{grid-template-columns:1fr;gap:26px}}
+/* prep */
+.prepwrap{display:block !important}
+.prep{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:34px;border-top:1px solid var(--line);padding-top:44px}
+.prep h4{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;color:var(--sand);font-size:14px;margin-bottom:14px}
+.prep ul{list-style:none}
+.prep li{padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;color:#4a443c}
+.prep p{font-size:14px;color:#5f574b;margin-bottom:10px}
+@media(max-width:960px){.prep{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:600px){.prep{grid-template-columns:1fr}}
+/* lightbox */
+#lb{position:fixed;inset:0;z-index:9500;background:rgba(8,6,3,.95);display:none;align-items:center;justify-content:center}
+#lb img{max-width:92vw;max-height:90vh}
+
+@media(max-width:960px){
+  .menu{display:none}.burger{display:flex}
+  .menu.open{display:flex;position:fixed;inset:0;background:#141008;flex-direction:column;align-items:center;justify-content:center;gap:26px;mix-blend-mode:normal}
+  .menu.open a{font-size:20px}
+  .intro .wrap,.about .wrap,.infos .wrap{grid-template-columns:1fr;gap:34px}
+  .pgrid{grid-template-columns:1fr 1fr}.pitem:nth-child(2){border-right:none}
+  .ggrid{grid-auto-rows:32vw}.s6,.s4,.s3,.s5,.s7{grid-column:span 6}
+  .band .bg{background-attachment:scroll}
+}
+</style>
+</head>
+<body>
+
+<div class="cur"></div><div class="curd"><span class="lbl">voir</span></div>
+
+<div id="loader"><div class="l1" id="lw"></div><div class="bar" id="lbar"></div></div>
+
+<header id="hd">
+  <div class="wrap nav">
+    <div class="logo">CD<b>Motorsports</b></div>
+    <nav class="menu" id="menu">
+      <a href="#raids">Raids</a>
+      <a href="Moto_KOVE-450-Rally_CDMotorsports.html">La Moto</a>
+      <a href="#maroc">Le Maroc</a>
+      <a href="#infos">Infos</a>
+      <a href="Actualites_CDMotorsports.html">Actualités</a>
+      <a href="Boutique_CDMotorsports.html">Boutique</a>
+      <a href="Reserver_CDMotorsports.html">Réserver</a>
+    </nav>
+    <div class="burger" id="burger"><span></span><span></span></div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="poster"></div>
+  <video autoplay muted loop playsinline poster="assets/img/hero_poster.jpg"><source src="hero-video.mp4" type="video/mp4"></video>
+  <div class="wrap hero-c">
+    <div class="k">CDMotorsports · Raids moto · Maroc</div>
+    <h1><span class="ln"><i>Every ride</i></span><span class="ln"><i>tells a <em>story</em></i></span></h1>
+    <div style="font-family:var(--disp);text-transform:uppercase;letter-spacing:3px;font-size:clamp(12px,1.4vw,15px);color:#e8c9a6;margin-top:16px">Live the rally. Ride the legend.</div>
+    <div class="sc">Défilez pour explorer</div>
+  </div>
+  <div class="marq"><div class="row" id="mrow"></div></div>
+</section>
+
+<!-- INTRO -->
+<section class="intro pad">
+  <div class="wrap">
+    <div class="reveal"><div class="eyebrow" style="margin-bottom:24px">Bienvenue chez CDMotorsports</div>
+      <div class="big">Ce n'est pas simplement<br>rouler au Maroc. C'est<br><em>vivre le rallye-raid.</em></div></div>
+    <p class="reveal">Près de 8 000 km de pistes, au guidon d'une véritable machine de rallye : la KOVE 450 Rally. Des montagnes de l'Atlas aux dunes du Sahara, chaque journée vous plonge dans un environnement différent. Votre histoire commence ici.</p>
+  </div>
+</section>
+
+<!-- BAND A -->
+<section class="band bandA"><div class="bg" data-parallax></div>
+  <div class="t reveal"><div class="big">Là où la piste s'efface,<br>l'aventure <em>continue.</em></div></div>
+</section>
+
+<!-- RAIDS -->
+<section class="raids pad" id="raids">
+  <div class="wrap head">
+    <div class="reveal"><div class="eyebrow" style="margin-bottom:16px">Les raids</div>
+      <div class="big">Choisissez votre <em>terrain</em></div></div>
+    <div class="drag-note reveal">↔ Glissez pour explorer</div>
+  </div>
+  <div class="rtrack" id="rtrack">
+    <div class="rcard"><div class="ph"><span class="idx">01</span><img src="assets/img/raid_dune.jpg" alt=""><div class="cap"><h3>Odyssée du Sud</h3><div class="meta"><span><b>7</b> jours</span><span>Confirmé</span><span>1 480 km</span></div></div></div><div class="price">Prix &amp; dates <b>sur demande</b></div><a class="rlink" href="Raid_1-odyssee-du-sud_CDMotorsports.html">Voir le raid →</a></div>
+    <div class="rcard"><div class="ph"><span class="idx">02</span><img src="assets/img/raid_mont.jpg" alt=""><div class="cap"><h3>Boucle de l'Anti-Atlas</h3><div class="meta"><span><b>5</b> jours</span><span>Intermédiaire</span><span>924 km</span></div></div></div><div class="price">Prix &amp; dates <b>sur demande</b></div><a class="rlink" href="Raid_2-boucle-anti-atlas_CDMotorsports.html">Voir le raid →</a></div>
+    <div class="rcard"><div class="ph"><span class="idx">03</span><img src="assets/img/pin.jpg" alt=""><div class="cap"><h3>Cap Merzouga</h3><div class="meta"><span><b>6</b> jours</span><span>Confirmé</span><span>1 232 km</span></div></div></div><div class="price">Prix &amp; dates <b>sur demande</b></div><a class="rlink" href="Raid_3-cap-merzouga_CDMotorsports.html">Voir le raid →</a></div>
+    <div class="rcard"><div class="ph"><span class="idx">04</span><img src="assets/img/raid_cote.jpg" alt=""><div class="cap"><h3>Océan &amp; Atlas</h3><div class="meta"><span><b>6</b> jours</span><span>Confirmé</span><span>1 290 km</span></div></div></div><div class="price">Prix &amp; dates <b>sur demande</b></div><a class="rlink" href="Raid_4-ocean-atlas_CDMotorsports.html">Voir le raid →</a></div>
+    <div class="rcard"><div class="ph"><span class="idx">05</span><img src="assets/img/band.jpg" alt=""><div class="cap"><h3>Escapade Drâa</h3><div class="meta"><span><b>3</b> jours</span><span>Confirmé</span><span>800 km</span></div></div></div><div class="price">Prix &amp; dates <b>sur demande</b></div><a class="rlink" href="Raid_5-escapade-draa_CDMotorsports.html">Voir le raid →</a></div>
+    <div class="rcard"><div class="ph"><span class="idx">06</span><img src="assets/img/g9.jpg" alt=""><div class="cap"><h3>Échappée Atlantique</h3><div class="meta"><span><b>3</b> jours</span><span>Intermédiaire</span><span>665 km</span></div></div></div><div class="price">Prix &amp; dates <b>sur demande</b></div><a class="rlink" href="Raid_6-echappee-atlantique_CDMotorsports.html">Voir le raid →</a></div>
+    <div class="rcard"><div class="ph"><span class="idx">07</span><img src="assets/img/g8.jpg" alt=""><div class="cap"><h3>Immersion Erg</h3><div class="meta"><span><b>3</b> jours</span><span>Découverte</span><span>460 km</span></div></div></div><div class="price">Prix &amp; dates <b>sur demande</b></div><a class="rlink" href="Raid_7-immersion-erg_CDMotorsports.html">Voir le raid →</a></div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philo pad">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:30px"><div class="eyebrow" style="margin-bottom:16px">Pourquoi CDMotorsports</div>
+      <div class="big">Ce n'est pas un voyage en moto.<br>C'est une <em>immersion.</em></div></div>
+    <div class="pgrid reveal">
+      <div class="pitem"><div class="n">01</div><h4>Une vraie machine de rallye</h4><p>Pas une moto de tourisme transformée : vous prenez le guidon d'une KOVE 450 Rally, conçue pour le rallye-raid.</p></div>
+      <div class="pitem"><div class="n">02</div><h4>8 000 km de terrain de jeu</h4><p>Pistes rapides, pierres, sable, montagnes, plateaux, dunes : toutes les facettes de la discipline.</p></div>
+      <div class="pitem"><div class="n">03</div><h4>L'héritage du Dakar</h4><p>Le Maroc a bâti la légende du rallye-raid. Ici, l'histoire n'est pas dans un musée — elle est sous vos roues.</p></div>
+      <div class="pitem"><div class="n">04</div><h4>L'aventure avant la performance</h4><p>Pas besoin du chrono. Progresser, gérer son effort, comprendre le terrain, repousser ses limites.</p></div>
+      <div class="pitem"><div class="n">05</div><h4>Un encadrement humain</h4><p>Jamais un simple numéro dans un groupe. On vous accompagne pour vivre l'aventure avec sérénité.</p></div>
+      <div class="pitem"><div class="n">06</div><h4>Le Maroc autrement</h4><p>Paysages, villages, rencontres, traditions. Un Maroc qui ne se visite pas depuis une autoroute, mais par les pistes.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about pad" id="apropos">
+  <div class="wrap">
+    <div class="im reveal"><img src="assets/img/apropos.jpg" alt="Edouard Charles De Moor"></div>
+    <div class="reveal"><div class="eyebrow" style="margin-bottom:20px">L'histoire</div>
+      <div class="big" style="font-size:clamp(28px,3.8vw,48px)">Apprendre à lire le terrain.<br>S'adapter. Se <em>dépasser.</em></div>
+      <p>CDMotorsports vous ouvre les portes de l'univers du rallye-raid et vous emmène au cœur du Maroc, sur près de 8 000 km de pistes. Ce n'est pas seulement rouler au Maroc : c'est vivre le rallye-raid, apprendre, partager, et découvrir un Maroc authentique, loin des itinéraires conventionnels.</p>
+      <div class="sig">Edouard Charles De Moor — Fondateur</div>
+    </div>
+  </div>
+</section>
+
+<!-- BAND B -->
+<section class="band bandB"><div class="bg" data-parallax></div>
+  <div class="t reveal"><div class="big">Les kilomètres disparaissent.<br>Les <em>histoires restent.</em></div></div>
+</section>
+
+<!-- LE MAROC -->
+<section class="maroc pad" id="maroc">
+  <div class="wrap">
+    <div class="reveal"><div class="eyebrow" style="margin-bottom:16px">Le Maroc</div>
+      <div class="big">Bien plus qu'un terrain<br>de jeu. Une <em>culture.</em></div>
+      <p class="lede">Villages berbères, marchés, thé à la menthe et hospitalité légendaire. Ici, la piste traverse une terre vivante — et chaque étape est une rencontre.</p>
+      <div class="mfacts">
+        <div><h4>Le pays</h4><p>Le Maroc — « Al Maghrib » — occupe l'extrême ouest de l'Afrique du Nord ; capitale Rabat. Bordé par la Méditerranée au nord et l'océan Atlantique à l'ouest (près de 3 000 km de côtes), il est fermé au sud et à l'est par le désert et les montagnes. Nos raids se déroulent dans le Sud, autour d'Agadir, aux portes de l'Anti-Atlas.</p></div>
+        <div><h4>Le climat</h4><p>Grâce à sa longue façade atlantique et à ses chaînes de montagnes, le Maroc offre une grande diversité climatique. La côte reste douce et maritime toute l'année ; à l'intérieur des terres, le climat varie selon l'altitude — journées chaudes et nuits fraîches dans le désert.</p></div>
+      </div></div>
+    <div class="mstrip reveal">
+      <figure><img src="assets/img/village.jpg" alt="Village de l'Atlas"><figcaption>Villages de l'Atlas</figcaption></figure>
+      <figure><img src="assets/img/g1.jpg" alt="Désert et dromadaires"><figcaption>Portes du Sahara</figcaption></figure>
+      <figure><img src="assets/img/vast.jpg" alt="Immensité des dunes"><figcaption>L'immensité</figcaption></figure>
+    </div>
+    <p class="mnote reveal">Emplacements prévus pour tes photos culturelles (médina, gastronomie, artisanat, portraits) à intégrer.</p>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gal pad" id="galerie">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:40px"><div class="eyebrow" style="margin-bottom:16px">Galerie</div>
+      <div class="big">Un avant-goût du <em>terrain</em></div></div>
+    <div class="ggrid reveal">
+      <a class="s6 r2"><img src="assets/img/g4.jpg" alt=""></a>
+      <a class="s3"><img src="assets/img/g1.jpg" alt=""></a>
+      <a class="s3"><img src="assets/img/g3.jpg" alt=""></a>
+      <a class="s3"><img src="assets/img/g2.jpg" alt=""></a>
+      <a class="s3"><img src="assets/img/g9.jpg" alt=""></a>
+      <a class="s5"><img src="assets/img/g5.jpg" alt=""></a>
+      <a class="s7"><img src="assets/img/g7.jpg" alt=""></a>
+      <a class="s4"><img src="assets/img/g10.jpg" alt=""></a>
+      <a class="s4"><img src="assets/img/infos.jpg" alt=""></a>
+      <a class="s4"><img src="assets/img/g6.jpg" alt=""></a>
+    </div>
+  </div>
+</section>
+
+<!-- INFOS -->
+<section class="infos pad" id="infos">
+  <div class="wrap">
+    <div class="reveal"><div class="eyebrow" style="margin-bottom:20px">Infos pratiques</div>
+      <div class="big" style="font-size:clamp(28px,3.8vw,48px)">Tout est prévu.<br><em>Vous roulez.</em></div>
+      <ul class="ilist">
+        <li><b>01</b> Encadrement par guides expérimentés</li>
+        <li><b>02</b> Véhicule d'assistance 4×4 &amp; mécanicien</li>
+        <li><b>03</b> Bivouac, riad &amp; pension complète</li>
+        <li><b>04</b> Road-book, trace GPS &amp; transferts</li>
+      </ul>
+    </div>
+    <div class="im reveal"><img src="assets/img/infos.jpg" alt="Assistance et logistique"></div>
+  </div>
+  <div class="wrap prepwrap">
+    <div class="prep reveal">
+      <div>
+        <h4>Niveau requis</h4>
+        <p>Des pistes accessibles au néophyte encadré comme au pilote confirmé. La pratique du tout-terrain loisir, cross ou enduro suffit.</p>
+        <p>Pour les débutants, un parcours adapté et des conseils sont proposés (groupe de 5 pilotes min.).</p>
+      </div>
+      <div>
+        <h4>Équipement obligatoire</h4>
+        <ul>
+          <li>Casque &amp; lunettes tout-terrain</li>
+          <li>Veste TT ou gilet de protection + coudières</li>
+          <li>Gants · Bottes TT</li>
+          <li>Pantalon TT + genouillères</li>
+          <li>Collier cervical / neck brace</li>
+          <li>Lampe frontale</li>
+        </ul>
+      </div>
+      <div>
+        <h4>À ne pas oublier</h4>
+        <ul>
+          <li>Camel bag ou petit sac à dos</li>
+          <li>Serviette de toilette</li>
+          <li>Casquette &amp; maillot de bain</li>
+          <li>Anti-moustique</li>
+          <li>Stick lèvres</li>
+          <li>Pansements anti-ampoules (Compeed)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Hébergement &amp; repas</h4>
+        <p>Hôtels et riads « tout confort » (certains avec piscine) et bivouacs organisés dans des sites magiques, du 1<sup>er</sup> au dernier jour.</p>
+        <p>Pension complète : petits-déjeuners, déjeuners et dîners. Tajines, couscous, oranges et thé à la menthe au programme.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact pad" id="contact">
+  <div class="bg" data-parallax></div>
+  <div class="wrap reveal">
+    <div class="eyebrow" style="margin-bottom:20px;color:#e8c9a6">Contact</div>
+    <div class="big">Prêt à écrire<br>votre <em>histoire ?</em></div>
+    <p class="lead">Dites-nous votre niveau et vos dates. On vous propose le raid qui vous ressemble.</p>
+    <div class="cbtns">
+      <a href="Reserver_CDMotorsports.html" class="btn wa">WhatsApp</a>
+      <a href="Reserver_CDMotorsports.html" class="btn">Demander une date</a>
+    </div>
+    <div class="cmeta">[Téléphone] · [email@cdmotorsports.com] · [Instagram]</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="flogo">CDMotorsports</div>
+    <nav class="fmenu">
+      <a href="#raids">Raids</a><a href="Moto_KOVE-450-Rally_CDMotorsports.html">La Moto</a>
+      <a href="Option-4x4_CDMotorsports.html">Option 4×4</a><a href="#maroc">Le Maroc</a>
+      <a href="#infos">Infos</a><a href="Actualites_CDMotorsports.html">Actualités</a>
+      <a href="Partenaires_CDMotorsports.html">Partenaires</a><a href="Boutique_CDMotorsports.html">Boutique</a><a href="Reserver_CDMotorsports.html">Réserver</a>
+      <a href="CGV_CDMotorsports.html">CGV</a><a href="Mentions-Legales_CDMotorsports.html">Mentions légales</a>
+      <a href="Confidentialite_CDMotorsports.html">Confidentialité</a><a href="#contact">Contact</a>
+    </nav>
+  </div>
+  <div class="fbtm">© 2026 CDMotorsports — Raids moto au Maroc · Maquette par Harold Pirlot de Corbion</div>
+</footer>
+
+<div class="mockbar">Maquette créative — textes, dates et tarifs à titre indicatif · vidéo &amp; photos © CDMotorsports</div>
+<div id="lb"><img src="" alt=""></div>
+
+<script>
+// loader word reveal
+(function(){
+  const words="Every ride tells a story".split(" ");
+  const lw=document.getElementById('lw');
+  lw.innerHTML=words.map(w=>'<span>'+w+'&nbsp;</span>').join('');
+  const sp=lw.querySelectorAll('span');
+  sp.forEach((s,i)=>{s.animate([{transform:'translateY(110%)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:600,delay:200+i*140,fill:'forwards',easing:'cubic-bezier(.5,0,.2,1)'})});
+  setTimeout(()=>document.getElementById('lbar').style.width='180px',150);
+  window.addEventListener('load',start); setTimeout(start,2600);
+  let done=false;
+  function start(){ if(done)return; done=true;
+    setTimeout(()=>{document.body.classList.add('loaded'); heroIn();},1600);
+  }
+})();
+// hero headline reveal
+function heroIn(){
+  document.querySelectorAll('.hero h1 .ln i, .hero-c .k').forEach((el,i)=>{
+    el.animate([{transform:'translateY(110%)',opacity:0},{transform:'translateY(0)',opacity:1}],
+      {duration:900,delay:i*130,fill:'forwards',easing:'cubic-bezier(.5,0,.2,1)'});
+  });
+}
+// marquee content
+document.getElementById('mrow').innerHTML=(function(){
+  const w=["Dunes","Erg Chegaga","Bivouac","Anti-Atlas","Road-book","Océan","Grand Sud","Pistes"];
+  const one=w.map(x=>'<span>'+x+'</span>').join('');
+  return one+one;
+})();
+// custom cursor
+const cur=document.querySelector('.cur'),curd=document.querySelector('.curd');
+let mx=innerWidth/2,my=innerHeight/2,dx=mx,dy=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){dx+=(mx-dx)*.15;dy+=(my-dy)*.15;curd.style.left=dx+'px';curd.style.top=dy+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,.rcard,.ggrid a,.btn,.burger').forEach(el=>{
+  el.addEventListener('mouseenter',()=>curd.classList.add('big'));
+  el.addEventListener('mouseleave',()=>curd.classList.remove('big'));
+});
+// header hide on scroll down
+let last=0;const hd=document.getElementById('hd');
+addEventListener('scroll',()=>{const y=scrollY;hd.classList.toggle('hide',y>last&&y>400);last=y;});
+// reveal observer
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+// parallax
+const px=[...document.querySelectorAll('[data-parallax]')];
+addEventListener('scroll',()=>{px.forEach(el=>{const r=el.parentElement.getBoundingClientRect();const off=(r.top+r.height/2-innerHeight/2)*-.12;el.style.transform='translateY('+off+'px) scale(1.12)';});},{passive:true});
+// raids drag scroll + whole-card click
+const rt=document.getElementById('rtrack');let down=false,sx,sl,moved=false;
+rt.addEventListener('pointerdown',e=>{down=true;moved=false;rt.classList.add('drag');sx=e.pageX;sl=rt.scrollLeft});
+addEventListener('pointerup',()=>{down=false;rt.classList.remove('drag')});
+addEventListener('pointermove',e=>{if(!down)return;if(Math.abs(e.pageX-sx)>6)moved=true;rt.scrollLeft=sl-(e.pageX-sx)*1.4});
+rt.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){rt.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+document.querySelectorAll('.rcard').forEach(c=>{c.addEventListener('click',e=>{
+  if(moved){e.preventDefault();return;}
+  const a=c.querySelector('.rlink'); if(a) location.href=a.getAttribute('href');
+});});
+// menu
+document.getElementById('burger').onclick=()=>document.getElementById('menu').classList.toggle('open');
+document.querySelectorAll('.menu a').forEach(a=>a.onclick=()=>document.getElementById('menu').classList.remove('open'));
+// lightbox
+const lb=document.getElementById('lb'),lbi=lb.querySelector('img');
+document.querySelectorAll('.ggrid a').forEach(a=>a.onclick=e=>{e.preventDefault();lbi.src=a.querySelector('img').src;lb.style.display='flex'});
+lb.onclick=()=>lb.style.display='none';
+</script>
+</body>
+</html>
