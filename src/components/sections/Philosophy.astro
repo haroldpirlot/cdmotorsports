@@ -1,0 +1,30 @@
+---
+const items = [
+  { n: '01', h: 'Une vraie machine de rallye',    p: "Pas une moto de tourisme transformée : vous prenez le guidon d'une KOVE 450 Rally, conçue pour le rallye-raid." },
+  { n: '02', h: '8 000 km de terrain de jeu',      p: 'Pistes rapides, pierres, sable, montagnes, plateaux, dunes : toutes les facettes de la discipline.' },
+  { n: '03', h: "L'héritage du Dakar",             p: "Le Maroc a bâti la légende du rallye-raid. Ici, l'histoire n'est pas dans un musée — elle est sous vos roues." },
+  { n: '04', h: "L'aventure avant la performance", p: 'Pas besoin du chrono. Progresser, gérer son effort, comprendre le terrain, repousser ses limites.' },
+  { n: '05', h: 'Un encadrement humain',           p: "Jamais un simple numéro dans un groupe. On vous accompagne pour vivre l'aventure avec sérénité." },
+  { n: '06', h: 'Le Maroc autrement',              p: 'Paysages, villages, rencontres, traditions. Un Maroc qui ne se visite pas depuis une autoroute, mais par les pistes.' },
+];
+---
+<section class="philo pad">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:30px">
+      <div class="eyebrow" style="margin-bottom:16px">Pourquoi CDMotorsports</div>
+      <div class="big">
+        Ce n'est pas un voyage en moto.<br />
+        C'est une <em>immersion.</em>
+      </div>
+    </div>
+    <div class="pgrid reveal">
+      {items.map((it) => (
+        <div class="pitem">
+          <div class="n">{it.n}</div>
+          <h4>{it.h}</h4>
+          <p>{it.p}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

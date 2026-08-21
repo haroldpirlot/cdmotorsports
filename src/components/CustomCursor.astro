@@ -1,0 +1,73 @@
+---
+---
+<div class="cur"></div>
+<div class="curd"><span class="lbl">voir</span></div>
+
+<style is:global>
+  .cur, .curd {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
+    border-radius: 50%;
+    mix-blend-mode: difference;
+  }
+  .cur {
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    transform: translate(-50%, -50%);
+  }
+  .curd {
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, .6);
+    transform: translate(-50%, -50%);
+    transition: width .25s, height .25s, background .25s, border-color .25s;
+  }
+  .curd.big {
+    width: 78px;
+    height: 78px;
+    background: rgba(255, 255, 255, .08);
+  }
+  .curd .lbl {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--disp);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+    opacity: 0;
+    transition: .2s;
+  }
+  .curd.big .lbl { opacity: 1; }
+</style>
+
+<script>
+  const cur = document.querySelector<HTMLElement>('.cur');
+  const curd = document.querySelector<HTMLElement>('.curd');
+  if (cur && curd) {
+    let mx = innerWidth / 2, my = innerHeight / 2, dx = mx, dy = my;
+    addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.left = mx + 'px';
+      cur.style.top = my + 'px';
+    });
+    (function loop() {
+      dx += (mx - dx) * .15;
+      dy += (my - dy) * .15;
+      curd.style.left = dx + 'px';
+      curd.style.top = dy + 'px';
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a, .rcard, .ggrid a, .btn, .burger').forEach((el) => {
+      el.addEventListener('mouseenter', () => curd.classList.add('big'));
+      el.addEventListener('mouseleave', () => curd.classList.remove('big'));
+    });
+  }
+</script>

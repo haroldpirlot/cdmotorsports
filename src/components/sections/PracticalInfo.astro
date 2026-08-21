@@ -1,0 +1,69 @@
+---
+const points = [
+  'Encadrement par guides expérimentés',
+  "Véhicule d'assistance 4×4 & mécanicien",
+  'Bivouac, riad & pension complète',
+  'Road-book, trace GPS & transferts',
+];
+const equipment = [
+  'Casque & lunettes tout-terrain',
+  'Veste TT ou gilet de protection + coudières',
+  'Gants · Bottes TT',
+  'Pantalon TT + genouillères',
+  'Collier cervical / neck brace',
+  'Lampe frontale',
+];
+const extras = [
+  'Camel bag ou petit sac à dos',
+  'Serviette de toilette',
+  'Casquette & maillot de bain',
+  'Anti-moustique',
+  'Stick lèvres',
+  'Pansements anti-ampoules (Compeed)',
+];
+---
+<section class="infos pad" id="infos">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow" style="margin-bottom:20px">Infos pratiques</div>
+      <div class="big" style="font-size:clamp(28px,3.8vw,48px)">
+        Tout est prévu.<br />
+        <em>Vous roulez.</em>
+      </div>
+      <ul class="ilist">
+        {points.map((p, i) => (
+          <li><b>{String(i + 1).padStart(2, '0')}</b> {p}</li>
+        ))}
+      </ul>
+    </div>
+    <div class="im reveal">
+      <img src="/img/infos.jpg" alt="Assistance et logistique" />
+    </div>
+  </div>
+  <div class="wrap prepwrap">
+    <div class="prep reveal">
+      <div>
+        <h4>Niveau requis</h4>
+        <p>Des pistes accessibles au néophyte encadré comme au pilote confirmé. La pratique du tout-terrain loisir, cross ou enduro suffit.</p>
+        <p>Pour les débutants, un parcours adapté et des conseils sont proposés (groupe de 5 pilotes min.).</p>
+      </div>
+      <div>
+        <h4>Équipement obligatoire</h4>
+        <ul>
+          {equipment.map((e) => <li>{e}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h4>À ne pas oublier</h4>
+        <ul>
+          {extras.map((e) => <li>{e}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h4>Hébergement &amp; repas</h4>
+        <p>Hôtels et riads « tout confort » (certains avec piscine) et bivouacs organisés dans des sites magiques, du 1<sup>er</sup> au dernier jour.</p>
+        <p>Pension complète : petits-déjeuners, déjeuners et dîners. Tajines, couscous, oranges et thé à la menthe au programme.</p>
+      </div>
+    </div>
+  </div>
+</section>

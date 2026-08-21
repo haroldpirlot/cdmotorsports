@@ -1,0 +1,50 @@
+---
+const strip = [
+  { img: '/img/village.jpg', alt: "Village de l'Atlas",   caption: "Villages de l'Atlas" },
+  { img: '/img/g1.jpg',      alt: 'Désert et dromadaires', caption: 'Portes du Sahara' },
+  { img: '/img/vast.jpg',    alt: 'Immensité des dunes',   caption: "L'immensité" },
+];
+---
+<section class="maroc pad" id="maroc">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow" style="margin-bottom:16px">Le Maroc</div>
+      <div class="big">
+        Bien plus qu'un terrain<br />
+        de jeu. Une <em>culture.</em>
+      </div>
+      <p class="lede">
+        Villages berbères, marchés, thé à la menthe et hospitalité légendaire. Ici, la piste
+        traverse une terre vivante — et chaque étape est une rencontre.
+      </p>
+      <div class="mfacts">
+        <div>
+          <h4>Le pays</h4>
+          <p>
+            Le Maroc — « Al Maghrib » — occupe l'extrême ouest de l'Afrique du Nord ; capitale Rabat.
+            Bordé par la Méditerranée au nord et l'océan Atlantique à l'ouest (près de 3 000 km de côtes),
+            il est fermé au sud et à l'est par le désert et les montagnes. Nos raids se déroulent dans
+            le Sud, autour d'Agadir, aux portes de l'Anti-Atlas.
+          </p>
+        </div>
+        <div>
+          <h4>Le climat</h4>
+          <p>
+            Grâce à sa longue façade atlantique et à ses chaînes de montagnes, le Maroc offre une
+            grande diversité climatique. La côte reste douce et maritime toute l'année ; à l'intérieur
+            des terres, le climat varie selon l'altitude — journées chaudes et nuits fraîches dans le
+            désert.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="mstrip reveal">
+      {strip.map((s) => (
+        <figure>
+          <img src={s.img} alt={s.alt} />
+          <figcaption>{s.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>

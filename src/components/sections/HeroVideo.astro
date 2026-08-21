@@ -1,0 +1,38 @@
+---
+const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-book', 'Océan', 'Grand Sud', 'Pistes'];
+---
+<section class="hero" id="top">
+  <div class="poster"></div>
+  <video autoplay muted loop playsinline poster="/img/hero_poster.jpg">
+    <source src="/hero-video.mp4" type="video/mp4" />
+  </video>
+  <div class="wrap hero-c">
+    <div class="k">CDMotorsports · Raids moto · Maroc</div>
+    <h1>
+      <span class="ln"><i>Every ride</i></span>
+      <span class="ln"><i>tells a <em>story</em></i></span>
+    </h1>
+    <div class="tagline">Live the rally. Ride the legend.</div>
+    <div class="sc">Défilez pour explorer</div>
+  </div>
+  <div class="marq">
+    <div class="row" id="mrow">
+      {[...marqueeWords, ...marqueeWords].map((w) => <span>{w}</span>)}
+    </div>
+  </div>
+</section>
+
+<script>
+  function heroIn() {
+    document.querySelectorAll('.hero h1 .ln i, .hero-c .k').forEach((el, i) => {
+      (el as HTMLElement).animate(
+        [
+          { transform: 'translateY(110%)', opacity: 0 },
+          { transform: 'translateY(0)', opacity: 1 },
+        ],
+        { duration: 900, delay: i * 130, fill: 'forwards', easing: 'cubic-bezier(.5,0,.2,1)' }
+      );
+    });
+  }
+  document.addEventListener('cdm:loaded', heroIn);
+</script>

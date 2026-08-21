@@ -1,0 +1,117 @@
+---
+const nav = [
+  { label: 'Raids', href: '/#raids' },
+  { label: 'La Moto', href: '/moto-kove-450-rally' },
+  { label: 'Le Maroc', href: '/#maroc' },
+  { label: 'Infos', href: '/#infos' },
+  { label: 'Actualités', href: '/actualites' },
+  { label: 'Boutique', href: '/boutique' },
+  { label: 'Réserver', href: '/reserver' },
+];
+---
+<header id="hd">
+  <div class="wrap nav">
+    <a href="/" class="logo">CD<b>Motorsports</b></a>
+    <nav class="menu" id="menu">
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <div class="burger" id="burger"><span></span><span></span></div>
+  </div>
+</header>
+
+<style is:global>
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    padding: 26px 0;
+    transition: .4s;
+    mix-blend-mode: difference;
+  }
+  header.hide { transform: translateY(-100%); }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: var(--disp);
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: .5px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  .logo b { color: inherit; }
+  .menu { display: flex; gap: 34px; }
+  .menu a {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #fff;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .menu a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 1px;
+    background: #fff;
+    transition: .3s;
+  }
+  .menu a:hover::after { width: 100%; }
+  .burger {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .burger span {
+    width: 26px;
+    height: 1.5px;
+    background: #fff;
+  }
+  @media (max-width: 960px) {
+    .menu { display: none; }
+    .burger { display: flex; }
+    .menu.open {
+      display: flex;
+      position: fixed;
+      inset: 0;
+      background: #141008;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 26px;
+      mix-blend-mode: normal;
+    }
+    .menu.open a { font-size: 20px; }
+  }
+</style>
+
+<script>
+  const hd = document.getElementById('hd');
+  const menu = document.getElementById('menu');
+  const burger = document.getElementById('burger');
+
+  if (hd) {
+    let last = 0;
+    addEventListener('scroll', () => {
+      const y = scrollY;
+      hd.classList.toggle('hide', y > last && y > 400);
+      last = y;
+    });
+  }
+
+  if (burger && menu) {
+    burger.addEventListener('click', () => menu.classList.toggle('open'));
+    menu.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => menu.classList.remove('open'));
+    });
+  }
+</script>

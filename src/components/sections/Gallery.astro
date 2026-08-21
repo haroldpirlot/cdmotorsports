@@ -1,0 +1,29 @@
+---
+const tiles = [
+  { img: '/img/g4.jpg',    cls: 's6 r2' },
+  { img: '/img/g1.jpg',    cls: 's3' },
+  { img: '/img/g3.jpg',    cls: 's3' },
+  { img: '/img/g2.jpg',    cls: 's3' },
+  { img: '/img/g9.jpg',    cls: 's3' },
+  { img: '/img/g5.jpg',    cls: 's5' },
+  { img: '/img/g7.jpg',    cls: 's7' },
+  { img: '/img/g10.jpg',   cls: 's4' },
+  { img: '/img/infos.jpg', cls: 's4' },
+  { img: '/img/g6.jpg',    cls: 's4' },
+];
+---
+<section class="gal pad" id="galerie">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:40px">
+      <div class="eyebrow" style="margin-bottom:16px">Galerie</div>
+      <div class="big">Un avant-goût du <em>terrain</em></div>
+    </div>
+    <div class="ggrid reveal">
+      {tiles.map((t) => (
+        <a class={t.cls} href={t.img}>
+          <img src={t.img} alt="" />
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

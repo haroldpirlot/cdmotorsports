@@ -1,0 +1,80 @@
+---
+const links = [
+  { label: 'Raids', href: '/#raids' },
+  { label: 'La Moto', href: '/moto-kove-450-rally' },
+  { label: 'Option 4×4', href: '/option-4x4' },
+  { label: 'Le Maroc', href: '/#maroc' },
+  { label: 'Infos', href: '/#infos' },
+  { label: 'Actualités', href: '/actualites' },
+  { label: 'Partenaires', href: '/partenaires' },
+  { label: 'Boutique', href: '/boutique' },
+  { label: 'Réserver', href: '/reserver' },
+  { label: 'CGV', href: '/cgv' },
+  { label: 'Mentions légales', href: '/mentions-legales' },
+  { label: 'Confidentialité', href: '/confidentialite' },
+  { label: 'Contact', href: '/#contact' },
+];
+const year = new Date().getFullYear();
+---
+<footer>
+  <div class="wrap">
+    <div class="flogo">CDMotorsports</div>
+    <nav class="fmenu">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+  </div>
+  <div class="fbtm">© {year} CDMotorsports — Raids moto au Maroc</div>
+</footer>
+
+<style is:global>
+  footer {
+    background: #141008;
+    color: #8c8073;
+    padding: 60px 0 30px;
+    position: relative;
+    z-index: 2;
+  }
+  footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .06;
+    background-image: url('/img/g6.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  footer .wrap {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .flogo {
+    font-family: var(--disp);
+    font-size: 24px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .fmenu {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+  .fmenu a {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #cbbfae;
+  }
+  .fbtm {
+    position: relative;
+    text-align: center;
+    font-size: 11px;
+    color: #6f6455;
+    margin-top: 30px;
+    letter-spacing: .5px;
+  }
+</style>
