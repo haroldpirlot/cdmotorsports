@@ -76,6 +76,18 @@ const organizationJsonLd = {
 
   <!-- slot pour JSON-LD spécifique à la page (TouristTrip, FAQPage, etc.) -->
   <slot name="head" />
+
+  {import.meta.env.PROD && SITE.gaId && (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}`}></script>
+      <script is:inline define:vars={{ gaId: SITE.gaId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', gaId);
+      </script>
+    </>
+  )}
 </head>
 <body>
   <CustomCursor />

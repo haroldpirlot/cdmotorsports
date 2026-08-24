@@ -13,4 +13,6 @@ export const SITE = {
   // Formspree form ID — à remplacer par la vraie valeur (formspree.io → new form → copy ID xyzabc)
   // Puis form action = `https://formspree.io/f/${SITE.formspreeId}`
   formspreeId: 'xppaegba',
+  // Google Analytics 4 measurement ID (format G-XXXXXXXXXX)
+  gaId: 'G-7VF98VWPFT',
 };
