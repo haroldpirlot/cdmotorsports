@@ -1,4 +1,5 @@
 ---
+import { SITE } from '../../config';
 ---
 <section class="contact pad" id="contact">
   <div class="bg" data-parallax></div>
@@ -10,9 +11,9 @@
     </div>
     <p class="lead">Dites-nous votre niveau et vos dates. On vous propose le raid qui vous ressemble.</p>
     <div class="cbtns">
-      <a href="/reserver" class="btn wa">WhatsApp</a>
+      <a href={SITE.whatsappUrl} class="btn wa" target="_blank" rel="noopener">WhatsApp</a>
       <a href="/reserver" class="btn">Demander une date</a>
     </div>
-    <div class="cmeta">[Téléphone] · [email@cdmotorsports.com] · [Instagram]</div>
+    <div class="cmeta">{SITE.contact.phone} · {SITE.contact.email} · {SITE.contact.instagram}</div>
   </div>
 </section>

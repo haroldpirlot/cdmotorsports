@@ -110,7 +110,9 @@ const steps = [
           <div class="line"><b>Email</b><span>{SITE.contact.email}</span></div>
           <div class="line"><b>Départs</b><span>Depuis Agadir — Maroc</span></div>
           <div class="line"><b>Réseaux</b><span>{SITE.contact.instagram} · [Facebook]</span></div>
-          <a href="#" class="btn wa" style="margin-top:20px">Écrire sur WhatsApp</a>
+          <a href={SITE.whatsappUrl} class="btn wa" style="margin-top:20px" target="_blank" rel="noopener">
+            Écrire sur WhatsApp
+          </a>
           <p style="margin-top:18px;color:#6b6255;font-size:13px">
             Nos plannings se remplissent souvent plusieurs mois à l'avance — n'hésitez pas à anticiper.
           </p>
