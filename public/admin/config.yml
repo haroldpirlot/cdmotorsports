@@ -1,0 +1,86 @@
+backend:
+  name: github
+  repo: haroldpirlot/cdmotorsports
+  branch: main
+  base_url: https://cdmotorsports.vercel.app
+  auth_endpoint: api/auth
+
+media_folder: "public/img"
+public_folder: "/img"
+
+locale: fr
+
+collections:
+  - name: raids
+    label: "Raids"
+    label_singular: "Raid"
+    folder: "src/content/raids"
+    extension: md
+    format: yaml-frontmatter
+    create: false
+    slug: "{{slug}}"
+    identifier_field: name
+    summary: "{{n}} · {{name}} — {{days}}j · {{level}}"
+    fields:
+      - { label: "Numéro",     name: n,     widget: number,  value_type: int, min: 1, max: 99 }
+      - { label: "Nom",        name: name,  widget: string }
+      - { label: "Itinéraire", name: itin,  widget: string,  hint: "ex. Agadir → Ouarzazate (par le sud)" }
+      - { label: "Jours",      name: days,  widget: number,  value_type: int, min: 1 }
+      - { label: "Niveau",     name: level, widget: select,  options: [Découverte, Intermédiaire, Confirmé] }
+      - { label: "Photo hero",   name: hero, widget: image }
+      - { label: "Carte itinéraire", name: map,  widget: image }
+      - label: "Galerie (6 photos)"
+        name: gallery
+        widget: list
+        field: { label: Photo, name: photo, widget: image }
+      - label: "Étapes"
+        name: stages
+        widget: list
+        summary: "Jour — {{fields.from}} → {{fields.to}} · {{fields.km}} km"
+        fields:
+          - { label: Depuis,       name: from,    widget: string }
+          - { label: Vers,         name: to,      widget: string }
+          - { label: Km,           name: km,      widget: number, value_type: int, min: 1 }
+          - { label: Hébergement,  name: lodging, widget: string, default: "hôtel / bivouac", required: false }
+      - label: "Points forts"
+        name: highlights
+        widget: list
+        field: { label: Point, name: point, widget: string }
+      - { label: "Introduction (2 paragraphes)", name: body, widget: markdown }
+
+  - name: globals
+    label: "Contenus globaux"
+    label_singular: "Contenu"
+    files:
+      - name: included
+        label: "Compris"
+        file: "src/content/globals/included.md"
+        fields:
+          - { label: Titre, name: title, widget: string }
+          - label: "Éléments"
+            name: items
+            widget: list
+            field: { label: Élément, name: item, widget: string }
+
+      - name: excluded
+        label: "Non compris"
+        file: "src/content/globals/excluded.md"
+        fields:
+          - { label: Titre, name: title, widget: string }
+          - label: "Éléments"
+            name: items
+            widget: list
+            field: { label: Élément, name: item, widget: string }
+
+      - name: bike
+        label: "Moto (KOVE 450 Rally)"
+        file: "src/content/globals/bike.md"
+        fields:
+          - { label: Titre, name: title, widget: string }
+          - label: "Specs"
+            name: specs
+            widget: list
+            summary: "{{fields.label}} · {{fields.value}}"
+            fields:
+              - { label: Label,  name: label, widget: string }
+              - { label: Valeur, name: value, widget: string }
