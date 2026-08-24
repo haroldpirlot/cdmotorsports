@@ -5,7 +5,7 @@ itin: "Agadir → Agadir"
 days: 3
 level: Intermédiaire
 hero: /img/g9.jpg
-map: /img/map_raid6.png
+map: /img/raids/echappee-atlantique.png
 gallery:
   - /img/g9.jpg
   - /img/raid_cote.jpg

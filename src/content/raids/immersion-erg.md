@@ -5,7 +5,7 @@ itin: "Errachidia → Errachidia"
 days: 3
 level: Découverte
 hero: /img/g8.jpg
-map: /img/map_raid7.png
+map: /img/raids/immersion-erg.png
 gallery:
   - /img/g8.jpg
   - /img/pin.jpg

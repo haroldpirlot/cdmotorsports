@@ -1,0 +1,272 @@
+---
+// Carte interactive Leaflet avec fond satellite (Esri par défaut, MapTiler si env
+// PUBLIC_MAPTILER_KEY). Init lazy via IntersectionObserver. Placeholder PNG en
+// background jusqu'à ce que la carte soit visible et que Leaflet soit chargé.
+
+export interface GpxData {
+  slug: string;
+  metaName: string;
+  metaDesc: string;
+  announcedKm: number;
+  measuredKm: number;
+  provisional: boolean;
+  bounds: [[number, number], [number, number]];
+  tracks: {
+    name: string;
+    stageDay: number | null;
+    stageDestination: string | null;
+    stageKm: number;
+    km: number;
+    segments: [number, number][][];
+  }[];
+  stages: {
+    day: number;
+    name: string;
+    km: number;
+    start: [number, number];
+    end: [number, number];
+  }[];
+  elevation: [number, number][];
+  gpxUrl: string;
+}
+
+interface Props {
+  gpx: GpxData;
+  raidName: string;
+  fallbackPng: string;
+}
+
+const { gpx, raidName, fallbackPng } = Astro.props;
+const mapId = `map-${gpx.slug}`;
+const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
+---
+
+<div class="raidmap-wrap">
+  <div
+    id={mapId}
+    class="raidmap"
+    role="region"
+    aria-label={`Carte interactive du raid ${raidName}`}
+    style={`background-image: url('${fallbackPng}')`}
+    data-gpx={JSON.stringify(gpx)}
+    data-maptiler={maptilerKey}
+  ><noscript>
+    <img src={fallbackPng} alt={`Carte itinéraire ${raidName}`} style="width:100%;display:block" />
+  </noscript></div>
+
+  <div class="raidmap-actions">
+    <a class="btn dark" href={gpx.gpxUrl} download aria-label={`Télécharger la trace GPX du raid ${raidName}`}>
+      Télécharger la trace GPX
+    </a>
+    {gpx.provisional && (
+      <span class="raidmap-provisional" role="note">
+        ⚠ Tracé provisoire — une étape est manquante ou incomplète.
+      </span>
+    )}
+  </div>
+</div>
+
+<style>
+  .raidmap-wrap {
+    margin-top: 30px;
+  }
+  .raidmap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    min-height: 380px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--cream);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .1);
+    border: 1px solid var(--line);
+    cursor: auto;
+  }
+  .raidmap:focus-within,
+  .raidmap:hover {
+    cursor: auto;
+  }
+  .raidmap * {
+    cursor: auto !important;
+  }
+  .raidmap-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .raidmap-provisional {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: #b56a5a;
+    letter-spacing: .5px;
+    font-style: italic;
+  }
+</style>
+
+<style is:global>
+  /* Styles Leaflet override (chargés dynamiquement, style global nécessaire) */
+  .raidmap-marker-inner {
+    width: 28px;
+    height: 28px;
+    background: #C8702A;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+  }
+  .leaflet-popup-content-wrapper {
+    border-radius: 6px;
+    background: #fff;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 13px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .18);
+  }
+  .leaflet-popup-content {
+    margin: 12px 16px;
+  }
+  .leaflet-popup-content strong {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    color: #1a1613;
+  }
+  .leaflet-container a.leaflet-popup-close-button {
+    color: #8c8375;
+  }
+  .leaflet-control-attribution {
+    font-size: 10px;
+  }
+</style>
+
+<script>
+  import type * as LeafletNS from 'leaflet';
+
+  const maps = document.querySelectorAll<HTMLElement>('.raidmap[data-gpx]');
+  if (maps.length === 0) {
+    // nothing to init
+  } else if (!('IntersectionObserver' in window)) {
+    // Fallback : init tout tout de suite
+    maps.forEach((m) => initMap(m));
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          observer.unobserve(entry.target);
+          initMap(entry.target as HTMLElement);
+        }
+      },
+      { rootMargin: '250px' }
+    );
+    maps.forEach((el) => observer.observe(el));
+  }
+
+  async function initMap(el: HTMLElement) {
+    let data;
+    try {
+      data = JSON.parse(el.dataset.gpx || '{}');
+    } catch {
+      return;
+    }
+    if (!data.tracks || data.tracks.length === 0) return;
+
+    const leaflet = await import('leaflet');
+    await import('leaflet/dist/leaflet.css');
+    const L = leaflet.default;
+
+    const maptilerKey = el.dataset.maptiler || '';
+    const tileLayer = maptilerKey
+      ? L.tileLayer(
+          `https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=${maptilerKey}`,
+          {
+            maxZoom: 19,
+            attribution:
+              '<a href="https://www.maptiler.com/copyright/">© MapTiler</a> · <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a>',
+          }
+        )
+      : L.tileLayer(
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+          {
+            maxZoom: 18,
+            attribution: 'Tiles © Esri — World Imagery',
+          }
+        );
+
+    const map = L.map(el, {
+      zoomControl: true,
+      scrollWheelZoom: false,
+    });
+    tileLayer.addTo(map);
+    map.fitBounds(data.bounds, { padding: [30, 30] });
+
+    // Trace polylines
+    for (const track of data.tracks) {
+      for (const seg of track.segments) {
+        const latlngs = seg.map(([lon, lat]: [number, number]): [number, number] => [lat, lon]);
+        L.polyline(latlngs, {
+          color: '#C8702A',
+          weight: 3.5,
+          opacity: 0.92,
+          lineCap: 'round',
+          lineJoin: 'round',
+        }).addTo(map);
+      }
+    }
+
+    // Marqueurs numérotés (départ de chaque étape)
+    for (let i = 0; i < data.stages.length; i++) {
+      const stage = data.stages[i];
+      const [lon, lat] = stage.start;
+      const icon = L.divIcon({
+        className: 'raidmap-marker',
+        html: `<div class="raidmap-marker-inner">${stage.day}</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14],
+      });
+      const marker = L.marker([lat, lon], { icon, title: `Jour ${stage.day} — ${stage.name}` }).addTo(map);
+      marker.bindPopup(
+        `<strong>Jour ${stage.day}</strong><br/>${escapeHtml(stage.name)}<br/><span style="color:#C8702A;font-family:'Bricolage Grotesque',sans-serif">${stage.km} km</span>`
+      );
+    }
+
+    // Marqueur d'arrivée finale (fin du dernier track)
+    const last = data.stages[data.stages.length - 1];
+    if (last) {
+      const [lon, lat] = last.end;
+      const icon = L.divIcon({
+        className: 'raidmap-marker',
+        html: `<div class="raidmap-marker-inner" style="background:#1a1613">★</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+      });
+      L.marker([lat, lon], { icon, title: 'Arrivée' }).addTo(map).bindPopup('<strong>Arrivée</strong>');
+    }
+
+    // Zoom molette : uniquement au clic sur la carte (évite de piéger le scroll de page)
+    map.on('click', () => map.scrollWheelZoom.enable());
+    map.on('mouseout', () => map.scrollWheelZoom.disable());
+
+    // Retirer le background PNG une fois la carte prête
+    map.whenReady(() => {
+      el.style.backgroundImage = 'none';
+    });
+  }
+
+  function escapeHtml(s: string): string {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+</script>

@@ -5,7 +5,7 @@ itin: "Ouarzazate → Ouarzazate"
 days: 5
 level: Intermédiaire
 hero: /img/raid_mont.jpg
-map: /img/map_raid2.png
+map: /img/raids/boucle-anti-atlas.png
 gallery:
   - /img/raid_mont.jpg
   - /img/village.jpg

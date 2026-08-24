@@ -5,7 +5,7 @@ itin: "Agadir → Marrakech"
 days: 6
 level: Confirmé
 hero: /img/raid_cote.jpg
-map: /img/map_raid4.png
+map: /img/raids/ocean-atlas.png
 gallery:
   - /img/raid_cote.jpg
   - /img/g9.jpg

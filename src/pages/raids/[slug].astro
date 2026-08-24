@@ -4,6 +4,8 @@ import Layout from '../../layouts/Layout.astro';
 import RaidHero from '../../components/raid/RaidHero.astro';
 import RaidIntro from '../../components/raid/RaidIntro.astro';
 import RaidMap from '../../components/raid/RaidMap.astro';
+import RaidMapInteractive, { type GpxData } from '../../components/raid/RaidMapInteractive.astro';
+import RaidElevation from '../../components/raid/RaidElevation.astro';
 import RaidItinerary from '../../components/raid/RaidItinerary.astro';
 import IncludedExcluded from '../../components/raid/IncludedExcluded.astro';
 import RaidGallery from '../../components/raid/RaidGallery.astro';
@@ -26,8 +28,14 @@ export async function getStaticPaths() {
 }
 
 const { raid, prev, next } = Astro.props;
-const totalKm = raid.data.stages.reduce((sum, s) => sum + s.km, 0);
 const { Content } = await render(raid);
+
+// Load GPX-derived data (built by scripts/parse-gpx.mjs)
+const gpxModules = import.meta.glob<{ default: GpxData }>('../../data/gpx/*.json', { eager: true });
+const gpx = gpxModules[`../../data/gpx/${raid.id}.json`]?.default ?? null;
+
+// Preferred total km : announced (from GPX metadata table) > sum of md stages
+const totalKm = gpx?.announcedKm ?? raid.data.stages.reduce((sum, s) => sum + s.km, 0);
 
 const title = `${raid.data.name} — ${raid.data.itin} · CDMotorSport`;
 const description = `${raid.data.days} jours de raid moto au Maroc, ${totalKm} km au guidon d'une KOVE 450 Rally. Niveau ${raid.data.level}.`;
@@ -86,7 +94,22 @@ const touristTripJsonLd = {
   <RaidIntro totalKm={totalKm} highlights={raid.data.highlights}>
     <Content />
   </RaidIntro>
-  <RaidMap map={raid.data.map} name={raid.data.name} />
+
+  {gpx ? (
+    <section class="mapwrap pad">
+      <div class="wrap reveal">
+        <div class="eyebrow" style="margin-bottom:16px">L'itinéraire</div>
+        <div class="big" style="font-size:clamp(24px,3vw,36px);margin-bottom:8px">
+          {raid.data.days} jours · {totalKm} km
+        </div>
+        <RaidMapInteractive gpx={gpx} raidName={raid.data.name} fallbackPng={raid.data.map} />
+        <RaidElevation elevation={gpx.elevation} />
+      </div>
+    </section>
+  ) : (
+    <RaidMap map={raid.data.map} name={raid.data.name} />
+  )}
+
   <RaidItinerary stages={raid.data.stages} />
   <IncludedExcluded />
   <RaidGallery gallery={raid.data.gallery} name={raid.data.name} />

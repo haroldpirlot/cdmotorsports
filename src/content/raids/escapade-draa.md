@@ -5,7 +5,7 @@ itin: "Ouarzazate → Ouarzazate"
 days: 3
 level: Confirmé
 hero: /img/band.jpg
-map: /img/map_raid5.png
+map: /img/raids/escapade-draa.png
 gallery:
   - /img/band.jpg
   - /img/g4.jpg

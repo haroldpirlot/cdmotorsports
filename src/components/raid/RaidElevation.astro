@@ -1,0 +1,128 @@
+---
+// Profil de dénivelé simple en SVG inline (aucune lib externe).
+// Data en entrée : elevation = [[cumulativeKm, altitudeMeters], ...]
+
+interface Props {
+  elevation: [number, number][];
+}
+
+const { elevation } = Astro.props;
+
+// SVG viewBox
+const W = 800;
+const H = 140;
+const PAD_X = 42;
+const PAD_Y = 18;
+
+let path = '';
+let areaPath = '';
+let minKm = 0, maxKm = 0, minEle = 0, maxEle = 0;
+let firstMarkers: Array<{ x: number; y: number; label: string }> = [];
+
+if (elevation && elevation.length > 1) {
+  minKm = elevation[0][0];
+  maxKm = elevation[elevation.length - 1][0];
+  const eles = elevation.map((e) => e[1]);
+  minEle = Math.min(...eles);
+  maxEle = Math.max(...eles);
+  // Padding vertical dans la data pour éviter que le trait touche les bords
+  const eleRange = Math.max(maxEle - minEle, 50);
+
+  const toX = (km: number) => PAD_X + ((km - minKm) / (maxKm - minKm)) * (W - PAD_X * 2);
+  const toY = (ele: number) => H - PAD_Y - ((ele - minEle) / eleRange) * (H - PAD_Y * 2);
+
+  const points = elevation.map(([km, ele]) => `${toX(km).toFixed(1)},${toY(ele).toFixed(1)}`);
+  path = 'M ' + points.join(' L ');
+  areaPath =
+    'M ' +
+    points.join(' L ') +
+    ` L ${toX(maxKm).toFixed(1)},${(H - PAD_Y).toFixed(1)}` +
+    ` L ${toX(minKm).toFixed(1)},${(H - PAD_Y).toFixed(1)} Z`;
+}
+---
+
+{elevation && elevation.length > 1 && (
+  <div class="elev-wrap">
+    <div class="elev-head">
+      <div class="elev-label">Profil de dénivelé</div>
+      <div class="elev-stats">
+        <span><b>{Math.round(minEle)} m</b> min</span>
+        <span><b>{Math.round(maxEle)} m</b> max</span>
+        <span><b>{Math.round(maxEle - minEle)} m</b> écart</span>
+      </div>
+    </div>
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label={`Profil de dénivelé : de ${Math.round(minEle)}m à ${Math.round(maxEle)}m, sur ${Math.round(maxKm)} km`}
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <linearGradient id="elev-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#C8702A" stop-opacity="0.35" />
+          <stop offset="100%" stop-color="#C8702A" stop-opacity="0.05" />
+        </linearGradient>
+      </defs>
+
+      {/* Baseline */}
+      <line x1={PAD_X} y1={H - PAD_Y} x2={W - PAD_X} y2={H - PAD_Y} stroke="#E4DBCD" stroke-width="1" />
+
+      {/* Y-axis labels */}
+      <text x={PAD_X - 8} y={PAD_Y + 4} text-anchor="end" class="elev-tick">{Math.round(maxEle)}m</text>
+      <text x={PAD_X - 8} y={H - PAD_Y + 4} text-anchor="end" class="elev-tick">{Math.round(minEle)}m</text>
+
+      {/* X-axis labels */}
+      <text x={PAD_X} y={H - 4} text-anchor="start" class="elev-tick">0 km</text>
+      <text x={W - PAD_X} y={H - 4} text-anchor="end" class="elev-tick">{Math.round(maxKm)} km</text>
+
+      {/* Area + line */}
+      <path d={areaPath} fill="url(#elev-fill)" />
+      <path d={path} fill="none" stroke="#C8702A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </div>
+)}
+
+<style>
+  .elev-wrap {
+    margin-top: 18px;
+    padding: 20px 22px 12px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .elev-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .elev-label {
+    font-family: var(--disp);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sand);
+    font-size: 12px;
+  }
+  .elev-stats {
+    display: flex;
+    gap: 22px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .elev-stats b {
+    font-family: var(--disp);
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 14px;
+  }
+  svg { width: 100%; height: auto; display: block; }
+  .elev-tick {
+    font-family: var(--sans);
+    font-size: 10px;
+    fill: var(--muted);
+    letter-spacing: .5px;
+  }
+</style>

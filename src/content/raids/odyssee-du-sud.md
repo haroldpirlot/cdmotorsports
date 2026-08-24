@@ -5,7 +5,7 @@ itin: "Agadir → Ouarzazate (par le sud)"
 days: 7
 level: Confirmé
 hero: /img/raid_dune.jpg
-map: /img/map_raid1.png
+map: /img/raids/odyssee-du-sud.png
 gallery:
   - /img/g4.jpg
   - /img/g3.jpg

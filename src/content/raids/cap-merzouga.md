@@ -5,7 +5,7 @@ itin: "Ouarzazate → Ouarzazate (par Merzouga)"
 days: 6
 level: Confirmé
 hero: /img/pin.jpg
-map: /img/map_raid3.png
+map: /img/raids/cap-merzouga.png
 gallery:
   - /img/pin.jpg
   - /img/g4.jpg
