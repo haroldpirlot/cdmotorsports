@@ -163,7 +163,33 @@ Nécessite l'identité juridique Edouard (SIREN/SIRET, adresse pro).
 
 ---
 
-## 11. Optim images (à faire en même temps que les vraies photos)
+## 11. Sécurité — traces GPX (confidentiel client)
+
+Les fichiers GPX bruts du client (`_gpx_private/*.gpx` en local) **ne doivent
+jamais être commit** — propriété client, ultra-confidentiel.
+
+**Règles en place** :
+- Dossier `_gpx_private/` git-ignoré
+- `scripts/parse-gpx.mjs` lit depuis `_gpx_private/`, ne génère que du JSON
+  dérivé (polylines décimées) commit dans `src/data/gpx/`
+- Aucun fichier `.gpx` servi sur `cdmotorsports.vercel.app`
+- Pas de bouton "Télécharger la trace GPX" côté visiteur
+
+**Si un leak survient à l'avenir** (fichier commit par erreur) :
+1. `git rm public/gpx/*.gpx` + commit
+2. `brew install git-filter-repo` (si pas installé)
+3. `git filter-repo --path public/gpx --invert-paths --force`
+4. `git remote add origin https://github.com/haroldpirlot/cdmotorsports.git`
+5. `git push --force origin main`
+6. **Important** : GitHub garde les blobs orphelins ~90 jours (accessibles via
+   SHA direct). Pour purge complète : ouvrir un ticket [GitHub Support](https://support.github.com/contact/private-information)
+   avec les SHA à purger + confirmation que c'est de la data confidentielle.
+   Cf. https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository
+7. Vérifier qu'aucun fork n'a été fait entre le leak et la purge (`gh api repos/haroldpirlot/cdmotorsports/forks`)
+
+---
+
+## 12. Optim images (à faire en même temps que les vraies photos)
 
 Quand le client livre les photos HD :
 
