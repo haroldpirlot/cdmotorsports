@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/sections.css';
+import '../styles/pages.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CustomCursor from '../components/CustomCursor.astro';
@@ -11,7 +12,7 @@ interface Props {
   lang?: string;
 }
 const {
-  title = 'CDMotorsports — Every ride tells a story',
+  title = 'CDMotorSport — Every ride tells a story',
   description = 'Raids moto (rallye-raid) au Maroc en KOVE 450 Rally. Live the rally. Ride the legend.',
   lang = 'fr',
 } = Astro.props;

@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const partners = [
+  { logo: 'KOVE',            name: 'KOVE',            text: "Constructeur des motos qui équipent nos raids. La KOVE 450 Rally est au cœur de l'expérience CDMotorSport." },
+  { logo: 'One Race',        name: 'One Race',        text: 'Univers course et rallye-raid. Un partenaire technique et sportif de premier plan.' },
+  { logo: 'MX Mag',          name: 'MX Mag',          text: 'Média moto spécialisé qui suit nos aventures et relaie nos récits de raid.' },
+  { logo: 'Hôtels & Riads',  name: 'Hôtels & Riads',  text: 'Nos établissements étapes, sélectionnés pour leur accueil, leur table et leur cadre.' },
+];
+---
+<Layout
+  title="Partenaires · CDMotorSport"
+  description="Nos partenaires : KOVE, One Race, MX Mag, hôtels et riads — les acteurs qui rendent nos raids possibles."
+>
+  <section class="phero short" style="background-image:url('/img/g5.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">Partenaires</div>
+      <h1>Nos <em>partenaires</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom:20px">
+        <div class="eyebrow" style="margin-bottom:16px">Ils nous accompagnent</div>
+        <div class="big">Nos <em>partenaires</em></div>
+        <p class="lead" style="margin-top:16px">
+          Des marques et des acteurs qui partagent notre exigence du terrain. (Logos officiels à intégrer.)
+        </p>
+      </div>
+      {partners.map((p) => (
+        <div class="partner reveal">
+          <div class="plogo">{p.logo}</div>
+          <div>
+            <h3>{p.name}</h3>
+            <p>{p.text}</p>
+          </div>
+        </div>
+      ))}
+      <div class="note reveal" style="margin-top:34px">
+        Vous êtes une marque, un média ou un hébergeur et souhaitez collaborer ? Écrivez-nous —
+        les partenariats nourrissent aussi notre visibilité en ligne.
+      </div>
+      <a href="/reserver" class="btn dark reveal" style="margin-top:22px">Devenir partenaire</a>
+    </div>
+  </section>
+</Layout>

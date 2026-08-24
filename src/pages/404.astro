@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Page introuvable · CDMotorSport"
+  description="Cette page n'existe pas ou plus. Revenez à l'accueil pour explorer les raids."
+>
+  <section class="phero short" style="background-image:url('/img/vast.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">404</div>
+      <h1>La piste s'est <em>perdue</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap" style="text-align:center;max-width:640px">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">Page introuvable</div>
+        <div class="big">Cette route n'existe <em>pas.</em></div>
+        <p class="lead" style="margin:20px auto 30px">
+          Le lien que vous avez suivi mène nulle part. Retour à la civilisation :
+        </p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a href="/" class="btn dark">Accueil</a>
+          <a href="/#raids" class="btn dark">Les raids</a>
+          <a href="/reserver" class="btn dark">Réserver</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -28,7 +28,7 @@ const { raid, prev, next } = Astro.props;
 const totalKm = raid.data.stages.reduce((sum, s) => sum + s.km, 0);
 const { Content } = await render(raid);
 
-const title = `${raid.data.name} — ${raid.data.itin} · CDMotorsports`;
+const title = `${raid.data.name} — ${raid.data.itin} · CDMotorSport`;
 const description = `${raid.data.days} jours de raid moto au Maroc, ${totalKm} km au guidon d'une KOVE 450 Rally. Niveau ${raid.data.level}.`;
 ---
 <Layout title={title} description={description}>

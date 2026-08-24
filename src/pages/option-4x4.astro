@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const features = [
+  { n: '01', h: 'Place en 4×4',     p: "À bord du véhicule d'assistance, avec le chauffeur et l'équipe logistique." },
+  { n: '02', h: 'Mêmes étapes',      p: 'Hôtels, riads et bivouacs partagés avec les pilotes.' },
+  { n: '03', h: 'Pension complète',  p: 'Repas et hébergement inclus, du premier au dernier jour.' },
+  { n: '04', h: 'Spots & photos',    p: 'Accès aux plus beaux points de vue pour immortaliser l\'aventure.' },
+];
+---
+<Layout
+  title="Option 4×4 — Accompagnants · CDMotorSport"
+  description="Suivez le raid à bord du véhicule d'assistance 4×4 : mêmes paysages, mêmes bivouacs, mêmes soirées, sans piloter."
+>
+  <section class="phero" style="background-image:url('/img/infos.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">Accompagnants</div>
+      <h1>Option <em>4×4</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap two">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">Option 4×4</div>
+        <div class="big">Vivez le raid,<br />même sans <em>rouler.</em></div>
+        <p class="lead" style="margin-top:18px">
+          Vous ne pilotez pas, ou vous accompagnez un pilote ? Suivez l'aventure à bord du véhicule
+          d'assistance 4×4 : mêmes paysages, mêmes bivouacs, mêmes soirées — au rythme du désert.
+        </p>
+        <a href="/reserver" class="btn dark" style="margin-top:22px">Demander une place accompagnant</a>
+      </div>
+      <div class="reveal">
+        <img src="/img/infos.jpg" alt="Véhicule 4x4 d'assistance" style="aspect-ratio:4/5" />
+      </div>
+    </div>
+  </section>
+
+  <section class="pad" style="background:var(--cream)">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">Ce que ça comprend</div>
+        <div class="big">Confort &amp; <em>liberté</em></div>
+      </div>
+      <div class="feat reveal">
+        {features.map((f) => (
+          <div class="it">
+            <div class="n">{f.n}</div>
+            <h4>{f.h}</h4>
+            <p>{f.p}</p>
+          </div>
+        ))}
+      </div>
+      <div class="note reveal" style="margin-top:30px">
+        Tarif accompagnant sur demande, selon le raid choisi.
+      </div>
+    </div>
+  </section>
+</Layout>

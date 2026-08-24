@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../config';
+import { getCollection } from 'astro:content';
+
+const raids = (await getCollection('raids')).sort((a, b) => a.data.n - b.data.n);
+const submitted = Astro.url.searchParams.get('ok') === '1';
+
+const formAction = `https://formspree.io/f/${SITE.formspreeId}`;
+const nextUrl = `${SITE.url}/reserver?ok=1`;
+
+const steps = [
+  { n: '01', t: 'Demande',  d: 'Vous nous écrivez niveau & dates souhaitées.' },
+  { n: '02', t: 'Conseil',  d: 'On vous propose le raid adapté.' },
+  { n: '03', t: 'Acompte',  d: 'Réservation confirmée par un acompte de 30 %.' },
+  { n: '04', t: 'Départ',   d: "Il ne reste qu'à rouler." },
+];
+---
+<Layout
+  title="Réserver votre raid · CDMotorSport"
+  description="Réservez votre raid moto au Maroc en KOVE 450 Rally. Formulaire de demande + contact WhatsApp direct."
+>
+  <section class="phero short" style="background-image:url('/img/pin.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">Réservation</div>
+      <h1>Réserver votre <em>raid</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom:36px">
+        <div class="eyebrow" style="margin-bottom:16px">Comment ça marche</div>
+        <div class="big">De l'envie au <em>départ</em></div>
+      </div>
+      <div class="steps reveal" style="margin-bottom:56px">
+        {steps.map((s) => (
+          <div class="step">
+            <b>{s.n}</b>
+            <span>{s.t}</span>
+            <small>{s.d}</small>
+          </div>
+        ))}
+      </div>
+
+      <div class="formwrap">
+        <div class="reveal">
+          {submitted && (
+            <div class="note" style="border-left-color:var(--check);margin-bottom:20px;background:#f0f7f2;color:#3F7A57">
+              <b>Merci !</b> Votre demande a bien été envoyée. Nous vous répondrons sous 48h.
+            </div>
+          )}
+          <form action={formAction} method="POST">
+            <input type="hidden" name="_subject" value="Nouvelle demande de réservation — CDMotorSport" />
+            <input type="hidden" name="_next" value={nextUrl} />
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-5000px" aria-hidden="true" />
+
+            <div class="row2">
+              <div class="field">
+                <label for="f-name">Nom</label>
+                <input id="f-name" name="name" placeholder="Votre nom" required />
+              </div>
+              <div class="field">
+                <label for="f-email">Email</label>
+                <input id="f-email" name="email" type="email" placeholder="vous@email.com" required />
+              </div>
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <label for="f-raid">Raid souhaité</label>
+                <select id="f-raid" name="raid">
+                  {raids.map((r) => <option value={r.data.name}>{r.data.name}</option>)}
+                  <option value="undecided">Je ne sais pas encore</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-level">Niveau</label>
+                <select id="f-level" name="niveau">
+                  <option>Découverte</option>
+                  <option>Intermédiaire</option>
+                  <option>Confirmé</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <label for="f-dates">Dates envisagées</label>
+                <input id="f-dates" name="dates" placeholder="ex. mars 2026" />
+              </div>
+              <div class="field">
+                <label for="f-pilotes">Nb de pilotes</label>
+                <input id="f-pilotes" name="pilotes" type="number" min="1" placeholder="1" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="f-msg">Message</label>
+              <textarea id="f-msg" name="message" placeholder="Parlez-nous de votre projet…"></textarea>
+            </div>
+
+            <button type="submit" class="btn">Envoyer ma demande</button>
+          </form>
+        </div>
+
+        <div class="cinfo reveal">
+          <div class="eyebrow" style="margin-bottom:14px">Contact direct</div>
+          <div class="line"><b>WhatsApp</b><span>{SITE.contact.phone}</span></div>
+          <div class="line"><b>Email</b><span>{SITE.contact.email}</span></div>
+          <div class="line"><b>Départs</b><span>Depuis Agadir — Maroc</span></div>
+          <div class="line"><b>Réseaux</b><span>{SITE.contact.instagram} · [Facebook]</span></div>
+          <a href="#" class="btn wa" style="margin-top:20px">Écrire sur WhatsApp</a>
+          <p style="margin-top:18px;color:#6b6255;font-size:13px">
+            Nos plannings se remplissent souvent plusieurs mois à l'avance — n'hésitez pas à anticiper.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
