@@ -1,0 +1,102 @@
+---
+const faqs = [
+  {
+    q: 'Quel niveau faut-il pour un raid CDMotorSport ?',
+    a: "La pratique du tout-terrain loisir, cross ou enduro suffit pour un raid découverte. Nos groupes restent réduits et l'encadrement s'adapte — un débutant motivé a toute sa place, à condition d'être honnête sur son niveau au moment de choisir son raid.",
+  },
+  {
+    q: 'Quel équipement dois-je apporter ?',
+    a: "Casque et lunettes tout-terrain, veste TT ou gilet de protection avec coudières, gants, bottes TT, pantalon TT + genouillères, collier cervical (neck brace) et lampe frontale. Camel bag, casquette, stick lèvres et anti-moustique complètent l'essentiel.",
+  },
+  {
+    q: 'Puis-je venir avec ma propre moto ?',
+    a: "Nos raids se déroulent sur une KOVE 450 Rally fournie et préparée par CDMotorSport. Pour venir avec votre propre moto, contactez-nous : c'est possible sous conditions, avec assistance 4×4 et transport des bagages.",
+  },
+  {
+    q: 'Quels sont les prix des raids ?',
+    a: 'Les prix sont communiqués sur demande, selon le raid et la période. Ils comprennent transferts aéroport, hôtel demi-pension, la moto, la trace GPS, la logistique et l\'assistance mécanique. Écrivez-nous depuis la page Réserver.',
+  },
+  {
+    q: 'Y a-t-il un raid adapté aux débutants ?',
+    a: "Le raid Immersion Erg (3 jours, 460 km, niveau Découverte) est le plus accessible. L'Échappée Atlantique (3 jours, 665 km) et la Boucle de l'Anti-Atlas (5 jours) sont classés Intermédiaire. Les autres demandent un niveau Confirmé.",
+  },
+  {
+    q: 'Comment se déroule la réservation ?',
+    a: "Vous nous écrivez avec votre niveau et vos dates. On vous propose le raid adapté. La réservation est confirmée par un acompte de 30 %. Le solde est réglé au plus tard 30 jours avant le départ.",
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a,
+    },
+  })),
+};
+---
+<section class="faq pad" id="faq">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:40px">
+      <div class="eyebrow" style="margin-bottom:16px">Questions fréquentes</div>
+      <div class="big">Vos questions,<br />nos <em>réponses.</em></div>
+    </div>
+    <div class="faq-list reveal">
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>
+            <span>{f.q}</span>
+            <span class="chev" aria-hidden="true">+</span>
+          </summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+<style>
+  .faq { background: var(--paper); }
+  .faq-item {
+    border-top: 1px solid var(--line);
+    padding: 0;
+  }
+  .faq-item:last-child { border-bottom: 1px solid var(--line); }
+  .faq-item summary {
+    padding: 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    font-family: var(--disp);
+    font-size: clamp(17px, 2vw, 21px);
+    font-weight: 400;
+    color: var(--ink);
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary:hover { color: var(--sand); }
+  .faq-item .chev {
+    font-family: var(--disp);
+    font-size: 24px;
+    color: var(--sand);
+    transition: transform .3s ease;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .faq-item[open] .chev { transform: rotate(45deg); }
+  .faq-item p {
+    padding: 0 0 24px 0;
+    color: #5f574b;
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 780px;
+  }
+</style>

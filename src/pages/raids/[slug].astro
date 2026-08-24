@@ -10,6 +10,7 @@ import RaidGallery from '../../components/raid/RaidGallery.astro';
 import RaidBike from '../../components/raid/RaidBike.astro';
 import RaidCTA from '../../components/raid/RaidCTA.astro';
 import RaidNav from '../../components/raid/RaidNav.astro';
+import { SITE } from '../../config';
 
 export async function getStaticPaths() {
   const raids = await getCollection('raids');
@@ -30,8 +31,49 @@ const { Content } = await render(raid);
 
 const title = `${raid.data.name} — ${raid.data.itin} · CDMotorSport`;
 const description = `${raid.data.days} jours de raid moto au Maroc, ${totalKm} km au guidon d'une KOVE 450 Rally. Niveau ${raid.data.level}.`;
+const raidUrl = new URL(`/raids/${raid.id}`, SITE.url).href;
+const heroAbs = new URL(raid.data.hero, SITE.url).href;
+
+// JSON-LD TouristTrip : itinerary structuré pour rich results Google
+const touristTripJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristTrip',
+  name: raid.data.name,
+  description,
+  url: raidUrl,
+  image: heroAbs,
+  touristType: raid.data.level,
+  itinerary: {
+    '@type': 'ItemList',
+    numberOfItems: raid.data.stages.length,
+    itemListElement: raid.data.stages.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Place',
+        name: `${s.from} → ${s.to}`,
+        description: `Jour ${i + 1} · ${s.km} km · Hébergement : ${s.lodging}`,
+      },
+    })),
+  },
+  provider: {
+    '@type': 'TravelAgency',
+    name: SITE.name,
+    url: SITE.url,
+  },
+  offers: {
+    '@type': 'Offer',
+    availability: 'https://schema.org/InStock',
+    url: new URL('/reserver', SITE.url).href,
+    priceSpecification: {
+      '@type': 'PriceSpecification',
+      description: 'Prix sur demande',
+    },
+  },
+};
 ---
-<Layout title={title} description={description}>
+<Layout title={title} description={description} ogImage={raid.data.hero}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(touristTripJsonLd)} />
   <RaidHero
     n={raid.data.n}
     name={raid.data.name}
