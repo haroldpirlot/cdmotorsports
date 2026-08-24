@@ -1,5 +1,10 @@
-// Parse les 7 GPX dans public/gpx/ et génère un JSON structuré par raid
-// dans src/data/gpx/{slug}.json. Lancé au prebuild + prédev via npm scripts.
+// Parse les 7 GPX bruts (source privée) et génère un JSON structuré par raid
+// dans src/data/gpx/{slug}.json. Lancé au prebuild + predev via npm scripts.
+//
+// ⚠ CONFIDENTIALITÉ : les GPX bruts sont propriété du client et NE DOIVENT
+// PAS être exposés publiquement. Ils vivent dans _gpx_private/ (git-ignoré),
+// jamais dans public/. Ce script ne génère que des JSON dérivés (destinés à
+// l'affichage carte), qui sont commit et servis avec le site.
 //
 // Règles :
 //  - Coupe la trace quand deux points consécutifs sont à + GAP_KM_MAX km
@@ -7,14 +12,14 @@
 //  - Raid 7 : marqué provisoire (tracé incomplet)
 //  - Distances annoncées prioritaires sur la somme calculée
 
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { XMLParser } from 'fast-xml-parser';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
-const GPX_DIR = join(ROOT, 'public/gpx');
+const GPX_DIR = join(ROOT, '_gpx_private');
 const OUT_DIR = join(ROOT, 'src/data/gpx');
 
 const GAP_KM_MAX = 2;
@@ -243,8 +248,7 @@ function parseGpxToOutput(slug, filePath) {
 
   return {
     slug,
-    metaName,
-    metaDesc: metaDesc.trim(),
+    // metaName/metaDesc omis : peuvent contenir des indications privées
     announcedKm: meta.announcedKm,
     measuredKm: Math.round(totalMeasuredKm),
     provisional: meta.provisional,
@@ -255,12 +259,20 @@ function parseGpxToOutput(slug, filePath) {
     tracks: processedTracks,
     stages: stageWaypoints,
     elevation: elevationSeries,
-    gpxUrl: `/gpx/${slug}.gpx`,
   };
 }
 
 // ---- Main ----
 mkdirSync(OUT_DIR, { recursive: true });
+
+if (!existsSync(GPX_DIR)) {
+  console.warn(
+    `[parse-gpx] Dossier privé introuvable : ${GPX_DIR}\n` +
+      `           JSON de sortie non regénérés (probablement CI sans accès aux sources).\n` +
+      `           Les JSON déjà commit dans src/data/gpx/ sont utilisés tels quels.`
+  );
+  process.exit(0);
+}
 
 const gpxFiles = readdirSync(GPX_DIR).filter((f) => f.endsWith('.gpx'));
 const summary = [];

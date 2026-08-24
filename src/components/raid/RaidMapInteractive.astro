@@ -5,8 +5,6 @@
 
 export interface GpxData {
   slug: string;
-  metaName: string;
-  metaDesc: string;
   announcedKm: number;
   measuredKm: number;
   provisional: boolean;
@@ -27,7 +25,6 @@ export interface GpxData {
     end: [number, number];
   }[];
   elevation: [number, number][];
-  gpxUrl: string;
 }
 
 interface Props {
@@ -54,16 +51,13 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
     <img src={fallbackPng} alt={`Carte itinéraire ${raidName}`} style="width:100%;display:block" />
   </noscript></div>
 
-  <div class="raidmap-actions">
-    <a class="btn dark" href={gpx.gpxUrl} download aria-label={`Télécharger la trace GPX du raid ${raidName}`}>
-      Télécharger la trace GPX
-    </a>
-    {gpx.provisional && (
+  {gpx.provisional && (
+    <div class="raidmap-actions">
       <span class="raidmap-provisional" role="note">
         ⚠ Tracé provisoire — une étape est manquante ou incomplète.
       </span>
-    )}
-  </div>
+    </div>
+  )}
 </div>
 
 <style>

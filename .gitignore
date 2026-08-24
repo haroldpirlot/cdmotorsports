@@ -33,3 +33,6 @@ pnpm-debug.log*
 
 # tmp
 .tmp/
+
+# GPX bruts — propriété client, ne jamais commit
+_gpx_private/
