@@ -26,40 +26,33 @@ export default async function handler(req, res) {
   });
   const data = await tokenRes.json();
 
+  const provider = 'github';
+  const status = data.access_token ? 'success' : 'error';
   const payload = data.access_token
-    ? {
-        status: 'success',
-        message: `authorization:github:success:${JSON.stringify({
-          token: data.access_token,
-          provider: 'github',
-        })}`,
-      }
-    : {
-        status: 'error',
-        message: `authorization:github:error:${JSON.stringify({
-          error: data.error ?? 'unknown_error',
-          error_description: data.error_description ?? '',
-        })}`,
-      };
+    ? { token: data.access_token, provider }
+    : { error: data.error ?? 'unknown_error', error_description: data.error_description ?? '' };
+
+  const authMessage = `authorization:${provider}:${status}:${JSON.stringify(payload)}`;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.status(200).end(`<!DOCTYPE html>
 <html>
 <body>
 <script>
-  (function(){
-    var msg = ${JSON.stringify(payload.message)};
-    function send(){
-      if (window.opener) {
-        window.opener.postMessage(msg, "*");
-      }
+  (function () {
+    var authMessage = ${JSON.stringify(authMessage)};
+    var provider = ${JSON.stringify(provider)};
+
+    function receiveMessage(e) {
+      // Decap répond "authorizing:github" — on peut envoyer le message d'auth
+      window.opener.postMessage(authMessage, e.origin);
+      window.removeEventListener("message", receiveMessage, false);
+      setTimeout(function () { window.close(); }, 200);
     }
-    // Decap listens for the second message after handshake
-    window.addEventListener("message", function(e){
-      if (e.data === "authorizing:github") send();
-    }, false);
-    send();
-    setTimeout(function(){ window.close(); }, 1000);
+
+    window.addEventListener("message", receiveMessage, false);
+    // Signal à Decap : "je suis prêt"
+    window.opener.postMessage("authorizing:" + provider, "*");
   })();
 </script>
 </body>
