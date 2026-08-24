@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// La photo hero + les 12 autres en galerie. Ordre lexicographique = ordre du dossier
+// source, Harold peut réordonner en renommant les fichiers dans public/img/edouard/.
+const heroPhoto = '/img/edouard/edouard-01.jpg';
+const galleryPhotos = Array.from({ length: 12 }, (_, i) =>
+  `/img/edouard/edouard-${String(i + 2).padStart(2, '0')}.jpg`
+);
+
+// Grille 12 colonnes façon .ggrid — patron répété pour couvrir 12 photos
+const layout = [
+  's6 r2', 's3', 's3',
+  's3', 's3', 's6',
+  's4', 's4', 's4',
+  's6', 's3', 's3',
+];
+---
+<Layout
+  title="Edouard Charles De Moor — Fondateur · CDMotorSport"
+  description="La moto depuis l'âge de 5 ans, motocross, enduro (Husqvarna Trophy Belgique, Yamaha Belgique), puis le rallye-raid comme priorité. L'histoire du fondateur de CDMotorSport."
+  ogImage={heroPhoto}
+>
+  <section class="phero" style={`background-image:url('${heroPhoto}')`}>
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">Le fondateur</div>
+      <h1>Edouard Charles<br /><em>De Moor</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap article">
+      <div class="meta reveal">Portrait · Fondateur CDMotorSport</div>
+      <div class="big reveal" style="margin-bottom:26px">
+        La moto, une <em>vie.</em>
+      </div>
+      <div class="reveal">
+        <p>
+          Edouard Charles de Moor, j’ai 32 ans, et la moto fait partie de ma vie
+          depuis l’âge de 5 ans.
+        </p>
+        <p>
+          J’ai grandi sur 2 roues et dans la compétition petit à petit, avec de
+          nombreuses années consacrées au motocross dès mon plus jeune âge.
+          À 19 ans, j’ai ensuite pris le chemin de l’enduro, une discipline qui
+          m’a permis de franchir une nouvelle étape dans mon parcours sportif —
+          notamment avec la chance d’intégrer le Husqvarna Trophy en Championnat
+          de Belgique, puis de poursuivre cette aventure avec Yamaha Belgique.
+        </p>
+        <p>
+          Ces expériences m’ont progressivement amené vers une discipline qui est
+          aujourd’hui devenue ma seule et unique priorité dans la vie :
+          <em>le rallye-raid.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="gal pad">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom:40px">
+        <div class="eyebrow" style="margin-bottom:16px">En images</div>
+        <div class="big">Sur les <em>pistes.</em></div>
+      </div>
+      <div class="ggrid reveal">
+        {galleryPhotos.map((src, i) => (
+          <a class={layout[i] ?? 's4'} href={src} aria-label={`Photo ${i + 2} d’Edouard De Moor`}>
+            <img src={src} alt={`Edouard De Moor en action — photo ${i + 2}`} loading="lazy" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta pad">
+    <div class="bg" style={`background-image:url('${heroPhoto}')`}></div>
+    <div class="wrap reveal">
+      <div class="eyebrow" style="color:#e8c9a6;margin-bottom:16px">Prochaine étape</div>
+      <div class="big">Rouler avec <em>Edouard ?</em></div>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px">
+        <a href="/#raids" class="btn">Voir les raids</a>
+        <a href="/reserver" class="btn">Réserver</a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -318,6 +318,14 @@
   color: var(--sand);
   font-size: 18px;
 }
+.sig-link {
+  display: inline-block;
+  transition: color .3s ease, transform .3s ease;
+}
+.sig-link:hover {
+  color: var(--ink);
+  transform: translateX(4px);
+}
 
 /* maroc */
 .maroc { background: var(--paper); }
