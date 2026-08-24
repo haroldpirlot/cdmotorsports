@@ -1,0 +1,27 @@
+---
+interface Props {
+  totalKm: number;
+  highlights: string[];
+}
+const { totalKm, highlights } = Astro.props;
+const totalKmStr = totalKm.toLocaleString('fr-FR').replace(/ /g, ' ');
+---
+<section class="rintro pad">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow" style="margin-bottom:16px">L'aventure</div>
+      <div class="big">{totalKmStr} km de <em>rallye-raid</em></div>
+      <div style="margin-top:20px">
+        <slot />
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="eyebrow" style="margin-bottom:10px">Points forts</div>
+      <ul class="forts">
+        {highlights.map((h, i) => (
+          <li><b>{String(i + 1).padStart(2, '0')}</b> {h}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

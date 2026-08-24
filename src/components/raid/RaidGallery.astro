@@ -1,0 +1,23 @@
+---
+interface Props {
+  gallery: string[];
+  name: string;
+}
+const { gallery, name } = Astro.props;
+const layout = ['s3 r2', 's3', 's3', 's2', 's2', 's2'];
+---
+<section class="rgal pad">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:30px">
+      <div class="eyebrow" style="margin-bottom:16px">En images</div>
+      <div class="big">Le raid en <em>photos</em></div>
+    </div>
+    <div class="rgrid reveal">
+      {gallery.slice(0, 6).map((src, i) => (
+        <a class={layout[i]} href={src}>
+          <img src={src} alt={`${name} — photo ${i + 1}`} />
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

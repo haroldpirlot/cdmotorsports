@@ -1,0 +1,14 @@
+---
+interface Props {
+  prev: { slug: string; name: string };
+  next: { slug: string; name: string };
+}
+const { prev, next } = Astro.props;
+---
+<section class="rnav">
+  <div class="wrap">
+    <a href={`/raids/${prev.slug}`}>← {prev.name}</a>
+    <a href="/#raids">Tous les raids</a>
+    <a href={`/raids/${next.slug}`}>{next.name} →</a>
+  </div>
+</section>

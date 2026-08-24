@@ -1,0 +1,13 @@
+---
+interface Props {
+  map: string;
+  name: string;
+}
+const { map, name } = Astro.props;
+---
+<section class="mapwrap pad">
+  <div class="wrap reveal">
+    <div class="eyebrow" style="margin-bottom:16px">L'itinéraire</div>
+    <img src={map} alt={`Carte itinéraire ${name}`} />
+  </div>
+</section>

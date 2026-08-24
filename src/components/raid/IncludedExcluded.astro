@@ -1,0 +1,22 @@
+---
+import { getEntry } from 'astro:content';
+
+const included = await getEntry('globals', 'included');
+const excluded = await getEntry('globals', 'excluded');
+---
+<section class="incl pad">
+  <div class="wrap">
+    <div class="reveal">
+      <h4>{included?.data.title}</h4>
+      <ul>
+        {included?.data.items?.map((i) => <li>{i}</li>)}
+      </ul>
+    </div>
+    <div class="reveal">
+      <h4>{excluded?.data.title}</h4>
+      <ul>
+        {excluded?.data.items?.map((i) => <li class="no">{i}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>

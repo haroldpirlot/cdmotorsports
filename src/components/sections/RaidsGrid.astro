@@ -1,13 +1,8 @@
 ---
-const raids = [
-  { idx: '01', title: 'Odyssée du Sud',        days: 7, level: 'Confirmé',      km: '1 480 km', img: '/img/raid_dune.jpg', slug: 'odyssee-du-sud' },
-  { idx: '02', title: "Boucle de l'Anti-Atlas", days: 5, level: 'Intermédiaire', km: '924 km',   img: '/img/raid_mont.jpg', slug: 'boucle-anti-atlas' },
-  { idx: '03', title: 'Cap Merzouga',           days: 6, level: 'Confirmé',      km: '1 232 km', img: '/img/pin.jpg',       slug: 'cap-merzouga' },
-  { idx: '04', title: 'Océan & Atlas',          days: 6, level: 'Confirmé',      km: '1 290 km', img: '/img/raid_cote.jpg', slug: 'ocean-atlas' },
-  { idx: '05', title: 'Escapade Drâa',          days: 3, level: 'Confirmé',      km: '800 km',   img: '/img/band.jpg',      slug: 'escapade-draa' },
-  { idx: '06', title: 'Échappée Atlantique',    days: 3, level: 'Intermédiaire', km: '665 km',   img: '/img/g9.jpg',        slug: 'echappee-atlantique' },
-  { idx: '07', title: 'Immersion Erg',          days: 3, level: 'Découverte',    km: '460 km',   img: '/img/g8.jpg',        slug: 'immersion-erg' },
-];
+import { getCollection } from 'astro:content';
+
+const raids = (await getCollection('raids')).sort((a, b) => a.data.n - b.data.n);
+const fmtKm = (n: number) => n.toLocaleString('fr-FR').replace(/ /g, ' ');
 ---
 <section class="raids pad" id="raids">
   <div class="wrap head">
@@ -18,24 +13,27 @@ const raids = [
     <div class="drag-note reveal">↔ Glissez pour explorer</div>
   </div>
   <div class="rtrack" id="rtrack">
-    {raids.map((r) => (
-      <div class="rcard">
-        <div class="ph">
-          <span class="idx">{r.idx}</span>
-          <img src={r.img} alt={r.title} />
-          <div class="cap">
-            <h3>{r.title}</h3>
-            <div class="meta">
-              <span><b>{r.days}</b> jours</span>
-              <span>{r.level}</span>
-              <span>{r.km}</span>
+    {raids.map((raid) => {
+      const totalKm = raid.data.stages.reduce((s, x) => s + x.km, 0);
+      return (
+        <div class="rcard">
+          <div class="ph">
+            <span class="idx">{String(raid.data.n).padStart(2, '0')}</span>
+            <img src={raid.data.hero} alt={raid.data.name} />
+            <div class="cap">
+              <h3>{raid.data.name}</h3>
+              <div class="meta">
+                <span><b>{raid.data.days}</b> jours</span>
+                <span>{raid.data.level}</span>
+                <span>{fmtKm(totalKm)} km</span>
+              </div>
             </div>
           </div>
+          <div class="price">Prix &amp; dates <b>sur demande</b></div>
+          <a class="rlink" href={`/raids/${raid.id}`}>Voir le raid →</a>
         </div>
-        <div class="price">Prix &amp; dates <b>sur demande</b></div>
-        <a class="rlink" href={`/raids/${r.slug}`}>Voir le raid →</a>
-      </div>
-    ))}
+      );
+    })}
   </div>
 </section>
 

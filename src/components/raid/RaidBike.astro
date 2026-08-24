@@ -1,0 +1,24 @@
+---
+import { getEntry } from 'astro:content';
+
+const bike = await getEntry('globals', 'bike');
+---
+<section class="moto pad">
+  <div class="wrap">
+    <div class="reveal">
+      <img src="/img/g9.jpg" alt={bike?.data.title ?? 'KOVE 450 Rally'} />
+    </div>
+    <div class="reveal">
+      <div class="eyebrow" style="margin-bottom:16px">La machine</div>
+      <div class="big" style="font-size:clamp(26px,3.4vw,42px)">{bike?.data.title}</div>
+      <ul class="specs">
+        {bike?.data.specs?.map((s) => (
+          <li><span>{s.label}</span><b>{s.value}</b></li>
+        ))}
+      </ul>
+      <p style="margin-top:16px;color:#5f574b">
+        Une véritable machine de rallye-raid, pas une moto de tourisme transformée.
+      </p>
+    </div>
+  </div>
+</section>
