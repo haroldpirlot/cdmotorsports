@@ -47,11 +47,11 @@ section { position: relative; z-index: 2; }
 }
 .big {
   font-family: var(--disp);
-  font-weight: 300;
-  font-size: clamp(32px, 5.2vw, 70px);
-  line-height: 1.02;
+  font-weight: 600;
+  font-size: clamp(28px, 4.2vw, 52px);
+  line-height: 1.04;
   letter-spacing: -.5px;
 }
-.big em { font-style: italic; font-weight: 400; color: var(--sand); }
+.big em { font-style: italic; font-weight: 600; color: var(--sand); }
 
 .hr { height: 1px; background: var(--line); margin: 0; }
