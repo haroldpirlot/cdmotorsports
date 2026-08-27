@@ -349,39 +349,23 @@
   gap: 16px;
   margin-top: 44px;
 }
-.mstrip figure {
+.mstrip > a {
   position: relative;
   overflow: hidden;
   border-radius: 2px;
+  height: clamp(280px, 26vw, 380px);
 }
 .mstrip picture,
 .mstrip img {
   display: block;
   width: 100%;
-  height: clamp(280px, 26vw, 380px);
+  height: 100%;
   object-fit: cover;
   transition: transform .8s cubic-bezier(.5, 0, .2, 1);
 }
 .mstrip picture { position: relative; overflow: hidden; }
 .mstrip picture img { transition: inherit; }
-.mstrip figure:hover img { transform: scale(1.06); }
-.mstrip figcaption {
-  position: absolute;
-  left: 16px;
-  bottom: 14px;
-  color: #fff;
-  font-family: var(--disp);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 13px;
-  z-index: 2;
-}
-.mstrip figure::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 55%, rgba(10, 8, 4, .55));
-}
+.mstrip > a:hover img { transform: scale(1.06); }
 .mnote {
   margin-top: 18px;
   font-size: 12px;

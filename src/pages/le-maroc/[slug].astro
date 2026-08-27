@@ -1,0 +1,143 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { cultureItems } from '../../data/culture';
+
+export async function getStaticPaths() {
+  return cultureItems.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const title = `${item.title} · CDM Motorsport`;
+const otherItems = cultureItems.filter((c) => c.slug !== item.slug).slice(0, 3);
+---
+<Layout title={title} description={item.description} ogImage={item.image}>
+  <section class="phero cphero" style={`background-image:url('${item.image}')`}>
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">Le Maroc</div>
+      <h1>{item.title}</h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap article">
+      <div class="meta reveal">Culture · Sud marocain</div>
+      <div class="reveal cbody">
+        {item.body.map((p) => (
+          <p set:html={p}></p>
+        ))}
+
+        {item.showVisitMorocco && (
+          <p class="cvm">
+            En savoir plus sur la destination :
+            <a href="https://www.visitmorocco.com/" target="_blank" rel="noopener">site officiel du tourisme marocain →</a>
+          </p>
+        )}
+
+        <div class="ccta">
+          <a href={item.cta.href} class="btn dark">{item.cta.label}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pad" style="background:var(--cream)">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom:34px">
+        <div class="eyebrow" style="margin-bottom:14px">À découvrir aussi</div>
+        <div class="big" style="font-size:clamp(24px,3vw,36px)">
+          Continuer sur <em>Le Maroc.</em>
+        </div>
+      </div>
+      <div class="crelated reveal">
+        {otherItems.map((c) => (
+          <a class="cctile" href={`/le-maroc/${c.slug}`}>
+            {c.imageBase ? (
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset={`${c.imageBase}-800.webp 800w, ${c.imageBase}-1400.webp 1400w`}
+                  sizes="(max-width: 640px) 100vw, 33vw"
+                />
+                <img src={c.image} alt={c.imageAlt} loading="lazy" decoding="async" />
+              </picture>
+            ) : (
+              <img src={c.image} alt={c.imageAlt} loading="lazy" decoding="async" />
+            )}
+            <span class="cclab">{c.caption}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .cphero {
+    min-height: 55vh;
+  }
+
+  .cbody p { color: #4c4438; margin-bottom: 18px; font-size: 17px; line-height: 1.7; }
+  .cbody p a { color: var(--sand); text-decoration: none; border-bottom: 1px solid currentColor; }
+  .cbody p a:hover { color: var(--ink); }
+
+  .cvm {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 14px !important;
+    color: var(--muted) !important;
+  }
+  .cvm a { color: var(--sand); text-decoration: none; margin-left: 4px; }
+  .cvm a:hover { color: var(--ink); }
+
+  .ccta { margin-top: 32px; }
+
+  .crelated {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .cctile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
+    display: block;
+    aspect-ratio: 3 / 2;
+    background: var(--paper);
+  }
+  .cctile picture,
+  .cctile img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .6s cubic-bezier(.5, 0, .2, 1);
+  }
+  .cctile:hover img { transform: scale(1.05); }
+  .cctile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .55) 100%);
+    pointer-events: none;
+  }
+  .cclab {
+    position: absolute;
+    left: 16px;
+    bottom: 12px;
+    color: #fff;
+    font-family: var(--disp);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
+    z-index: 2;
+  }
+
+  @media (max-width: 720px) {
+    .crelated { grid-template-columns: 1fr; }
+  }
+</style>
