@@ -141,7 +141,11 @@
   background-position: center;
   will-change: transform;
 }
-.bandA .bg { background-image: url('/img/band.jpg'); }
+.bandA .bg {
+  background-image: url('/img/band.jpg');
+  /* décalé pour montrer le motard en haut à gauche */
+  background-position: center top;
+}
 .bandB .bg { background-image: url('/img/pin.jpg'); }
 .band::after {
   content: "";
@@ -516,28 +520,45 @@
   flex-wrap: wrap;
 }
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   font-family: var(--sans);
   text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 16px 34px;
+  letter-spacing: 1.6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 14px 28px;
   border: 1px solid #fff;
   color: #fff;
-  border-radius: 1px;
-  transition: .3s;
+  border-radius: 2px;
+  transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
+  line-height: 1;
+  white-space: nowrap;
 }
 .btn:hover {
   background: #fff;
   color: var(--ink);
 }
+.btn .btn-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
 .btn.wa {
-  background: #25D366;
-  border-color: #25D366;
+  background: #B4642C;
+  border-color: #B4642C;
+  color: #fff;
 }
 .btn.wa:hover {
-  background: #1eb257;
+  background: #93511f;
+  border-color: #93511f;
   color: #fff;
+}
+.btn.wide {
+  width: 100%;
+  padding: 15px 22px;
 }
 .cmeta {
   margin-top: 30px;

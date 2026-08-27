@@ -1,42 +1,23 @@
 ---
-// Galerie unifiée : 21 nouvelles photos (gallery-01..21) + les photos existantes.
-// Toutes en 3:2 landscape. Chaque tuile utilise <picture> avec WebP srcset
-// (800w + 1400w), lazy-loading natif, JPG en fallback.
+// Galerie de l'accueil : les 9 premières photos + flèche vers la page complète.
+import { galleryTiles } from '../../data/gallery';
 
-interface Tile {
-  base: string;       // ex. '/img/gallery/gallery-01' (sans extension)
-  src: string;        // fallback JPG complet
-  alt: string;
-}
-
-const galleryTiles: Tile[] = Array.from({ length: 21 }, (_, i) => {
-  const n = String(i + 1).padStart(2, '0');
-  return {
-    base: `/img/gallery/gallery-${n}`,
-    src: `/img/gallery/gallery-${n}.jpg`,
-    alt: `Raid CDM Motorsport, photo ${i + 1}`,
-  };
-});
-
-const legacyTiles: Tile[] = [
-  { base: '/img/g4',    src: '/img/g4.jpg',    alt: 'Sur la piste, plateau' },
-  { base: '/img/g1',    src: '/img/g1.jpg',    alt: 'Groupe en bivouac' },
-  { base: '/img/g3',    src: '/img/g3.jpg',    alt: 'Traversée de dune' },
-  { base: '/img/g2',    src: '/img/g2.jpg',    alt: 'Piste rocailleuse' },
-  { base: '/img/g9',    src: '/img/g9.jpg',    alt: 'Côte atlantique' },
-  { base: '/img/g5',    src: '/img/g5.jpg',    alt: 'Passage technique' },
-  { base: '/img/g10',   src: '/img/g10.jpg',   alt: 'Coucher de soleil' },
-  { base: '/img/infos', src: '/img/infos.jpg', alt: 'Assistance logistique' },
-  { base: '/img/g6',    src: '/img/g6.jpg',    alt: 'Bivouac étoilé' },
-];
-
-const tiles: Tile[] = [...galleryTiles, ...legacyTiles];
+const tiles = galleryTiles.slice(0, 9);
 ---
 <section class="gal pad" id="galerie">
   <div class="wrap">
-    <div class="reveal" style="margin-bottom:40px">
-      <div class="eyebrow" style="margin-bottom:16px">Galerie</div>
-      <div class="big">Un avant-goût du <em>terrain</em></div>
+    <div class="ghead reveal">
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px">Galerie</div>
+        <div class="big">Un avant-goût du <em>terrain</em></div>
+      </div>
+      <a href="/galerie" class="more" aria-label="Voir toute la galerie">
+        <span>Voir tout</span>
+        <svg viewBox="0 0 32 32" width="46" height="46" aria-hidden="true">
+          <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M13 10 L20 16 L13 22 Z" fill="currentColor"/>
+        </svg>
+      </a>
     </div>
     <div class="ggrid reveal">
       {tiles.map((t, i) => (
@@ -63,6 +44,30 @@ const tiles: Tile[] = [...galleryTiles, ...legacyTiles];
 </section>
 
 <style>
+  .ghead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--ink);
+    font-family: var(--sans);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: color .3s ease;
+  }
+  .more:hover { color: var(--sand); }
+  .more svg { transition: transform .3s ease; }
+  .more:hover svg { transform: translateX(4px); }
+
   .ggrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

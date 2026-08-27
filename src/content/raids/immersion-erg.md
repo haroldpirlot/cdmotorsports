@@ -4,10 +4,10 @@ name: "Immersion Erg"
 itin: "Errachidia → Errachidia"
 days: 3
 level: Découverte
-hero: /img/g8.jpg
+hero: /img/gallery/gallery-16.jpg
 map: /img/raids/immersion-erg.png
 gallery:
-  - /img/g8.jpg
+  - /img/gallery/gallery-16.jpg
   - /img/pin.jpg
   - /img/g4.jpg
   - /img/g5.jpg

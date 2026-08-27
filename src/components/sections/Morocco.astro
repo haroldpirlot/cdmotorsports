@@ -37,6 +37,18 @@ const strip = [
           </p>
         </div>
       </div>
+
+      <div class="mrencontres">
+        <h3>Une terre, des rencontres</h3>
+        <p>
+          Au Maroc, l'accueil n'est pas une formule, c'est une manière d'être. Sur les pistes,
+          on partage le thé avec un berger, on échange quelques mots dans un village, on croise
+          des regards curieux et bienveillants. Ce sont ces rencontres, simples et sincères,
+          qui donnent au raid toute sa saveur. Derrière chaque étape il y a des gens, une
+          hospitalité et une culture façonnée par le temps, qui transforment un voyage à moto
+          en une véritable aventure humaine.
+        </p>
+      </div>
     </div>
     <div class="mstrip reveal">
       {strip.map((s) => (
@@ -48,3 +60,26 @@ const strip = [
     </div>
   </div>
 </section>
+
+<style>
+  .mrencontres {
+    margin-top: 40px;
+    padding-top: 34px;
+    border-top: 1px solid var(--line);
+    max-width: 780px;
+  }
+  .mrencontres h3 {
+    font-family: var(--disp);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: clamp(20px, 2.4vw, 26px);
+    color: var(--ink);
+    letter-spacing: -.2px;
+    margin-bottom: 14px;
+  }
+  .mrencontres p {
+    color: #4c4438;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+</style>

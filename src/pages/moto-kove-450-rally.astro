@@ -2,26 +2,34 @@
 import Layout from '../layouts/Layout.astro';
 
 const specs = [
-  { label: 'Cylindrée',     value: '450 cc' },
-  { label: 'Poids',         value: '~140 kg' },
-  { label: 'Autonomie',     value: 'Grand réservoir longue distance' },
-  { label: 'Suspensions',   value: 'Débattement rally' },
-  { label: 'Navigation',    value: 'Tour de road-book / GPS' },
-  { label: 'Profil',        value: 'Rally-raid tout-terrain' },
+  'Échappement en inox',
+  'Moteur double arbre à cames alliant performance et entretien peu contraignant',
+  'Sabot moteur en carbone',
+  'Amortisseur de couple',
+  'Compteur numérique contrôlable via les boutons au guidon, avec tour de navigation en PA',
+  'ABS déconnectable',
+  'Fourche Factory 49 mm entièrement réglable',
+  'Amortisseur 300 mm de débattement (version haute), entièrement réglable',
+  'Filtre à air Factory accessible en 2 secondes',
+  'Radiateurs gros volume avec ventilation',
+  "Radiateur d'huile avec protection carbone",
+  'Éclairage LED',
+  "Autonomie d'environ 550 km",
+  'ECU Bosch',
 ];
 
-const features = [
-  { n: '01', h: 'Légèreté',    p: 'Maniable dans le sable comme sur la roche, elle pardonne et met en confiance.' },
-  { n: '02', h: 'Fiabilité',   p: 'Entretenue et préparée avec le même soin que pour la course.' },
-  { n: '03', h: 'Autonomie',   p: 'Un réservoir taillé pour les longues étapes loin de tout.' },
-  { n: '04', h: 'Esprit rally', p: 'Tour de navigation, position de conduite et débattement dignes du rallye-raid.' },
+const highlights = [
+  { label: 'Réservoirs',   value: '3 réservoirs, 30 L de carburant' },
+  { label: 'Autonomie',    value: '~550 km' },
+  { label: 'Navigation',   value: 'Tour de navigation / GPS' },
+  { label: 'Profil',       value: 'Rally-raid tout-terrain' },
 ];
 ---
 <Layout
   title="La Moto, KOVE 450 Rally · CDM Motorsport"
-  description="La KOVE 450 Rally : une véritable machine de rallye-raid, légère, fiable et taillée pour les longues pistes du désert marocain."
+  description="La KOVE 450 Rally Standard : machine légère, endurante, issue de la compétition. 3 réservoirs, 30 L, autonomie ~550 km, taillée pour tous les terrains."
 >
-  <section class="phero" style="background-image:url('/img/g9.jpg')">
+  <section class="phero" style="background-image:url('/img/gallery/gallery-07.jpg')">
     <div class="wrap c">
       <div class="eyebrow" style="color:#e8c9a6">La moto</div>
       <h1>KOVE 450 <em>Rally</em></h1>
@@ -33,19 +41,29 @@ const features = [
       <div class="reveal">
         <div class="eyebrow" style="margin-bottom:16px">La machine</div>
         <div class="big">Née pour le <em>rally.</em></div>
-        <p class="lead" style="margin-top:18px">
-          La KOVE 450 Rally est une moto d'exception qui s'exprime à merveille dans les grands espaces :
-          légère, fiable et taillée pour les longues pistes du désert.
+        <p class="lead" style="margin-top:22px">
+          La KOVE 450 Rally Standard incarne l'essence même des motos rallye développées par
+          <a href="https://kove-racing.com/" target="_blank" rel="noopener" class="ext">KOVE Moto France</a>
+          : une machine légère, endurante et directement issue de l'expérience compétition de la marque.
+        </p>
+        <p style="margin-top:14px">
+          La 450 Rally Standard repose sur une base technique éprouvée, pensée pour offrir un équilibre
+          optimal entre performance tout-terrain, autonomie et facilité d'utilisation, aussi bien pour
+          le voyage que pour l'engagement sportif.
+        </p>
+        <p style="margin-top:14px">
+          Équipée de <b>3 réservoirs</b> pour une contenance totale de <b>30 L</b> de carburant.
+          Taillée pour affronter tous types de terrains.
         </p>
         <ul class="specs">
-          {specs.map((s) => (
+          {highlights.map((s) => (
             <li><span>{s.label}</span><b>{s.value}</b></li>
           ))}
         </ul>
-        <a href="/reserver" class="btn dark" style="margin-top:22px">Réserver un raid</a>
+        <a href="/reserver" class="btn dark" style="margin-top:26px">Réserver un raid</a>
       </div>
       <div class="reveal">
-        <img src="/img/g9.jpg" alt="KOVE 450 Rally" style="aspect-ratio:4/5" />
+        <img src="/img/gallery/gallery-13.jpg" alt="KOVE 450 Rally" style="aspect-ratio:4/5" />
       </div>
     </div>
   </section>
@@ -53,21 +71,55 @@ const features = [
   <section class="pad" style="background:var(--cream)">
     <div class="wrap">
       <div class="reveal">
-        <div class="eyebrow" style="margin-bottom:16px">Pourquoi la KOVE</div>
+        <div class="eyebrow" style="margin-bottom:16px">Caractéristiques techniques</div>
         <div class="big">Préparée comme<br />en <em>compétition.</em></div>
       </div>
-      <div class="feat reveal">
-        {features.map((f) => (
-          <div class="it">
-            <div class="n">{f.n}</div>
-            <h4>{f.h}</h4>
-            <p>{f.p}</p>
-          </div>
-        ))}
-      </div>
-      <div class="note reveal" style="margin-top:30px">
-        Partenariat KOVE, logo et visuels officiels à intégrer. Motos fournies et préparées par CDM Motorsport.
-      </div>
+      <ul class="speclist reveal">
+        {specs.map((s) => <li>{s}</li>)}
+      </ul>
+      <p class="note reveal" style="margin-top:36px;font-style:italic">
+        Cette machine est conçue pour affronter les pistes avec CDM Motorsport.
+      </p>
     </div>
   </section>
 </Layout>
+
+<style>
+  .ext {
+    color: var(--sand);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+  .ext:hover { color: var(--ink); }
+
+  .speclist {
+    list-style: none;
+    padding: 0;
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .speclist li {
+    padding: 16px 8px 16px 26px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+    line-height: 1.5;
+    color: #4c4438;
+    position: relative;
+  }
+  .speclist li::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 24px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sand);
+  }
+  @media (max-width: 720px) {
+    .speclist { grid-template-columns: 1fr; }
+  }
+</style>

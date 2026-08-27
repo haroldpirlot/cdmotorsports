@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { galleryTiles } from '../data/gallery';
+
+const tiles = galleryTiles;
+---
+<Layout
+  title="Galerie · CDM Motorsport"
+  description="Photos de raids moto au Maroc, sur la KOVE 450 Rally, avec CDM Motorsport."
+>
+  <section class="phero" style="background-image:url('/img/gallery/gallery-05.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">Galerie</div>
+      <h1>Sur les <em>pistes.</em></h1>
+    </div>
+  </section>
+
+  <section class="gal pad">
+    <div class="wrap">
+      <div class="ggrid reveal">
+        {tiles.map((t, i) => (
+          <a class="gtile" href={t.src} aria-label={t.alt}>
+            <picture>
+              <source
+                type="image/webp"
+                srcset={`${t.base}-800.webp 800w, ${t.base}-1400.webp 1400w`}
+                sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw"
+              />
+              <img
+                src={t.src}
+                alt={t.alt}
+                width="2000"
+                height="1333"
+                loading={i < 6 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </picture>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ggrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    grid-auto-rows: initial;
+  }
+  .gtile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+    display: block;
+    aspect-ratio: 3 / 2;
+    background: var(--cream);
+  }
+  .gtile picture,
+  .gtile picture img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .8s cubic-bezier(.5, 0, .2, 1);
+  }
+  .gtile:hover picture img { transform: scale(1.05); }
+
+  @media (max-width: 960px) {
+    .ggrid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .ggrid { grid-template-columns: 1fr; }
+  }
+</style>
