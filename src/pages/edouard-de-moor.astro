@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { SITE } from '../config';
 
 // La photo hero + les 12 autres en galerie. Ordre lexicographique = ordre du dossier
 // source, Harold peut réordonner en renommant les fichiers dans public/img/edouard/.
@@ -13,15 +14,48 @@ const pressArticles = [
     title: 'Edouard Charles de Moor : Objectif Dakar !',
     source: 'MotocrossMag.be',
     date: 'Août 2020',
+    datePublished: '2020-08',
     url: 'https://fr.motocrossmag.be/index.php/2020/08/edouard-charles-de-moor-objectif-dakar/',
   },
   {
     title: 'Edouard Charles de Moor avec Xavier de Soultrait et Camille Chapelière en Espagne',
     source: 'MotocrossMag.be',
     date: 'Juillet 2020',
+    datePublished: '2020-07',
     url: 'https://fr.motocrossmag.be/index.php/2020/07/edouard-charles-de-moor-avec-xavier-de-soultrait-et-camille-chapeliere-en-espagne/',
   },
 ];
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Edouard Charles De Moor',
+  givenName: 'Edouard Charles',
+  familyName: 'De Moor',
+  jobTitle: 'Fondateur, pilote et guide rallye-raid',
+  nationality: 'BE',
+  url: new URL('/edouard-de-moor', SITE.url).href,
+  image: new URL(heroPhoto, SITE.url).href,
+  knowsAbout: ['Rallye-raid', 'Motocross', 'Enduro', 'KOVE 450 Rally', 'Maroc'],
+  worksFor: {
+    '@type': 'Organization',
+    name: SITE.name,
+    url: SITE.url,
+  },
+  subjectOf: pressArticles.map((a) => ({
+    '@type': 'NewsArticle',
+    headline: a.title,
+    url: a.url,
+    datePublished: a.datePublished,
+    inLanguage: 'fr',
+    about: { '@type': 'Person', name: 'Edouard Charles De Moor' },
+    publisher: {
+      '@type': 'NewsMediaOrganization',
+      name: a.source,
+      url: 'https://fr.motocrossmag.be/',
+    },
+  })),
+};
 
 // Grille 12 colonnes façon .ggrid, patron répété pour couvrir 12 photos
 const layout = [
@@ -36,6 +70,7 @@ const layout = [
   description="La moto depuis l'âge de 5 ans, motocross, enduro (Husqvarna Trophy Belgique, Yamaha Belgique), puis le rallye-raid comme priorité. L'histoire du fondateur de CDM Motorsport."
   ogImage={heroPhoto}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
   <section class="phero" style={`background-image:url('${heroPhoto}')`}>
     <div class="wrap c">
       <div class="eyebrow" style="color:#e8c9a6">Le guide</div>
