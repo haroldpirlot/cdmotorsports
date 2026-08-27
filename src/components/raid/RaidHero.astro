@@ -4,22 +4,20 @@ interface Props {
   name: string;
   itin: string;
   days: number;
-  level: string;
   hero: string;
   totalKm: number;
 }
-const { n, name, itin, days, level, hero, totalKm } = Astro.props;
+const { n, name, itin, days, hero, totalKm } = Astro.props;
 const departure = itin.split(' → ')[0];
 const totalKmStr = totalKm.toLocaleString('fr-FR').replace(/ /g, ' ');
 ---
 <section class="rhero" style={`background-image:url('${hero}')`}>
   <div class="wrap c">
-    <div class="k">Raid {n} · {days} jours · {level}</div>
+    <div class="k">Raid {n} · {days} jours</div>
     <h1>{name}</h1>
     <div class="itin">{itin}</div>
     <div class="chips">
       <span class="chip"><b>{days} jours</b></span>
-      <span class="chip">Niveau <b>{level}</b></span>
       <span class="chip"><b>{totalKmStr} km</b></span>
       <span class="chip">Départ <b>{departure}</b></span>
       <span class="chip">Prix &amp; dates <b>sur demande</b></span>

@@ -1,0 +1,229 @@
+---
+// Section "Avis clients" style Restex : note globale + cartes.
+// Prend une liste d'avis en entrée. Prête à recevoir la vraie liste Google
+// (via une API/fetch server-side plus tard) sans changer le rendu.
+
+export interface Review {
+  name: string;         // "Thomas L."
+  raid: string;         // "Odyssée du Sud"
+  country: string;      // "Belgique"
+  rating: 1 | 2 | 3 | 4 | 5;
+  text: string;
+  date: string;         // "Mars 2026"
+}
+
+interface Props {
+  reviews: Review[];
+  googleUrl?: string;
+  title?: string;
+}
+
+const {
+  reviews,
+  googleUrl = '#',
+  title = "Ils l'ont vécu",
+} = Astro.props;
+
+const total = reviews.length;
+const avg = total > 0
+  ? (reviews.reduce((s, r) => s + r.rating, 0) / total)
+  : 0;
+const avgLabel = avg.toFixed(1).replace('.', ',');
+
+// Palette pour les avatars initiales (couleurs terre/sable, rotation)
+const avatarColors = ['#C8702A', '#8B5A2E', '#4C6B54', '#7A5C3D', '#B4642C'];
+const initialOf = (name: string) => {
+  const parts = name.trim().split(/\s+/);
+  const first = parts[0]?.[0] ?? '';
+  return first.toUpperCase();
+};
+---
+<section class="greviews pad" id="avis">
+  <div class="wrap">
+    <div class="reveal head">
+      <div class="eyebrow">Avis clients</div>
+      <h2 class="gtitle">{title}</h2>
+      <div class="score">
+        <div class="score-num">{avgLabel}</div>
+        <div class="score-detail">
+          <div class="stars-big" aria-label={`${avgLabel} sur 5`}>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <span class={i <= Math.round(avg) ? 'on' : ''}>★</span>
+            ))}
+          </div>
+          <div class="score-count">{total} avis Google</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gcards reveal">
+      {reviews.map((r, i) => (
+        <article class="gcard">
+          <div class="ghead">
+            <div class="avatar" style={`background:${avatarColors[i % avatarColors.length]}`}>
+              {initialOf(r.name)}
+            </div>
+            <div class="gwho">
+              <b>{r.name}</b>
+              <span>{r.country} · {r.raid}</span>
+            </div>
+          </div>
+          <div class="stars" aria-label={`${r.rating} étoiles sur 5`}>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <span class={n <= r.rating ? 'on' : ''}>★</span>
+            ))}
+          </div>
+          <p class="quote">« {r.text} »</p>
+          <div class="date">{r.date}</div>
+        </article>
+      ))}
+    </div>
+
+    <div class="gcta reveal">
+      <a href={googleUrl} class="btn dark" target="_blank" rel="noopener">
+        Voir tous les avis sur Google
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .greviews {
+    background: var(--cream);
+  }
+  .head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 30px 40px;
+    align-items: end;
+    margin-bottom: 44px;
+  }
+  .gtitle {
+    grid-column: 1;
+    font-family: var(--disp);
+    font-weight: 600;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05;
+    color: var(--ink);
+    margin: 12px 0 0;
+    letter-spacing: -0.5px;
+  }
+  .eyebrow {
+    grid-column: 1;
+  }
+  .score {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 22px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .score-num {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stars-big {
+    color: #E4DBCD;
+    font-size: 18px;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .stars-big .on { color: #F5B301; }
+  .score-count {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: .3px;
+    margin-top: 4px;
+  }
+
+  .gcards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .gcard {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ghead {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: var(--disp);
+    font-weight: 600;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .gwho {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .gwho b {
+    font-family: var(--disp);
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 15px;
+  }
+  .gwho span {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: .2px;
+  }
+  .stars {
+    color: #E4DBCD;
+    font-size: 14px;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .stars .on { color: #F5B301; }
+  .quote {
+    font-family: var(--sans);
+    color: #4c4438;
+    font-size: 15px;
+    line-height: 1.6;
+    flex: 1;
+    margin: 0;
+  }
+  .date {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: .3px;
+  }
+
+  .gcta {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 960px) {
+    .gcards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .head { grid-template-columns: 1fr; }
+    .score { grid-column: 1; grid-row: auto; }
+    .gcards { grid-template-columns: 1fr; }
+  }
+</style>

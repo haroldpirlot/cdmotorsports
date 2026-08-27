@@ -5,7 +5,7 @@ export const SITE = {
   url: 'https://cdmmotorsport.com',
   description: 'Raids moto (rallye-raid) au Maroc en KOVE 450 Rally.',
   contact: {
-    email: '[email@cdmotorsport.com]',
+    email: 'info@cdmmotorsport.com',
     phone: '+32 486 94 23 40',
     // Numéro brut pour construire l'URL wa.me (sans + ni espaces)
     whatsappNumber: '32486942340',

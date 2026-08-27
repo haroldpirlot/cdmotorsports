@@ -10,9 +10,56 @@ import BandB from '../components/sections/BandB.astro';
 import Morocco from '../components/sections/Morocco.astro';
 import Gallery from '../components/sections/Gallery.astro';
 import PracticalInfo from '../components/sections/PracticalInfo.astro';
-import Reviews from '../components/sections/Reviews.astro';
 import FAQ from '../components/sections/FAQ.astro';
 import ContactBlock from '../components/sections/ContactBlock.astro';
+import GoogleReviews, { type Review } from '../components/sections/GoogleReviews.astro';
+
+// Placeholder d'avis (structure identique à ce que servira l'API Google plus tard).
+const reviews: Review[] = [
+  {
+    name: 'Thomas L.',
+    raid: 'Odyssée du Sud',
+    country: 'Belgique',
+    rating: 5,
+    text: "Organisation au top du début à la fin. Edouard connaît le terrain par cœur et s'adapte à chaque niveau. Les paysages sont irréels. Je repars l'an prochain.",
+    date: 'Mars 2026',
+  },
+  {
+    name: 'Julie D.',
+    raid: 'Océan & Atlas',
+    country: 'France',
+    rating: 5,
+    text: "Première expérience en rallye-raid, et je me suis sentie encadrée et en sécurité à chaque instant. On progresse vite et on prend un plaisir fou.",
+    date: 'Février 2026',
+  },
+  {
+    name: 'Marc V.',
+    raid: 'Cap Merzouga',
+    country: 'Belgique',
+    rating: 5,
+    text: "Les dunes de Merzouga au lever du soleil, inoubliable. Assistance impeccable, bivouacs magiques, super groupe.",
+    date: 'Avril 2026',
+  },
+  {
+    name: 'Nicolas P.',
+    raid: "Boucle de l'Anti-Atlas",
+    country: 'France',
+    rating: 5,
+    text: "Du vrai rallye-raid, exigeant et grisant. La KOVE est parfaite, et Edouard partage son expérience sans compter. À faire absolument.",
+    date: 'Janvier 2026',
+  },
+  {
+    name: 'Sophie & Antoine',
+    raid: 'Échappée Atlantique',
+    country: 'Belgique',
+    rating: 5,
+    text: "On a tout adoré : les pistes, les paysages, l'ambiance et l'accueil. Tout est pensé pour qu'on n'ait qu'à profiter. On reviendra.",
+    date: 'Mai 2026',
+  },
+];
+
+// URL de la fiche Google Business (à mettre à jour quand la fiche sera créée)
+const googleReviewsUrl = '#';
 ---
 <Layout title="CDM Motorsport, Every ride tells a story">
   <HeroVideo />
@@ -25,7 +72,7 @@ import ContactBlock from '../components/sections/ContactBlock.astro';
   <Morocco />
   <Gallery />
   <PracticalInfo />
-  <Reviews />
   <FAQ />
   <ContactBlock />
+  <GoogleReviews reviews={reviews} googleUrl={googleReviewsUrl} />
 </Layout>

@@ -15,7 +15,7 @@ import { SITE } from '../../config';
       <a href="/reserver" class="btn">Demander une date</a>
     </div>
     <div class="cmeta">
-      {SITE.contact.phone} · {SITE.contact.email} · <a href={SITE.contact.instagramUrl} target="_blank" rel="noopener">{SITE.contact.instagram}</a>
+      {SITE.contact.phone} · <a href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a> · <a href={SITE.contact.instagramUrl} target="_blank" rel="noopener">{SITE.contact.instagram}</a>
     </div>
   </div>
 </section>

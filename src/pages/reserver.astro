@@ -107,7 +107,7 @@ const steps = [
         <div class="cinfo reveal">
           <div class="eyebrow" style="margin-bottom:14px">Contact direct</div>
           <div class="line"><b>WhatsApp</b><span>{SITE.contact.phone}</span></div>
-          <div class="line"><b>Email</b><span>{SITE.contact.email}</span></div>
+          <div class="line"><b>Email</b><span><a href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a></span></div>
           <div class="line"><b>Départs</b><span>Depuis Agadir, Maroc</span></div>
           <div class="line"><b>Réseaux</b><span><a href={SITE.contact.instagramUrl} target="_blank" rel="noopener">{SITE.contact.instagram}</a></span></div>
           <a href={SITE.whatsappUrl} class="btn wa" style="margin-top:20px" target="_blank" rel="noopener">

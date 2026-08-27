@@ -24,8 +24,8 @@ const fmtKm = (n: number) => n.toLocaleString('fr-FR').replace(/ /g, ' ');
               <h3>{raid.data.name}</h3>
               <div class="meta">
                 <span><b>{raid.data.days}</b> jours</span>
-                <span>{raid.data.level}</span>
                 <span>{fmtKm(totalKm)} km</span>
+                <span>{raid.data.itin}</span>
               </div>
             </div>
           </div>
