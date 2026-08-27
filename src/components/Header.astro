@@ -14,16 +14,14 @@
 
 const primary = [
   { label: 'Raids',    href: '/#raids' },
+  { label: 'La Moto',  href: '/moto-kove-450-rally' },
+  { label: 'Le Maroc', href: '/#maroc' },
 ];
 const discover = [
-  { label: 'La Moto',         href: '/moto-kove-450-rally' },
-  { label: 'Le Maroc',        href: '/#maroc' },
-  { label: 'Qui suis-je',     href: '/edouard-de-moor' },
   { label: 'Infos pratiques', href: '/#infos' },
-];
-const secondary = [
-  { label: 'Blog',     href: '/actualites' },
-  { label: 'Boutique', href: '/boutique' },
+  { label: 'Qui suis-je',     href: '/edouard-de-moor' },
+  { label: 'Blog',            href: '/actualites' },
+  { label: 'Boutique',        href: '/boutique' },
 ];
 ---
 <header id="hd">
@@ -88,10 +86,6 @@ const secondary = [
           ))}
         </div>
       </div>
-
-      {secondary.map((item) => (
-        <a href={item.href} class="menu-link">{item.label}</a>
-      ))}
 
       <a href="/reserver" class="menu-cta">Réserver</a>
     </nav>
