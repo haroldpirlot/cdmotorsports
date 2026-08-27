@@ -17,7 +17,7 @@ const steps = [
 ];
 ---
 <Layout
-  title="Réserver votre raid · CDMotorSport"
+  title="Réserver votre raid · CDM Motorsport"
   description="Réservez votre raid moto au Maroc en KOVE 450 Rally. Formulaire de demande + contact WhatsApp direct."
 >
   <section class="phero short" style="background-image:url('/img/pin.jpg')">
@@ -51,7 +51,7 @@ const steps = [
             </div>
           )}
           <form action={formAction} method="POST">
-            <input type="hidden" name="_subject" value="Nouvelle demande de réservation — CDMotorSport" />
+            <input type="hidden" name="_subject" value="Nouvelle demande de réservation, CDM Motorsport" />
             <input type="hidden" name="_next" value={nextUrl} />
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-5000px" aria-hidden="true" />
 
@@ -108,13 +108,13 @@ const steps = [
           <div class="eyebrow" style="margin-bottom:14px">Contact direct</div>
           <div class="line"><b>WhatsApp</b><span>{SITE.contact.phone}</span></div>
           <div class="line"><b>Email</b><span>{SITE.contact.email}</span></div>
-          <div class="line"><b>Départs</b><span>Depuis Agadir — Maroc</span></div>
-          <div class="line"><b>Réseaux</b><span>{SITE.contact.instagram} · [Facebook]</span></div>
+          <div class="line"><b>Départs</b><span>Depuis Agadir, Maroc</span></div>
+          <div class="line"><b>Réseaux</b><span><a href={SITE.contact.instagramUrl} target="_blank" rel="noopener">{SITE.contact.instagram}</a></span></div>
           <a href={SITE.whatsappUrl} class="btn wa" style="margin-top:20px" target="_blank" rel="noopener">
             Écrire sur WhatsApp
           </a>
           <p style="margin-top:18px;color:#6b6255;font-size:13px">
-            Nos plannings se remplissent souvent plusieurs mois à l'avance — n'hésitez pas à anticiper.
+            Nos plannings se remplissent souvent plusieurs mois à l'avance, n'hésitez pas à anticiper.
           </p>
         </div>
       </div>

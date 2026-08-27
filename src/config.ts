@@ -1,5 +1,5 @@
 export const SITE = {
-  name: 'CDMotorSport',
+  name: 'CDM Motorsport',
   tagline: 'Every ride tells a story',
   subtagline: 'Live the rally. Ride the legend.',
   url: 'https://cdmmotorsport.com',
@@ -9,13 +9,14 @@ export const SITE = {
     phone: '+32 486 94 23 40',
     // Numéro brut pour construire l'URL wa.me (sans + ni espaces)
     whatsappNumber: '32486942340',
-    instagram: '[Instagram]',
+    instagram: '@cdmmotorsport__',
+    instagramUrl: 'https://www.instagram.com/cdmmotorsport__/',
   },
   // URL prête à l'emploi pour les boutons WhatsApp
   get whatsappUrl() {
     return `https://wa.me/${this.contact.whatsappNumber}`;
   },
-  // Formspree form ID — à remplacer par la vraie valeur (formspree.io → new form → copy ID xyzabc)
+  // Formspree form ID, à remplacer par la vraie valeur (formspree.io → new form → copy ID xyzabc)
   // Puis form action = `https://formspree.io/f/${SITE.formspreeId}`
   formspreeId: 'xppaegba',
   // Google Analytics 4 measurement ID (format G-XXXXXXXXXX)

@@ -15,7 +15,7 @@ const layout = ['s3 r2', 's3', 's3', 's2', 's2', 's2'];
     <div class="rgrid reveal">
       {gallery.slice(0, 6).map((src, i) => (
         <a class={layout[i]} href={src}>
-          <img src={src} alt={`${name} — photo ${i + 1}`} />
+          <img src={src} alt={`${name}, photo ${i + 1}`} />
         </a>
       ))}
     </div>

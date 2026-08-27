@@ -14,6 +14,8 @@ import { SITE } from '../../config';
       <a href={SITE.whatsappUrl} class="btn wa" target="_blank" rel="noopener">WhatsApp</a>
       <a href="/reserver" class="btn">Demander une date</a>
     </div>
-    <div class="cmeta">{SITE.contact.phone} · {SITE.contact.email} · {SITE.contact.instagram}</div>
+    <div class="cmeta">
+      {SITE.contact.phone} · {SITE.contact.email} · <a href={SITE.contact.instagramUrl} target="_blank" rel="noopener">{SITE.contact.instagram}</a>
+    </div>
   </div>
 </section>

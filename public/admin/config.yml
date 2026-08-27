@@ -20,7 +20,7 @@ collections:
     create: false
     slug: "{{slug}}"
     identifier_field: name
-    summary: "{{n}} · {{name}} — {{days}}j · {{level}}"
+    summary: "{{n}} · {{name}}, {{days}}j · {{level}}"
     fields:
       - { label: "Numéro",     name: n,     widget: number,  value_type: int, min: 1, max: 99 }
       - { label: "Nom",        name: name,  widget: string }
@@ -36,7 +36,7 @@ collections:
       - label: "Étapes"
         name: stages
         widget: list
-        summary: "Jour — {{fields.from}} → {{fields.to}} · {{fields.km}} km"
+        summary: "Jour, {{fields.from}} → {{fields.to}} · {{fields.km}} km"
         fields:
           - { label: Depuis,       name: from,    widget: string }
           - { label: Vers,         name: to,      widget: string }

@@ -1,8 +1,8 @@
 ---
 const faqs = [
   {
-    q: 'Quel niveau faut-il pour un raid CDMotorSport ?',
-    a: "La pratique du tout-terrain loisir, cross ou enduro suffit pour un raid découverte. Nos groupes restent réduits et l'encadrement s'adapte — un débutant motivé a toute sa place, à condition d'être honnête sur son niveau au moment de choisir son raid.",
+    q: 'Quel niveau faut-il pour un raid CDM Motorsport ?',
+    a: "La pratique du tout-terrain loisir, cross ou enduro suffit pour un raid découverte. Nos groupes restent réduits et l'encadrement s'adapte, un débutant motivé a toute sa place, à condition d'être honnête sur son niveau au moment de choisir son raid.",
   },
   {
     q: 'Quel équipement dois-je apporter ?',
@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     q: 'Puis-je venir avec ma propre moto ?',
-    a: "Nos raids se déroulent sur une KOVE 450 Rally fournie et préparée par CDMotorSport. Pour venir avec votre propre moto, contactez-nous : c'est possible sous conditions, avec assistance 4×4 et transport des bagages.",
+    a: "Nos raids se déroulent sur une KOVE 450 Rally fournie et préparée par CDM Motorsport. Pour venir avec votre propre moto, contactez-nous : c'est possible sous conditions, avec assistance 4×4 et transport des bagages.",
   },
   {
     q: 'Quels sont les prix des raids ?',
@@ -23,6 +23,11 @@ const faqs = [
   {
     q: 'Comment se déroule la réservation ?',
     a: "Vous nous écrivez avec votre niveau et vos dates. On vous propose le raid adapté. La réservation est confirmée par un acompte de 30 %. Le solde est réglé au plus tard 30 jours avant le départ.",
+  },
+  {
+    q: 'Quelles sont les conditions générales de vente ?',
+    a: "Inscription, paiement (acompte 30 % puis solde 30 jours avant départ), annulation, assurance annulation et rapatriement obligatoires, responsabilité et force majeure sont détaillés dans nos CGV.",
+    link: { href: '/cgv', label: 'Lire les CGV' },
   },
 ];
 
@@ -52,7 +57,7 @@ const faqJsonLd = {
             <span>{f.q}</span>
             <span class="chev" aria-hidden="true">+</span>
           </summary>
-          <p>{f.a}</p>
+          <p>{f.a}{f.link && (<> <a href={f.link.href} class="faq-link">{f.link.label} →</a></>)}</p>
         </details>
       ))}
     </div>
@@ -99,4 +104,12 @@ const faqJsonLd = {
     line-height: 1.6;
     max-width: 780px;
   }
+  .faq-link {
+    color: var(--sand);
+    font-family: var(--disp);
+    text-decoration: none;
+    white-space: nowrap;
+    margin-left: 4px;
+  }
+  .faq-link:hover { color: var(--ink); }
 </style>

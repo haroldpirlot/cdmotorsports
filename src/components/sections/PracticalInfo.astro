@@ -3,7 +3,7 @@ const points = [
   'Encadrement par guides expérimentés',
   "Véhicule d'assistance 4×4 & mécanicien",
   'Bivouac, riad & pension complète',
-  'Road-book, trace GPS & transferts',
+  'Trace GPS & transferts',
 ];
 const equipment = [
   'Casque & lunettes tout-terrain',
@@ -37,7 +37,12 @@ const extras = [
       </ul>
     </div>
     <div class="im reveal">
-      <img src="/img/infos.jpg" alt="Assistance et logistique" />
+      <div class="infos-gallery">
+        <img src="/img/infos.jpg" alt="Assistance et logistique" />
+        <img src="/img/g6.jpg" alt="Sur la piste" />
+        <img src="/img/village.jpg" alt="Étape en village berbère" />
+        <img src="/img/band.jpg" alt="Bivouac dans le désert" />
+      </div>
     </div>
   </div>
   <div class="wrap prepwrap">
@@ -67,3 +72,17 @@ const extras = [
     </div>
   </div>
 </section>
+
+<style>
+  .infos-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .infos-gallery img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+</style>

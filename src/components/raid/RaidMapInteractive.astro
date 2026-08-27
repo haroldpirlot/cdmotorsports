@@ -55,7 +55,7 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
   {gpx.approximate && (
     <div class="raidmap-actions">
       <span class="raidmap-provisional" role="note">
-        Tracé indicatif — route lissée à travers les villes-étapes.
+        Tracé indicatif, route lissée à travers les villes-étapes.
       </span>
     </div>
   )}
@@ -192,7 +192,7 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
           'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
           {
             maxZoom: 18,
-            attribution: 'Tiles © Esri — World Imagery',
+            attribution: 'Tiles © Esri, World Imagery',
           }
         );
 
@@ -232,8 +232,8 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
         popupAnchor: [0, -14],
       });
       const title = isDeparture
-        ? `Départ — ${stage.from}`
-        : `Jour ${stage.day} — ${stage.from}`;
+        ? `Départ, ${stage.from}`
+        : `Jour ${stage.day}, ${stage.from}`;
       const marker = L.marker([lat, lon], { icon, title }).addTo(map);
       const label = isDeparture ? `Départ · ${escapeHtml(stage.from)}` : escapeHtml(stage.from);
       marker.bindPopup(
@@ -252,7 +252,7 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
         iconAnchor: [14, 14],
         popupAnchor: [0, -14],
       });
-      L.marker([lat, lon], { icon, title: `Arrivée — ${last.name}` })
+      L.marker([lat, lon], { icon, title: `Arrivée, ${last.name}` })
         .addTo(map)
         .bindPopup(`<strong>Arrivée · ${escapeHtml(last.name)}</strong>`);
     }
