@@ -115,7 +115,7 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-family: 'Bricolage Grotesque', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 500;
     font-size: 13px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
@@ -123,7 +123,7 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
   .leaflet-popup-content-wrapper {
     border-radius: 6px;
     background: #fff;
-    font-family: 'Hanken Grotesk', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 13px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, .18);
   }
@@ -131,7 +131,7 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
     margin: 12px 16px;
   }
   .leaflet-popup-content strong {
-    font-family: 'Bricolage Grotesque', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #1a1613;
   }
   .leaflet-container a.leaflet-popup-close-button {
@@ -237,7 +237,7 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
       const marker = L.marker([lat, lon], { icon, title }).addTo(map);
       const label = isDeparture ? `Départ · ${escapeHtml(stage.from)}` : escapeHtml(stage.from);
       marker.bindPopup(
-        `<strong>${label}</strong><br/>Jour ${stage.day} · ${escapeHtml(stage.from)} → ${escapeHtml(stage.name)}<br/><span style="color:#C8702A;font-family:'Bricolage Grotesque',sans-serif">${stage.km} km</span>`
+        `<strong>${label}</strong><br/>Jour ${stage.day} · ${escapeHtml(stage.from)} → ${escapeHtml(stage.name)}<br/><span style="color:#C8702A;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">${stage.km} km</span>`
       );
     }
 

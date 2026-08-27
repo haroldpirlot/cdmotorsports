@@ -8,6 +8,7 @@
   --check: #3F7A57;
   --white: #fff;
 
-  --disp: 'Clash Display', sans-serif;
-  --sans: 'Satoshi', sans-serif;
+  /* Police système unique : Helvetica Neue > Helvetica > Arial. Aucun font web. */
+  --disp: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

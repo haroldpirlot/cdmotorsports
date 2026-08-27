@@ -1,5 +1,4 @@
 ---
-import '../styles/fonts.css';
 import '../styles/global.css';
 import '../styles/sections.css';
 import '../styles/pages.css';
@@ -70,8 +69,6 @@ const organizationJsonLd = {
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImageAbs} />
 
-  <link rel="preload" href="/fonts/clash-display-600.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin />
 
   <!-- JSON-LD : identité de l'organisation, présent sur toutes les pages -->
   <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />

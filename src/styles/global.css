@@ -4,6 +4,7 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--sans);
+  font-weight: 400;
   color: var(--ink);
   background: var(--paper);
   line-height: 1.6;
@@ -47,11 +48,12 @@ section { position: relative; z-index: 2; }
 }
 .big {
   font-family: var(--disp);
-  font-weight: 600;
+  font-weight: 700;
   font-size: clamp(28px, 4.2vw, 52px);
   line-height: 1.04;
   letter-spacing: -.5px;
+  text-transform: uppercase;
 }
-.big em { font-style: italic; font-weight: 600; color: var(--sand); }
+.big em { font-style: italic; font-weight: 700; color: var(--sand); }
 
 .hr { height: 1px; background: var(--line); margin: 0; }
