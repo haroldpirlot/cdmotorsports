@@ -1,18 +1,18 @@
 # DEPLOY.md — Checklist mise en production
 
 Ce document liste **tout ce qu'il faut changer** le jour où le vrai domaine
-`cdmotorsport.com` est acheté et pointé sur Vercel. À suivre dans l'ordre.
+`cdmmotorsport.com` est acheté et pointé sur Vercel. À suivre dans l'ordre.
 
 ---
 
 ## 1. Registrar & DNS (~5 min + propagation)
 
-- [ ] Acheter `cdmotorsport.com` chez un registrar (OVH, Gandi, Namecheap, Porkbun…)
-- [ ] Sur **Vercel → cdmotorsports → Settings → Domains → Add Domain** : entrer `cdmotorsport.com` et `www.cdmotorsport.com`
+- [ ] Acheter `cdmmotorsport.com` chez un registrar (OVH, Gandi, Namecheap, Porkbun…)
+- [ ] Sur **Vercel → cdmotorsports → Settings → Domains → Add Domain** : entrer `cdmmotorsport.com` et `www.cdmmotorsport.com`
 - [ ] Vercel affiche les **DNS records** à créer chez le registrar. Deux options :
   - **Nameservers Vercel** (le plus simple, Vercel gère tout) : basculer les NS du domaine sur `ns1.vercel-dns.com` + `ns2.vercel-dns.com`
   - **Records manuels** : ajouter les A/CNAME/TXT indiqués par Vercel dans la zone DNS du registrar
-- [ ] Attendre la propagation DNS (5 min à 24 h). Vérifier avec `dig cdmotorsport.com` — doit répondre depuis Vercel
+- [ ] Attendre la propagation DNS (5 min à 24 h). Vérifier avec `dig cdmmotorsport.com` — doit répondre depuis Vercel
 - [ ] Vercel émet automatiquement le certificat SSL Let's Encrypt une fois DNS propagé
 
 ---
@@ -26,7 +26,7 @@ Trois fichiers à modifier :
 ```ts
 export const SITE = {
   // ...
-  url: 'https://cdmotorsport.com',  // ← anciennement 'https://cdmotorsports.vercel.app'
+  url: 'https://cdmmotorsport.com',  // ← anciennement 'https://cdmotorsports.vercel.app'
   // ...
 };
 ```
@@ -35,7 +35,7 @@ export const SITE = {
 
 ```js
 export default defineConfig({
-  site: 'https://cdmotorsport.com',  // ← anciennement 'https://cdmotorsports.vercel.app'
+  site: 'https://cdmmotorsport.com',  // ← anciennement 'https://cdmotorsports.vercel.app'
   integrations: [sitemap()],
 });
 ```
@@ -47,14 +47,14 @@ backend:
   name: github
   repo: haroldpirlot/cdmotorsports
   branch: main
-  base_url: https://cdmotorsport.com  # ← anciennement https://cdmotorsports.vercel.app
+  base_url: https://cdmmotorsport.com  # ← anciennement https://cdmotorsports.vercel.app
   auth_endpoint: api/auth
 ```
 
 ### `public/robots.txt`
 
 ```
-Sitemap: https://cdmotorsport.com/sitemap-index.xml
+Sitemap: https://cdmmotorsport.com/sitemap-index.xml
 ```
 
 ### Vérif — les autres endroits utilisent `SITE.url` dynamiquement, aucune modif nécessaire :
@@ -71,8 +71,8 @@ Sinon le login CMS casse.
 
 - [ ] Aller sur https://github.com/settings/developers → OAuth Apps → **CDMotorsports CMS**
 - [ ] Mettre à jour :
-  - **Homepage URL** : `https://cdmotorsport.com`
-  - **Authorization callback URL** : `https://cdmotorsport.com/api/callback`
+  - **Homepage URL** : `https://cdmmotorsport.com`
+  - **Authorization callback URL** : `https://cdmmotorsport.com/api/callback`
 - [ ] Update application. Le client_id + secret restent inchangés (pas besoin de les régénérer, ni de changer les env vars Vercel).
 
 ---
@@ -80,36 +80,36 @@ Sinon le login CMS casse.
 ## 4. Vercel — redirections (automatique)
 
 Une fois le domaine principal défini sur Vercel :
-- `cdmotorsports.vercel.app/*` → **redirect 308** vers `cdmotorsport.com/*` (Vercel fait ça tout seul)
-- Assure-toi que **Primary Domain = cdmotorsport.com** dans Settings → Domains
+- `cdmotorsports.vercel.app/*` → **redirect 308** vers `cdmmotorsport.com/*` (Vercel fait ça tout seul)
+- Assure-toi que **Primary Domain = cdmmotorsport.com** dans Settings → Domains
 
 ---
 
 ## 5. Google Analytics 4 (déjà OK, cosmétique)
 
 Le tag `G-7VF98VWPFT` tracke depuis n'importe quelle URL. Facultatif :
-- [ ] GA4 → Admin → Data Streams → mettre à jour le "Stream URL" de `https://cdmotorsport.com` (déjà configuré comme ça)
+- [ ] GA4 → Admin → Data Streams → mettre à jour le "Stream URL" de `https://cdmmotorsport.com` (déjà configuré comme ça)
 
 ---
 
 ## 6. Google Search Console
 
-- [ ] https://search.google.com/search-console → **Ajouter une propriété** → **Préfixe d'URL** → `https://cdmotorsport.com/`
+- [ ] https://search.google.com/search-console → **Ajouter une propriété** → **Préfixe d'URL** → `https://cdmmotorsport.com/`
 - [ ] Vérification via **Google Analytics** (1 clic, marche car GA4 est en place)
-- [ ] Une fois vérifié : soumettre le **sitemap** dans Sitemaps → `https://cdmotorsport.com/sitemap-index.xml`
-- [ ] Optionnel : ajouter aussi `https://www.cdmotorsport.com/` comme propriété séparée
+- [ ] Une fois vérifié : soumettre le **sitemap** dans Sitemaps → `https://cdmmotorsport.com/sitemap-index.xml`
+- [ ] Optionnel : ajouter aussi `https://www.cdmmotorsport.com/` comme propriété séparée
 
 ---
 
 ## 7. Email pro & séquence Brevo (J5 bis)
 
-Nécessite le domaine pour envoyer depuis `contact@cdmotorsport.com` ou `bonjour@cdmotorsport.com`.
+Nécessite le domaine pour envoyer depuis `contact@cdmmotorsport.com` ou `bonjour@cdmmotorsport.com`.
 
 - [ ] Créer un compte Brevo (gratuit jusqu'à 300 emails/jour)
-- [ ] Brevo → **Sender & IP** → ajouter `cdmotorsport.com` comme domaine émetteur
+- [ ] Brevo → **Sender & IP** → ajouter `cdmmotorsport.com` comme domaine émetteur
 - [ ] Ajouter les records **SPF + DKIM** fournis par Brevo dans la zone DNS Vercel/registrar
 - [ ] Attendre la vérification (~15 min)
-- [ ] Créer une boîte email `contact@cdmotorsport.com` (option registrar : mail forwarding, ou Google Workspace / Zoho gratuit)
+- [ ] Créer une boîte email `contact@cdmmotorsport.com` (option registrar : mail forwarding, ou Google Workspace / Zoho gratuit)
 - [ ] Migrer le formulaire Réserver : remplacer Formspree par une **Vercel Function `api/contact.js`** qui appelle l'API Brevo transactional (garde le client_secret Brevo en env var)
 - [ ] Créer les **6 templates Brevo** (voir handoff §7) :
   1. Confirmation de demande (auto après submit)
@@ -150,12 +150,12 @@ Nécessite l'identité juridique Edouard (SIREN/SIRET, adresse pro).
 
 À la fin, vérifier :
 
-- [ ] `cdmotorsport.com` répond en HTTPS avec le contenu du site
-- [ ] `cdmotorsports.vercel.app/*` redirige (308) vers `cdmotorsport.com/*`
-- [ ] `cdmotorsport.com/robots.txt` accessible, mentionne le bon sitemap
-- [ ] `cdmotorsport.com/sitemap-index.xml` accessible
-- [ ] `cdmotorsport.com/admin/` : login GitHub fonctionne (test manuel)
-- [ ] `cdmotorsport.com/reserver` : formulaire soumettable (test complet avec un vrai email)
+- [ ] `cdmmotorsport.com` répond en HTTPS avec le contenu du site
+- [ ] `cdmotorsports.vercel.app/*` redirige (308) vers `cdmmotorsport.com/*`
+- [ ] `cdmmotorsport.com/robots.txt` accessible, mentionne le bon sitemap
+- [ ] `cdmmotorsport.com/sitemap-index.xml` accessible
+- [ ] `cdmmotorsport.com/admin/` : login GitHub fonctionne (test manuel)
+- [ ] `cdmmotorsport.com/reserver` : formulaire soumettable (test complet avec un vrai email)
 - [ ] GA4 Realtime : voit tes visites
 - [ ] Google Rich Results Test : `TouristTrip` + `FAQPage` + `TravelAgency` détectés
 - [ ] Facebook Sharing Debugger : preview OG correct
