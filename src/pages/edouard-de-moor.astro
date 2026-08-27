@@ -16,6 +16,8 @@ const pressArticles = [
     date: 'Août 2020',
     datePublished: '2020-08',
     url: 'https://fr.motocrossmag.be/index.php/2020/08/edouard-charles-de-moor-objectif-dakar/',
+    image: '/img/press/objectif-dakar',
+    imageAlt: "Edouard Charles De Moor devant sa Yamaha rally-raid — cover MotocrossMag.be",
   },
   {
     title: 'Edouard Charles de Moor avec Xavier de Soultrait et Camille Chapelière en Espagne',
@@ -23,6 +25,8 @@ const pressArticles = [
     date: 'Juillet 2020',
     datePublished: '2020-07',
     url: 'https://fr.motocrossmag.be/index.php/2020/07/edouard-charles-de-moor-avec-xavier-de-soultrait-et-camille-chapeliere-en-espagne/',
+    image: '/img/press/espagne',
+    imageAlt: "Edouard De Moor, Xavier de Soultrait et Camille Chapelière en tenue rally, Espagne",
   },
 ];
 
@@ -200,18 +204,35 @@ const layout = [
             rel="noopener"
             aria-label={`${a.title}, ${a.source}, ${a.date} (nouvelle fenêtre)`}
           >
-            <div class="press-meta">
-              <span class="press-source">{a.source}</span>
-              <span class="press-sep">·</span>
-              <span class="press-date">{a.date}</span>
+            <div class="press-cover">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset={`${a.image}-800.webp 800w, ${a.image}-1400.webp 1400w`}
+                  sizes="(max-width: 720px) 100vw, 50vw"
+                />
+                <img
+                  src={`${a.image}.jpg`}
+                  alt={a.imageAlt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
-            <h3 class="press-title">« {a.title} »</h3>
-            <span class="press-arrow" aria-hidden="true">
-              Lire l'article
-              <svg viewBox="0 0 16 16" width="14" height="14">
-                <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 3 L11 8 L6 13 M3.5 8 L11 8"/>
-              </svg>
-            </span>
+            <div class="press-body">
+              <div class="press-meta">
+                <span class="press-source">{a.source}</span>
+                <span class="press-sep">·</span>
+                <span class="press-date">{a.date}</span>
+              </div>
+              <h3 class="press-title">« {a.title} »</h3>
+              <span class="press-arrow" aria-hidden="true">
+                Lire l'article
+                <svg viewBox="0 0 16 16" width="14" height="14">
+                  <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 3 L11 8 L6 13 M3.5 8 L11 8"/>
+                </svg>
+              </span>
+            </div>
           </a>
         ))}
       </div>
@@ -243,19 +264,40 @@ const layout = [
     .press-card {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      padding: 26px 26px 22px;
       background: #fff;
       border: 1px solid var(--line);
       border-radius: 3px;
       color: var(--ink);
       text-decoration: none;
+      overflow: hidden;
       transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
     }
     .press-card:hover {
       border-color: var(--sand);
       transform: translateY(-2px);
       box-shadow: 0 10px 24px rgba(20, 16, 8, .06);
+    }
+    .press-cover {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      background: var(--cream);
+    }
+    .press-cover picture,
+    .press-cover img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .5s cubic-bezier(.5, 0, .2, 1);
+    }
+    .press-card:hover .press-cover img { transform: scale(1.04); }
+    .press-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 22px 26px 22px;
+      flex: 1;
     }
     .press-meta {
       display: flex;
