@@ -37,12 +37,13 @@ const extras = [
       </ul>
     </div>
     <div class="im reveal">
-      <div class="infos-gallery">
-        <img src="/img/assitance.jpeg" alt="Véhicule d'assistance 4×4" />
-        <img src="/img/g6.jpg" alt="Sur la piste" />
-        <img src="/img/village.jpg" alt="Étape en village berbère" />
-        <img src="/img/band.jpg" alt="Bivouac dans le désert" />
-      </div>
+      <img
+        class="assistance-photo"
+        src="/img/assitance.jpeg"
+        alt="Tente KOVE, véhicule d'assistance 4×4 et motos alignées au bivouac"
+        width="1536"
+        height="1024"
+      />
     </div>
   </div>
   <div class="wrap prepwrap">
@@ -73,16 +74,15 @@ const extras = [
   </div>
 </section>
 
-<style>
-  .infos-gallery {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .infos-gallery img {
+<style is:global>
+  /* La règle globale .infos .im img force aspect-ratio 1/1 + cover.
+     On l'annule pour cette photo précise et on garde le ratio d'origine. */
+  .infos .im img.assistance-photo {
     width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
+    height: auto;
+    aspect-ratio: auto;
+    object-fit: initial;
+    display: block;
     border-radius: 2px;
   }
 </style>
