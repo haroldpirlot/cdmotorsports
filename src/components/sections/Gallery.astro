@@ -1,16 +1,36 @@
 ---
-const tiles = [
-  { img: '/img/g4.jpg',    cls: 's6 r2' },
-  { img: '/img/g1.jpg',    cls: 's3' },
-  { img: '/img/g3.jpg',    cls: 's3' },
-  { img: '/img/g2.jpg',    cls: 's3' },
-  { img: '/img/g9.jpg',    cls: 's3' },
-  { img: '/img/g5.jpg',    cls: 's5' },
-  { img: '/img/g7.jpg',    cls: 's7' },
-  { img: '/img/g10.jpg',   cls: 's4' },
-  { img: '/img/infos.jpg', cls: 's4' },
-  { img: '/img/g6.jpg',    cls: 's4' },
+// Galerie unifiée : 21 nouvelles photos (gallery-01..21) + les photos existantes.
+// Toutes en 3:2 landscape. Chaque tuile utilise <picture> avec WebP srcset
+// (800w + 1400w), lazy-loading natif, JPG en fallback.
+
+interface Tile {
+  base: string;       // ex. '/img/gallery/gallery-01' (sans extension)
+  src: string;        // fallback JPG complet
+  alt: string;
+}
+
+const galleryTiles: Tile[] = Array.from({ length: 21 }, (_, i) => {
+  const n = String(i + 1).padStart(2, '0');
+  return {
+    base: `/img/gallery/gallery-${n}`,
+    src: `/img/gallery/gallery-${n}.jpg`,
+    alt: `Raid CDM Motorsport, photo ${i + 1}`,
+  };
+});
+
+const legacyTiles: Tile[] = [
+  { base: '/img/g4',    src: '/img/g4.jpg',    alt: 'Sur la piste, plateau' },
+  { base: '/img/g1',    src: '/img/g1.jpg',    alt: 'Groupe en bivouac' },
+  { base: '/img/g3',    src: '/img/g3.jpg',    alt: 'Traversée de dune' },
+  { base: '/img/g2',    src: '/img/g2.jpg',    alt: 'Piste rocailleuse' },
+  { base: '/img/g9',    src: '/img/g9.jpg',    alt: 'Côte atlantique' },
+  { base: '/img/g5',    src: '/img/g5.jpg',    alt: 'Passage technique' },
+  { base: '/img/g10',   src: '/img/g10.jpg',   alt: 'Coucher de soleil' },
+  { base: '/img/infos', src: '/img/infos.jpg', alt: 'Assistance logistique' },
+  { base: '/img/g6',    src: '/img/g6.jpg',    alt: 'Bivouac étoilé' },
 ];
+
+const tiles: Tile[] = [...galleryTiles, ...legacyTiles];
 ---
 <section class="gal pad" id="galerie">
   <div class="wrap">
@@ -19,11 +39,58 @@ const tiles = [
       <div class="big">Un avant-goût du <em>terrain</em></div>
     </div>
     <div class="ggrid reveal">
-      {tiles.map((t) => (
-        <a class={t.cls} href={t.img}>
-          <img src={t.img} alt="" />
+      {tiles.map((t, i) => (
+        <a class="gtile" href={t.src} aria-label={t.alt}>
+          <picture>
+            <source
+              type="image/webp"
+              srcset={`${t.base}-800.webp 800w, ${t.base}-1400.webp 1400w`}
+              sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw"
+            />
+            <img
+              src={t.src}
+              alt={t.alt}
+              width="2000"
+              height="1333"
+              loading={i < 3 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          </picture>
         </a>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .ggrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    grid-auto-rows: initial;
+  }
+  .gtile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+    display: block;
+    aspect-ratio: 3 / 2;
+    background: var(--cream);
+  }
+  .gtile picture,
+  .gtile picture img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .8s cubic-bezier(.5, 0, .2, 1);
+  }
+  .gtile:hover picture img { transform: scale(1.05); }
+
+  @media (max-width: 960px) {
+    .ggrid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .ggrid { grid-template-columns: 1fr; }
+  }
+</style>

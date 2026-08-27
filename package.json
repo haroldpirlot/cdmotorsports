@@ -12,7 +12,8 @@
     "astro": "astro",
     "predev": "node scripts/build-raid-maps.mjs",
     "prebuild": "node scripts/build-raid-maps.mjs",
-    "build-raid-maps": "node scripts/build-raid-maps.mjs"
+    "build-raid-maps": "node scripts/build-raid-maps.mjs",
+    "build-gallery": "node scripts/build-gallery.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
