@@ -7,7 +7,7 @@ export interface GpxData {
   slug: string;
   announcedKm: number;
   measuredKm: number;
-  provisional: boolean;
+  approximate: boolean;
   bounds: [[number, number], [number, number]];
   tracks: {
     name: string;
@@ -20,6 +20,7 @@ export interface GpxData {
   stages: {
     day: number;
     name: string;
+    from: string;
     km: number;
     start: [number, number];
     end: [number, number];
@@ -51,10 +52,10 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
     <img src={fallbackPng} alt={`Carte itinéraire ${raidName}`} style="width:100%;display:block" />
   </noscript></div>
 
-  {gpx.provisional && (
+  {gpx.approximate && (
     <div class="raidmap-actions">
       <span class="raidmap-provisional" role="note">
-        ⚠ Tracé provisoire — une étape est manquante ou incomplète.
+        Tracé indicatif — route lissée à travers les villes-étapes.
       </span>
     </div>
   )}
@@ -216,24 +217,31 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
       }
     }
 
-    // Marqueurs numérotés (départ de chaque étape)
+    // Marqueurs numérotés au départ de chaque étape.
+    // Le marqueur 1 = ville de départ du raid, mis en évidence en vert.
     for (let i = 0; i < data.stages.length; i++) {
       const stage = data.stages[i];
       const [lon, lat] = stage.start;
+      const isDeparture = i === 0;
+      const bg = isDeparture ? '#2d6a4f' : '#C8702A';
       const icon = L.divIcon({
         className: 'raidmap-marker',
-        html: `<div class="raidmap-marker-inner">${stage.day}</div>`,
+        html: `<div class="raidmap-marker-inner" style="background:${bg}">${stage.day}</div>`,
         iconSize: [28, 28],
         iconAnchor: [14, 14],
         popupAnchor: [0, -14],
       });
-      const marker = L.marker([lat, lon], { icon, title: `Jour ${stage.day} — ${stage.name}` }).addTo(map);
+      const title = isDeparture
+        ? `Départ — ${stage.from}`
+        : `Jour ${stage.day} — ${stage.from}`;
+      const marker = L.marker([lat, lon], { icon, title }).addTo(map);
+      const label = isDeparture ? `Départ · ${escapeHtml(stage.from)}` : escapeHtml(stage.from);
       marker.bindPopup(
-        `<strong>Jour ${stage.day}</strong><br/>${escapeHtml(stage.name)}<br/><span style="color:#C8702A;font-family:'Bricolage Grotesque',sans-serif">${stage.km} km</span>`
+        `<strong>${label}</strong><br/>Jour ${stage.day} · ${escapeHtml(stage.from)} → ${escapeHtml(stage.name)}<br/><span style="color:#C8702A;font-family:'Bricolage Grotesque',sans-serif">${stage.km} km</span>`
       );
     }
 
-    // Marqueur d'arrivée finale (fin du dernier track)
+    // Marqueur d'arrivée finale
     const last = data.stages[data.stages.length - 1];
     if (last) {
       const [lon, lat] = last.end;
@@ -242,8 +250,11 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
         html: `<div class="raidmap-marker-inner" style="background:#1a1613">★</div>`,
         iconSize: [28, 28],
         iconAnchor: [14, 14],
+        popupAnchor: [0, -14],
       });
-      L.marker([lat, lon], { icon, title: 'Arrivée' }).addTo(map).bindPopup('<strong>Arrivée</strong>');
+      L.marker([lat, lon], { icon, title: `Arrivée — ${last.name}` })
+        .addTo(map)
+        .bindPopup(`<strong>Arrivée · ${escapeHtml(last.name)}</strong>`);
     }
 
     // Zoom molette : uniquement au clic sur la carte (évite de piéger le scroll de page)

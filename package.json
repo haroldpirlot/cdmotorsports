@@ -10,9 +10,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "predev": "node scripts/parse-gpx.mjs",
-    "prebuild": "node scripts/parse-gpx.mjs",
-    "parse-gpx": "node scripts/parse-gpx.mjs"
+    "predev": "node scripts/build-raid-maps.mjs",
+    "prebuild": "node scripts/build-raid-maps.mjs",
+    "build-raid-maps": "node scripts/build-raid-maps.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

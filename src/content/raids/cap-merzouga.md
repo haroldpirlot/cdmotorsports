@@ -14,12 +14,12 @@ gallery:
   - /img/g2.jpg
   - /img/g8.jpg
 stages:
-  - { from: Ouarzazate,       to: "Boumalne Dadès", km: 185 }
-  - { from: "Boumalne Dadès", to: Merzouga,         km: 307 }
-  - { from: Merzouga,         to: Ouzina,           km: 120 }
-  - { from: Ouzina,           to: "M'hamid",        km: 220 }
-  - { from: "M'hamid",        to: "Foum Zguid",     km: 180 }
-  - { from: "Foum Zguid",     to: Ouarzazate,       km: 220 }
+  - { from: Ouarzazate,       to: Zagora,           km: 216 }
+  - { from: Zagora,           to: Ouzina,           km: 238 }
+  - { from: Ouzina,           to: Merzouga,         km: 100 }
+  - { from: Merzouga,         to: Khemliya,         km: 97 }
+  - { from: Khemliya,         to: "Boumalne Dadès", km: 311 }
+  - { from: "Boumalne Dadès", to: Ouarzazate,       km: 186 }
 highlights:
   - "6 jours de pistes, 1 232 km de terrain"
   - "Au guidon d'une KOVE 450 Rally"
