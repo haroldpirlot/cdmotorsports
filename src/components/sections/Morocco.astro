@@ -1,8 +1,17 @@
 ---
-const strip = [
-  { img: '/img/village.jpg', alt: "Village de l'Atlas",   caption: "Villages de l'Atlas" },
-  { img: '/img/g1.jpg',      alt: 'Désert et dromadaires', caption: 'Portes du Sahara' },
-  { img: '/img/vast.jpg',    alt: 'Immensité des dunes',   caption: "L'immensité" },
+interface StripItem {
+  img: string;
+  alt: string;
+  caption: string;
+  base?: string; // si présent, on rend un <picture> avec WebP srcset
+}
+const strip: StripItem[] = [
+  { img: '/img/village.jpg',                         alt: "Village de l'Atlas",              caption: "Villages de l'Atlas" },
+  { img: '/img/g1.jpg',                              alt: 'Désert et dromadaires',           caption: 'Portes du Sahara' },
+  { img: '/img/vast.jpg',                            alt: 'Immensité des dunes',             caption: "L'immensité" },
+  { img: '/img/culture/mint-tea-optimized.jpg',      alt: 'Thé à la menthe versé, cérémonie marocaine',       caption: 'Thé à la menthe', base: '/img/culture/mint-tea' },
+  { img: '/img/culture/berber-village-optimized.jpg', alt: "Kasbah en pisé, village berbère de l'Atlas",       caption: 'Kasbah berbère',  base: '/img/culture/berber-village' },
+  { img: '/img/culture/local-portrait-optimized.jpg', alt: "Portrait d'un homme en djellaba, un verre de thé", caption: 'Rencontre',       base: '/img/culture/local-portrait' },
 ];
 ---
 <section class="maroc pad" id="maroc">
@@ -53,7 +62,18 @@ const strip = [
     <div class="mstrip reveal">
       {strip.map((s) => (
         <figure>
-          <img src={s.img} alt={s.alt} />
+          {s.base ? (
+            <picture>
+              <source
+                type="image/webp"
+                srcset={`${s.base}-800.webp 800w, ${s.base}-1400.webp 1400w`}
+                sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw"
+              />
+              <img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+            </picture>
+          ) : (
+            <img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+          )}
           <figcaption>{s.caption}</figcaption>
         </figure>
       ))}

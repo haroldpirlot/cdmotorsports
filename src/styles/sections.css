@@ -343,7 +343,7 @@
 }
 .mstrip {
   display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-top: 44px;
 }
@@ -352,12 +352,16 @@
   overflow: hidden;
   border-radius: 2px;
 }
+.mstrip picture,
 .mstrip img {
+  display: block;
   width: 100%;
-  height: clamp(300px, 34vw, 460px);
+  height: clamp(280px, 26vw, 380px);
   object-fit: cover;
   transition: transform .8s cubic-bezier(.5, 0, .2, 1);
 }
+.mstrip picture { position: relative; overflow: hidden; }
+.mstrip picture img { transition: inherit; }
 .mstrip figure:hover img { transform: scale(1.06); }
 .mstrip figcaption {
   position: absolute;
@@ -834,7 +838,6 @@
   .s6, .s4, .s3, .s5, .s7 { grid-column: span 6; }
   .band .bg { background-attachment: scroll; }
   .mstrip { grid-template-columns: 1fr 1fr; }
-  .mstrip figure:first-child { grid-column: span 2; }
   .mfacts { grid-template-columns: 1fr; gap: 26px; }
   .prep { grid-template-columns: 1fr 1fr; gap: 24px; }
   .rintro .wrap, .incl .wrap, .moto .wrap { grid-template-columns: 1fr; gap: 30px; }
