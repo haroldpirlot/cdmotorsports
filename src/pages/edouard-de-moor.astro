@@ -8,6 +8,21 @@ const galleryPhotos = Array.from({ length: 12 }, (_, i) =>
   `/img/edouard/edouard-${String(i + 2).padStart(2, '0')}.jpg`
 );
 
+const pressArticles = [
+  {
+    title: 'Edouard Charles de Moor : Objectif Dakar !',
+    source: 'MotocrossMag.be',
+    date: 'Août 2020',
+    url: 'https://fr.motocrossmag.be/index.php/2020/08/edouard-charles-de-moor-objectif-dakar/',
+  },
+  {
+    title: 'Edouard Charles de Moor avec Xavier de Soultrait et Camille Chapelière en Espagne',
+    source: 'MotocrossMag.be',
+    date: 'Juillet 2020',
+    url: 'https://fr.motocrossmag.be/index.php/2020/07/edouard-charles-de-moor-avec-xavier-de-soultrait-et-camille-chapeliere-en-espagne/',
+  },
+];
+
 // Grille 12 colonnes façon .ggrid, patron répété pour couvrir 12 photos
 const layout = [
   's6 r2', 's3', 's3',
@@ -135,7 +150,40 @@ const layout = [
     </div>
   </section>
 
-  <section class="gal pad" style="background:var(--paper)">
+  <section class="pad press-section" style="background:var(--paper)">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom:32px">
+        <div class="eyebrow" style="margin-bottom:16px">Presse &amp; médias</div>
+        <div class="big" style="font-size:clamp(24px,3vw,36px)">Ils en ont <em>parlé.</em></div>
+      </div>
+      <div class="press-list reveal">
+        {pressArticles.map((a) => (
+          <a
+            class="press-card"
+            href={a.url}
+            target="_blank"
+            rel="noopener"
+            aria-label={`${a.title}, ${a.source}, ${a.date} (nouvelle fenêtre)`}
+          >
+            <div class="press-meta">
+              <span class="press-source">{a.source}</span>
+              <span class="press-sep">·</span>
+              <span class="press-date">{a.date}</span>
+            </div>
+            <h3 class="press-title">« {a.title} »</h3>
+            <span class="press-arrow" aria-hidden="true">
+              Lire l'article
+              <svg viewBox="0 0 16 16" width="14" height="14">
+                <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 3 L11 8 L6 13 M3.5 8 L11 8"/>
+              </svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="gal pad">
     <div class="wrap">
       <div class="reveal" style="margin-bottom:40px">
         <div class="eyebrow" style="margin-bottom:16px">En images</div>
@@ -150,6 +198,71 @@ const layout = [
       </div>
     </div>
   </section>
+
+  <style>
+    .press-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .press-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 26px 26px 22px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      color: var(--ink);
+      text-decoration: none;
+      transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+    }
+    .press-card:hover {
+      border-color: var(--sand);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(20, 16, 8, .06);
+    }
+    .press-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .press-source { color: var(--sand); }
+    .press-sep { opacity: .5; }
+    .press-title {
+      font-family: var(--disp);
+      font-weight: 700;
+      font-size: clamp(17px, 1.6vw, 20px);
+      line-height: 1.35;
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: -.2px;
+    }
+    .press-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--sand);
+      font-weight: 700;
+      margin-top: auto;
+    }
+    .press-arrow svg { transition: transform .25s ease; }
+    .press-card:hover .press-arrow svg { transform: translateX(3px); }
+
+    @media (max-width: 720px) {
+      .press-list { grid-template-columns: 1fr; }
+    }
+  </style>
 
   <section class="cta pad">
     <div class="bg" style={`background-image:url('${heroPhoto}')`}></div>
