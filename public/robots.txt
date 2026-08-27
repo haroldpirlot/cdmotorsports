@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://cdmotorsports.vercel.app/sitemap-index.xml
+Sitemap: https://cdmmotorsport.com/sitemap-index.xml

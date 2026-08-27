@@ -2,7 +2,7 @@ backend:
   name: github
   repo: haroldpirlot/cdmotorsports
   branch: main
-  base_url: https://cdmotorsports.vercel.app
+  base_url: https://cdmmotorsport.com
   auth_endpoint: api/auth
 
 media_folder: "public/img"

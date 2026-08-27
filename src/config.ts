@@ -2,7 +2,7 @@ export const SITE = {
   name: 'CDMotorSport',
   tagline: 'Every ride tells a story',
   subtagline: 'Live the rally. Ride the legend.',
-  url: 'https://cdmotorsports.vercel.app',
+  url: 'https://cdmmotorsport.com',
   description: 'Raids moto (rallye-raid) au Maroc en KOVE 450 Rally.',
   contact: {
     email: '[email@cdmotorsport.com]',
