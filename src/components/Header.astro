@@ -62,6 +62,7 @@ const discover = [
       </svg>
     </a>
 
+    <div class="nav-right" id="nav-right">
     <nav class="menu" id="menu" aria-label="Navigation principale">
       {primary.map((item) => (
         <a href={item.href} class="menu-link">{item.label}</a>
@@ -93,6 +94,7 @@ const discover = [
     <button type="button" class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
       <span></span><span></span>
     </button>
+    </div>
   </div>
 </header>
 
@@ -104,15 +106,25 @@ const discover = [
     right: 0;
     z-index: 200;
     padding: 22px 0;
-    transition: transform .4s, background .3s;
     /* pas de mix-blend-mode sur le header : le CTA plein ne doit pas s'inverser */
+    /* le logo reste visible en permanence : le hide ne s'applique qu'au bloc droit */
   }
-  header.hide { transform: translateY(-100%); }
   .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 28px;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    transition: transform .4s ease, opacity .3s ease;
+  }
+  header.hide .nav-right {
+    transform: translateY(-140%);
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* Logo : inversion via mix-blend-mode (blanc sur hero sombre, sombre ailleurs) */
@@ -319,6 +331,9 @@ const discover = [
       const open = menu.classList.toggle('open');
       burger.setAttribute('aria-expanded', String(open));
       document.body.style.overflow = open ? 'hidden' : '';
+      // Réaffiche la partie droite du header pendant que le menu mobile est ouvert
+      // (évite tout containing block transformé qui casserait le fullscreen fixed).
+      if (open && hd) hd.classList.remove('hide');
     });
     // Ferme le menu mobile au clic sur un lien (mais pas sur le trigger dropdown)
     menu.querySelectorAll<HTMLElement>('a').forEach((a) => {

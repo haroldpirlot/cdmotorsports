@@ -92,6 +92,14 @@ const organizationJsonLd = {
   <div id="loader">
     <div class="l1" id="lw"></div>
     <div class="bar" id="lbar"></div>
+    <img
+      id="llogo"
+      class="loader-logo"
+      src="/img/logo-cdm.svg"
+      alt="CDM Motorsport"
+      width="180"
+      height="80"
+    />
   </div>
 
   <Header />
@@ -140,6 +148,18 @@ const organizationJsonLd = {
     margin-top: 26px;
     transition: width 1.4s cubic-bezier(.7, 0, .2, 1);
   }
+  #loader .loader-logo {
+    margin-top: 28px;
+    width: clamp(110px, 14vw, 160px);
+    height: auto;
+    display: block;
+    opacity: 0;
+    transform: translateY(10px);
+    /* Le SVG source utilise fill="currentColor" (noir par défaut en img) ;
+       brightness(0) invert(1) force le rendu en blanc pour ressortir
+       sur le fond sombre #141008 du loader. */
+    filter: brightness(0) invert(1);
+  }
   body.loaded #loader {
     transform: translateY(-100%);
     transition: transform 1s cubic-bezier(.76, 0, .24, 1);
@@ -179,6 +199,18 @@ const organizationJsonLd = {
     }
     if (lbar) setTimeout(() => (lbar.style.width = '180px'), 150);
 
+    // Logo apparaît en continuité, juste après la ligne (bar)
+    const llogo = document.getElementById('llogo');
+    if (llogo) {
+      llogo.animate(
+        [
+          { transform: 'translateY(10px)', opacity: 0 },
+          { transform: 'translateY(0)', opacity: 1 },
+        ],
+        { duration: 700, delay: 1200, fill: 'forwards', easing: 'cubic-bezier(.5,0,.2,1)' }
+      );
+    }
+
     let done = false;
     function start() {
       if (done) return;
@@ -186,10 +218,10 @@ const organizationJsonLd = {
       setTimeout(() => {
         document.body.classList.add('loaded');
         document.dispatchEvent(new CustomEvent('cdm:loaded'));
-      }, 1600);
+      }, 2000);
     }
     window.addEventListener('load', start);
-    setTimeout(start, 2600);
+    setTimeout(start, 3000);
   })();
 
   // reveal observer
