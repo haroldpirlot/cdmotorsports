@@ -1,13 +1,29 @@
 ---
-const nav = [
-  { label: 'Raids', href: '/#raids' },
-  { label: 'La Moto', href: '/moto-kove-450-rally' },
-  { label: 'Le Maroc', href: '/#maroc' },
-  { label: 'Infos', href: '/#infos' },
-  { label: 'Le Guide', href: '/edouard-de-moor' },
-  { label: 'Blog', href: '/actualites' },
+// Navigation restructurée :
+//  - Raids
+//  - Découvrir (dropdown : Moto / Maroc / Qui suis-je / Infos pratiques)
+//  - Blog
+//  - Boutique
+//  - Réserver (bouton mis en avant, plein terracotta)
+//
+// Comportement :
+//  - Desktop : dropdown au survol + focus clavier.
+//  - Mobile : hamburger déroule tout, sous-items "Découvrir" listés en dessous.
+//  - Logo et libellés menu conservent l'inversion via mix-blend-mode: difference
+//    appliqué individuellement (pas sur le header) pour ne pas altérer le CTA.
+
+const primary = [
+  { label: 'Raids',    href: '/#raids' },
+];
+const discover = [
+  { label: 'La Moto',         href: '/moto-kove-450-rally' },
+  { label: 'Le Maroc',        href: '/#maroc' },
+  { label: 'Qui suis-je',     href: '/edouard-de-moor' },
+  { label: 'Infos pratiques', href: '/#infos' },
+];
+const secondary = [
+  { label: 'Blog',     href: '/actualites' },
   { label: 'Boutique', href: '/boutique' },
-  { label: 'Réserver', href: '/reserver' },
 ];
 ---
 <header id="hd">
@@ -47,10 +63,42 @@ const nav = [
         <path transform="matrix(1,0,0,-1,949.3416,458.67988)" d="M0 0-76.644-.104V-29.144L.033-28.834C8.34-28.801 15.955-32.813 23.635-36.816L32.642-6.115C21.454-2.793 11.249 .015 0 0" fill="currentColor"/>
       </svg>
     </a>
-    <nav class="menu" id="menu">
-      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+
+    <nav class="menu" id="menu" aria-label="Navigation principale">
+      {primary.map((item) => (
+        <a href={item.href} class="menu-link">{item.label}</a>
+      ))}
+
+      <div class="menu-dropdown" id="dropdown">
+        <button
+          type="button"
+          class="menu-link menu-trigger"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="dropdown-panel"
+        >
+          Découvrir
+          <svg class="chev" viewBox="0 0 12 8" width="10" height="7" aria-hidden="true">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 1.5 L6 6.5 L11 1.5"/>
+          </svg>
+        </button>
+        <div id="dropdown-panel" class="menu-panel" role="menu">
+          {discover.map((item) => (
+            <a href={item.href} class="menu-panel-link" role="menuitem">{item.label}</a>
+          ))}
+        </div>
+      </div>
+
+      {secondary.map((item) => (
+        <a href={item.href} class="menu-link">{item.label}</a>
+      ))}
+
+      <a href="/reserver" class="menu-cta">Réserver</a>
     </nav>
-    <div class="burger" id="burger"><span></span><span></span></div>
+
+    <button type="button" class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
   </div>
 </header>
 
@@ -61,73 +109,198 @@ const nav = [
     left: 0;
     right: 0;
     z-index: 200;
-    padding: 26px 0;
-    transition: .4s;
-    mix-blend-mode: difference;
+    padding: 22px 0;
+    transition: transform .4s, background .3s;
+    /* pas de mix-blend-mode sur le header : le CTA plein ne doit pas s'inverser */
   }
   header.hide { transform: translateY(-100%); }
   .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 28px;
   }
+
+  /* Logo : inversion via mix-blend-mode (blanc sur hero sombre, sombre ailleurs) */
   .logo {
     color: #fff;
     display: inline-flex;
     align-items: center;
     line-height: 0;
+    mix-blend-mode: difference;
   }
   .logo-svg {
     height: 40px;
     width: auto;
     display: block;
   }
-  .menu { display: flex; gap: 34px; }
-  .menu a {
+
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .menu-link {
     font-family: var(--sans);
-    font-weight: 500;
-    font-size: 13px;
-    letter-spacing: 1px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.4px;
     color: #fff;
     text-transform: uppercase;
     position: relative;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    mix-blend-mode: difference;
   }
-  .menu a::after {
+  .menu-link::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -4px;
-    width: 0;
+    right: 0;
+    bottom: -6px;
     height: 1px;
-    background: #fff;
-    transition: .3s;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
   }
-  .menu a:hover::after { width: 100%; }
+  .menu-link:hover::after,
+  .menu-link:focus-visible::after { transform: scaleX(1); }
+  .menu-trigger .chev { transition: transform .25s ease; }
+  .menu-dropdown[data-open="true"] .menu-trigger .chev { transform: rotate(180deg); }
+
+  .menu-dropdown { position: relative; }
+  .menu-panel {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: -18px;
+    min-width: 220px;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
+    padding: 10px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+    display: flex;
+    flex-direction: column;
+  }
+  .menu-dropdown:hover .menu-panel,
+  .menu-dropdown:focus-within .menu-panel,
+  .menu-dropdown[data-open="true"] .menu-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+  .menu-panel-link {
+    padding: 11px 22px;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 14px;
+    color: #1a1613;
+    text-transform: none;
+    letter-spacing: .1px;
+    transition: background .18s ease, color .18s ease;
+  }
+  .menu-panel-link:hover { background: var(--cream); color: #B4642C; }
+
+  .menu-cta {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.4px;
+    color: #fff;
+    text-transform: uppercase;
+    background: #B4642C;
+    padding: 12px 22px;
+    border-radius: 2px;
+    line-height: 1;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .menu-cta:hover { background: #93511f; transform: translateY(-1px); }
+
   .burger {
     display: none;
     flex-direction: column;
     gap: 6px;
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    mix-blend-mode: difference;
   }
   .burger span {
     width: 26px;
     height: 1.5px;
     background: #fff;
+    transition: transform .25s ease, opacity .25s ease;
   }
+  .burger[aria-expanded="true"] span:first-child {
+    transform: translateY(4px) rotate(45deg);
+  }
+  .burger[aria-expanded="true"] span:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+
   @media (max-width: 960px) {
     .menu { display: none; }
     .burger { display: flex; }
+
     .menu.open {
       display: flex;
       position: fixed;
       inset: 0;
       background: #141008;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 26px;
-      mix-blend-mode: normal;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 100px 34px 40px;
+      gap: 6px;
+      overflow-y: auto;
     }
-    .menu.open a { font-size: 20px; }
+    .menu.open .menu-link {
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: #fff;
+      mix-blend-mode: normal;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+    .menu.open .menu-link::after { display: none; }
+    .menu.open .menu-dropdown { position: static; }
+    .menu.open .menu-panel {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+      display: none;
+      transition: none;
+    }
+    .menu.open .menu-dropdown[data-open="true"] .menu-panel { display: flex; }
+    .menu.open .menu-panel-link {
+      color: #cbbfae;
+      font-size: 16px;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
+    }
+    .menu.open .menu-panel-link:hover { background: transparent; color: #B4642C; }
+    .menu.open .menu-cta {
+      align-self: flex-start;
+      margin-top: 18px;
+      font-size: 14px;
+      padding: 14px 26px;
+    }
   }
 </style>
 
@@ -135,6 +308,8 @@ const nav = [
   const hd = document.getElementById('hd');
   const menu = document.getElementById('menu');
   const burger = document.getElementById('burger');
+  const dropdown = document.getElementById('dropdown');
+  const trigger = dropdown?.querySelector<HTMLButtonElement>('.menu-trigger');
 
   if (hd) {
     let last = 0;
@@ -142,13 +317,50 @@ const nav = [
       const y = scrollY;
       hd.classList.toggle('hide', y > last && y > 400);
       last = y;
-    });
+    }, { passive: true });
   }
 
   if (burger && menu) {
-    burger.addEventListener('click', () => menu.classList.toggle('open'));
-    menu.querySelectorAll('a').forEach((a) => {
-      a.addEventListener('click', () => menu.classList.remove('open'));
+    burger.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    // Ferme le menu mobile au clic sur un lien (mais pas sur le trigger dropdown)
+    menu.querySelectorAll<HTMLElement>('a').forEach((a) => {
+      a.addEventListener('click', () => {
+        if (menu.classList.contains('open')) {
+          menu.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+          if (dropdown) dropdown.setAttribute('data-open', 'false');
+        }
+      });
+    });
+  }
+
+  if (dropdown && trigger) {
+    // Tap/clic : toggle explicite (utile mobile + a11y clavier).
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = dropdown.getAttribute('data-open') === 'true';
+      dropdown.setAttribute('data-open', String(!isOpen));
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+    });
+    // Ferme au clic extérieur.
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target as Node)) {
+        dropdown.setAttribute('data-open', 'false');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+    // Escape ferme.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        dropdown.setAttribute('data-open', 'false');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.blur();
+      }
     });
   }
 </script>
