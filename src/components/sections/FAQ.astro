@@ -67,7 +67,7 @@ const faqJsonLd = {
 <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
 <style>
-  .faq { background: var(--paper); }
+  .faq { /* bg transparent — laisse passer le body (paper) et révèle le SiteLogo */ }
   .faq-item {
     border-top: 1px solid var(--line);
     padding: 0;

@@ -2,12 +2,48 @@
 import Layout from '../../layouts/Layout.astro';
 
 const articles = [
-  { img: '/img/g10.jpg',    tag: 'Conseils',    title: 'Préparer son premier raid enduro au Maroc', excerpt: "Niveau, équipement, condition physique : nos conseils pour aborder sereinement votre première aventure.", href: '/actualites/preparer-son-premier-raid' },
-  { img: '/img/apropos.jpg', tag: 'Pratique',    title: 'Venir rouler avec sa propre moto',           excerpt: 'Assistance 4×4, transport des bagages et formalités : comment participer avec votre machine.', href: '#' },
-  { img: '/img/village.jpg', tag: 'Destination', title: '5 raisons de rouler dans le Sud marocain',    excerpt: 'Diversité des terrains, météo, accueil : pourquoi le Maroc est la destination raid par excellence.', href: '#' },
-  { img: '/img/g5.jpg',      tag: 'Matériel',    title: "Le KOVE 450 Rally à l'épreuve des dunes",     excerpt: 'Retour de terrain sur la moto qui équipe nos raids.', href: '#' },
-  { img: '/img/team.jpg',    tag: 'Presse',      title: 'CDM Motorsport dans la presse',                 excerpt: 'Nos raids et nos images vus par les médias moto. (Page presse & médias.)', href: '#' },
-  { img: '/img/g6.jpg',      tag: 'Conseils',    title: 'Bien gérer sa condition physique en raid',    excerpt: "Hydratation, récupération, alimentation : rouler plusieurs jours d'affilée.", href: '#' },
+  {
+    img: '/img/gallery/gallery-05.jpg',
+    tag: 'Conseils',
+    title: 'Préparer son premier raid moto au Maroc',
+    excerpt: "Niveau, équipement, condition physique, navigation : le guide complet pour aborder sereinement votre première aventure.",
+    href: '/actualites/preparer-son-premier-raid',
+  },
+  {
+    img: '/img/gallery/gallery-13.jpg',
+    tag: 'Pratique',
+    title: "Venir rouler au Maroc avec sa propre moto",
+    excerpt: "Transport, formalités, assurances et assistance : comment participer à un raid avec votre propre machine.",
+    href: '/actualites/venir-avec-sa-propre-moto',
+  },
+  {
+    img: '/img/village.jpg',
+    tag: 'Destination',
+    title: 'Pourquoi le Sud marocain est le paradis du rallye-raid',
+    excerpt: "Diversité des terrains, héritage du Dakar, climat idéal : la terre du rallye-raid par excellence.",
+    href: '/actualites/sud-marocain-paradis-rallye-raid',
+  },
+  {
+    img: '/img/gallery/gallery-07.jpg',
+    tag: 'Matériel',
+    title: "La KOVE 450 Rally : le rallye-raid enfin accessible",
+    excerpt: "Vraie machine de rally, 3 réservoirs (30 L), autonomie ~550 km : pourquoi nous l'avons choisie.",
+    href: '/actualites/kove-450-rally-accessible',
+  },
+  {
+    img: '/img/gallery/gallery-15.jpg',
+    tag: 'Technique',
+    title: 'Navigation en rallye-raid : road-book, cap et trace GPS',
+    excerpt: "Les trois piliers de la navigation : comment se repérer sur le terrain en rallye-raid.",
+    href: '/actualites/navigation-rallye-raid',
+  },
+  {
+    img: '/img/gallery/gallery-04.jpg',
+    tag: 'Conseils',
+    title: 'Se préparer physiquement pour un raid moto',
+    excerpt: "Cardio, renforcement, hydratation, récupération : les clés pour tenir plusieurs jours d'effort.",
+    href: '/actualites/preparation-physique-raid',
+  },
 ];
 ---
 <Layout
@@ -27,22 +63,26 @@ const articles = [
         <div class="eyebrow" style="margin-bottom:16px">Le blog</div>
         <div class="big">Conseils, récits<br />&amp; <em>coulisses.</em></div>
         <p class="lead" style="margin-top:16px">
-          Tout pour préparer votre raid et prolonger l'aventure. (Articles d'exemple, à rédiger.)
+          Tout pour préparer votre raid et prolonger l'aventure.
         </p>
       </div>
       <div class="grid3">
         {articles.map((a) => (
-          <div class="pcard reveal">
-            <div class="ph"><img src={a.img} alt={a.title} /></div>
+          <a class="pcard reveal" href={a.href}>
+            <div class="ph"><img src={a.img} alt={a.title} loading="lazy" /></div>
             <div class="b">
               <div class="tag">{a.tag}</div>
               <h3>{a.title}</h3>
               <p>{a.excerpt}</p>
-              <a class="more" href={a.href}>Lire l'article →</a>
+              <span class="more">Lire l'article →</span>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
   </section>
 </Layout>
+
+<style>
+  a.pcard { color: inherit; text-decoration: none; display: block; }
+</style>

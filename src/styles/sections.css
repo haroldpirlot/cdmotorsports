@@ -4,7 +4,8 @@
   height: 100vh;
   min-height: 640px;
   overflow: hidden;
-  z-index: 2;
+  /* z-index 0 : sous le SiteLogo global (z-index 1) → logo visible sur la vidéo */
+  z-index: 0;
 }
 .hero video, .hero .poster {
   position: absolute;
@@ -110,7 +111,8 @@
 @keyframes marq { to { transform: translateX(-50%); } }
 
 /* intro */
-.intro { background: var(--paper); }
+/* .intro : bg transparent pour laisser passer le body (paper) et révéler le SiteLogo */
+.intro { }
 .intro .wrap {
   display: grid;
   grid-template-columns: 1.4fr .9fr;
@@ -270,7 +272,7 @@
 .rlink:hover { color: var(--ink); }
 
 /* philosophy */
-.philo { background: var(--paper); }
+.philo { }
 .pgrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -334,7 +336,7 @@
 }
 
 /* maroc */
-.maroc { background: var(--paper); }
+.maroc { }
 .maroc .lede {
   max-width: 560px;
   margin-top: 18px;
@@ -669,7 +671,7 @@
 }
 
 /* raid itinerary */
-.iti { background: var(--paper); }
+.iti { }
 .day {
   display: grid;
   grid-template-columns: 120px 1fr;
@@ -735,7 +737,7 @@
 .incl li.no::before { content: "×"; color: #b56a5a; }
 
 /* raid gallery */
-.rgal { background: var(--paper); }
+.rgal { }
 .rgrid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
