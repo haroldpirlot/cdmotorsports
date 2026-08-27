@@ -309,8 +309,9 @@
 .about .im { position: relative; overflow: hidden; }
 .about .im img {
   width: 100%;
-  aspect-ratio: 4/5;
+  aspect-ratio: 3/2;
   object-fit: cover;
+  object-position: center right;
 }
 .about p {
   color: #5f574b;
