@@ -13,6 +13,7 @@ import PracticalInfo from '../components/sections/PracticalInfo.astro';
 import FAQ from '../components/sections/FAQ.astro';
 import ContactBlock from '../components/sections/ContactBlock.astro';
 import GoogleReviews, { type Review } from '../components/sections/GoogleReviews.astro';
+import Partners from '../components/sections/Partners.astro';
 
 // Placeholder d'avis (structure identique à ce que servira l'API Google plus tard).
 const reviews: Review[] = [
@@ -75,4 +76,5 @@ const googleReviewsUrl = '#';
   <FAQ />
   <ContactBlock />
   <GoogleReviews reviews={reviews} googleUrl={googleReviewsUrl} />
+  <Partners />
 </Layout>

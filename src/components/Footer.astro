@@ -18,7 +18,9 @@ const year = new Date().getFullYear();
 ---
 <footer>
   <div class="wrap">
-    <div class="flogo">CDM Motorsport</div>
+    <a href="/" class="flogo" aria-label="Accueil CDM Motorsport">
+      <img src="/img/cdm-logo-white.svg" alt="CDM Motorsport" width="220" height="99" />
+    </a>
     <nav class="fmenu">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
@@ -52,11 +54,17 @@ const year = new Date().getFullYear();
     gap: 24px;
   }
   .flogo {
-    font-family: var(--disp);
-    font-size: 24px;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+  }
+  .flogo img {
+    height: 60px;
+    width: auto;
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .flogo img { height: 48px; }
   }
   .fmenu {
     display: flex;

@@ -1,0 +1,103 @@
+---
+// Bande "Partenaires" sobre : fond crème, 4 logos alignés, hauteur homogène,
+// grille responsive (4 colonnes desktop / 2 colonnes mobile). Chaque logo est
+// un lien cliquable qui ouvre l'onglet externe.
+const partners = [
+  { name: 'MX Mag',           logo: '/img/partners/mxmag.png',           href: 'https://mxmag.be/' },
+  { name: 'Enduro Magazine',  logo: '/img/partners/enduro-magazine.png', href: 'https://www.enduro-magazine.com/' },
+  { name: 'KOVE Benelux',     logo: '/img/partners/kove-benelux.png',    href: 'https://kovemoto.be/' },
+  { name: 'One Race',         logo: '/img/partners/onerace.png',         href: 'https://www.onerace.be/' },
+];
+---
+<section class="partners" id="partenaires">
+  <div class="wrap">
+    <div class="phead reveal">
+      <div class="eyebrow">Ils nous accompagnent</div>
+      <div class="ptitle">Nos <em>partenaires</em></div>
+    </div>
+    <ul class="pgrid reveal">
+      {partners.map((p) => (
+        <li>
+          <a
+            href={p.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={p.name}
+            title={p.name}
+          >
+            <img src={p.logo} alt={p.name} loading="lazy" decoding="async" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style is:global>
+  .partners {
+    background: var(--cream);
+    padding: clamp(56px, 8vw, 96px) 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .partners .phead {
+    text-align: center;
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .partners .ptitle {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.1;
+    letter-spacing: -.3px;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+  .partners .ptitle em { font-style: italic; color: var(--sand); }
+
+  .partners .pgrid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    justify-items: center;
+    padding: 0;
+    margin: 0;
+  }
+  .partners .pgrid li { width: 100%; display: flex; justify-content: center; }
+  .partners .pgrid a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 64px;
+    max-width: 200px;
+    width: 100%;
+    padding: 4px 8px;
+    transition: opacity .25s ease, transform .25s ease;
+    opacity: .78;
+  }
+  .partners .pgrid a:hover,
+  .partners .pgrid a:focus-visible {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  .partners .pgrid img {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(100%);
+    transition: filter .25s ease;
+  }
+  .partners .pgrid a:hover img,
+  .partners .pgrid a:focus-visible img {
+    filter: grayscale(0);
+  }
+
+  @media (max-width: 720px) {
+    .partners .pgrid { grid-template-columns: repeat(2, 1fr); gap: 28px 20px; }
+    .partners .pgrid a { height: 54px; }
+  }
+</style>

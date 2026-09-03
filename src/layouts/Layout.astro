@@ -93,16 +93,16 @@ const organizationJsonLd = {
   <CustomCursor />
 
   <div id="loader">
-    <div class="l1" id="lw"></div>
-    <div class="bar" id="lbar"></div>
     <img
       id="llogo"
       class="loader-logo"
-      src="/img/logo-cdm.svg"
+      src="/img/cdm-logo-white.svg"
       alt="CDM Motorsport"
-      width="180"
-      height="80"
+      width="220"
+      height="99"
     />
+    <div class="l1" id="lw"></div>
+    <div class="bar" id="lbar"></div>
   </div>
 
   <SiteLogo />
@@ -136,9 +136,10 @@ const organizationJsonLd = {
     font-family: var(--disp);
     font-weight: 300;
     color: #fff;
-    font-size: clamp(26px, 5vw, 54px);
+    font-size: clamp(22px, 4vw, 42px);
     letter-spacing: .5px;
     overflow: hidden;
+    margin-top: 28px;
   }
   #loader .l1 span {
     display: inline-block;
@@ -149,20 +150,15 @@ const organizationJsonLd = {
     width: 0;
     height: 1px;
     background: var(--sand);
-    margin-top: 26px;
+    margin-top: 22px;
     transition: width 1.4s cubic-bezier(.7, 0, .2, 1);
   }
   #loader .loader-logo {
-    margin-top: 28px;
-    width: clamp(110px, 14vw, 160px);
+    width: clamp(180px, 22vw, 280px);
     height: auto;
     display: block;
     opacity: 0;
     transform: translateY(10px);
-    /* Le SVG source utilise fill="currentColor" (noir par défaut en img) ;
-       brightness(0) invert(1) force le rendu en blanc pour ressortir
-       sur le fond sombre #141008 du loader. */
-    filter: brightness(0) invert(1);
   }
   body.loaded #loader {
     transform: translateY(-100%);
@@ -201,9 +197,7 @@ const organizationJsonLd = {
         );
       });
     }
-    if (lbar) setTimeout(() => (lbar.style.width = '180px'), 150);
-
-    // Logo apparaît en continuité, juste après la ligne (bar)
+    // Logo apparaît en premier (au-dessus), le slogan et la barre suivent
     const llogo = document.getElementById('llogo');
     if (llogo) {
       llogo.animate(
@@ -211,9 +205,11 @@ const organizationJsonLd = {
           { transform: 'translateY(10px)', opacity: 0 },
           { transform: 'translateY(0)', opacity: 1 },
         ],
-        { duration: 700, delay: 1200, fill: 'forwards', easing: 'cubic-bezier(.5,0,.2,1)' }
+        { duration: 700, delay: 80, fill: 'forwards', easing: 'cubic-bezier(.5,0,.2,1)' }
       );
     }
+
+    if (lbar) setTimeout(() => (lbar.style.width = '180px'), 900);
 
     let done = false;
     function start() {
