@@ -9,17 +9,31 @@ const galleryPhotos = Array.from({ length: 12 }, (_, i) =>
   `/img/edouard/edouard-${String(i + 2).padStart(2, '0')}.jpg`
 );
 
-// Articles "featured" (avec visuel de couverture)
+// Presse & médias — cartes uniformes (photo, source, date, titre), triées
+// du plus récent au plus ancien. Chaque image est hébergée localement,
+// crédit affiché en overlay.
 const pressArticles = [
   {
-    title: 'Edouard Charles de Moor avec Xavier de Soultrait et Camille Chapelière en Espagne',
+    title: 'Maroc : immersion express au cœur d\'un projet, pistes, dunes et liberté',
+    source: 'OneRace',
+    date: 'Mars 2026',
+    datePublished: '2026-03',
+    url: 'https://onerace.be/maroc-immersion-express-au-coeur-dun-projet-pistes-dunes-et-liberte/',
+    image: '/img/press/onerace-maroc-2026',
+    imageAlt: "Reportage OneRace au Maroc avec CDM Motorsport, dunes et pistes du sud",
+    credit: '© OneRace',
+    publisherUrl: 'https://onerace.be/',
+  },
+  {
+    title: 'Face-à-face 250 4-temps : KTM EXC-F Six Days vs Sherco SEF-R Factory, un duo gagnant',
     source: 'MotocrossMag.be',
-    date: 'Juillet 2020',
-    datePublished: '2020-07',
-    url: 'https://fr.motocrossmag.be/index.php/2020/07/edouard-charles-de-moor-avec-xavier-de-soultrait-et-camille-chapeliere-en-espagne/',
-    image: '/img/press/espagne',
-    imageAlt: "Edouard De Moor, Xavier de Soultrait et Camille Chapelière en tenue rally, Espagne",
-    credit: null,
+    date: 'Septembre 2023',
+    datePublished: '2023-09',
+    url: 'https://fr.motocrossmag.be/index.php/2023/09/face-a-face-250-4-temps-ktm-exc-f-six-days-sherco-sef-r-factory-un-duo-gagnant/',
+    image: '/img/press/face-a-face-2023',
+    imageAlt: 'Face-à-face KTM EXC-F Six Days et Sherco SEF-R Factory, essai MotocrossMag',
+    credit: '© MotocrossMag',
+    publisherUrl: 'https://fr.motocrossmag.be/',
   },
   {
     title: 'Essai Fantic 125 XE et 250 XEF : le retour gagnant',
@@ -28,43 +42,53 @@ const pressArticles = [
     datePublished: '2021-03',
     url: 'https://fr.motocrossmag.be/index.php/2021/03/essai-fantic-125-xe-et-250-xef-le-retour-gagnant/',
     image: '/img/press/essai-fantic-2021',
-    imageAlt: 'Edouard De Moor à l\'essai des Fantic 125 XE et 250 XEF — MotocrossMag',
+    imageAlt: 'Edouard De Moor à l\'essai des Fantic 125 XE et 250 XEF, MotocrossMag',
     credit: '© MotocrossMag',
-    hasJpgSrcset: true, // pas de variantes WebP pour ce visuel, uniquement JPG
-  },
-];
-
-// Références secondaires (liste compacte, sans visuel)
-const pressLinks = [
-  {
-    title: 'Maroc : immersion express au cœur d\'un projet, pistes, dunes et liberté',
-    source: 'OneRace',
-    date: 'Reportage',
-    url: 'https://onerace.be/maroc-immersion-express-au-coeur-dun-projet-pistes-dunes-et-liberte/',
+    publisherUrl: 'https://fr.motocrossmag.be/',
   },
   {
-    title: 'Photos : le Team Yamaha Zone Rouge 2019',
+    title: 'Edouard Charles de Moor avec Xavier de Soultrait et Camille Chapelière en Espagne',
     source: 'MotocrossMag.be',
-    date: 'Mars 2019',
-    url: 'https://fr.motocrossmag.be/index.php/2019/03/photos-le-team-yamaha-zone-rouge-2019/',
-  },
-  {
-    title: 'Six pilotes sous les couleurs du Team Yamaha Zone Rouge',
-    source: 'MotocrossMag.be',
-    date: 'Mars 2019',
-    url: 'https://fr.motocrossmag.be/index.php/2019/03/six-pilotes-sous-les-couleurs-du-team-yamaha-zone-rouge/',
+    date: 'Juillet 2020',
+    datePublished: '2020-07',
+    url: 'https://fr.motocrossmag.be/index.php/2020/07/edouard-charles-de-moor-avec-xavier-de-soultrait-et-camille-chapeliere-en-espagne/',
+    image: '/img/press/espagne',
+    imageAlt: "Edouard De Moor, Xavier de Soultrait et Camille Chapelière en tenue rally, Espagne",
+    credit: '© MotocrossMag',
+    publisherUrl: 'https://fr.motocrossmag.be/',
   },
   {
     title: 'Vidéo : le Team Yamaha Zone Rouge en action',
     source: 'MotocrossMag.be',
     date: 'Mai 2019',
+    datePublished: '2019-05',
     url: 'https://fr.motocrossmag.be/index.php/2019/05/video-le-team-yamaha-zone-rouge-en-action/',
+    image: '/img/press/yamaha-zone-rouge-video-2019',
+    imageAlt: 'Le Team Yamaha Zone Rouge en action, saison 2019',
+    credit: '© MotocrossMag',
+    publisherUrl: 'https://fr.motocrossmag.be/',
   },
   {
-    title: 'Face-à-face 250 4-temps : KTM EXC-F Six Days vs Sherco SEF-R Factory, un duo gagnant',
+    title: 'Six pilotes sous les couleurs du Team Yamaha Zone Rouge',
     source: 'MotocrossMag.be',
-    date: 'Septembre 2023',
-    url: 'https://fr.motocrossmag.be/index.php/2023/09/face-a-face-250-4-temps-ktm-exc-f-six-days-sherco-sef-r-factory-un-duo-gagnant/',
+    date: 'Mars 2019',
+    datePublished: '2019-03',
+    url: 'https://fr.motocrossmag.be/index.php/2019/03/six-pilotes-sous-les-couleurs-du-team-yamaha-zone-rouge/',
+    image: '/img/press/yamaha-zone-rouge-pilotes-2019',
+    imageAlt: 'Les six pilotes du Team Yamaha Zone Rouge 2019',
+    credit: '© MotocrossMag',
+    publisherUrl: 'https://fr.motocrossmag.be/',
+  },
+  {
+    title: 'Photos : le Team Yamaha Zone Rouge 2019',
+    source: 'MotocrossMag.be',
+    date: 'Mars 2019',
+    datePublished: '2019-03',
+    url: 'https://fr.motocrossmag.be/index.php/2019/03/photos-le-team-yamaha-zone-rouge-2019/',
+    image: '/img/press/yamaha-zone-rouge-photos-2019',
+    imageAlt: 'Séance photo du Team Yamaha Zone Rouge 2019',
+    credit: '© MotocrossMag',
+    publisherUrl: 'https://fr.motocrossmag.be/',
   },
 ];
 
@@ -84,31 +108,20 @@ const personJsonLd = {
     name: SITE.name,
     url: SITE.url,
   },
-  subjectOf: [
-    ...pressArticles.map((a) => ({
-      '@type': 'NewsArticle',
-      headline: a.title,
-      url: a.url,
-      datePublished: a.datePublished,
-      inLanguage: 'fr',
-      about: { '@type': 'Person', name: 'Edouard Charles De Moor' },
-      publisher: {
-        '@type': 'NewsMediaOrganization',
-        name: a.source,
-      },
-    })),
-    ...pressLinks.map((a) => ({
-      '@type': 'NewsArticle',
-      headline: a.title,
-      url: a.url,
-      inLanguage: 'fr',
-      about: { '@type': 'Person', name: 'Edouard Charles De Moor' },
-      publisher: {
-        '@type': 'NewsMediaOrganization',
-        name: a.source,
-      },
-    })),
-  ],
+  subjectOf: pressArticles.map((a) => ({
+    '@type': 'NewsArticle',
+    headline: a.title,
+    url: a.url,
+    datePublished: a.datePublished,
+    inLanguage: 'fr',
+    image: new URL(`${a.image}.jpg`, SITE.url).href,
+    about: { '@type': 'Person', name: 'Edouard Charles De Moor' },
+    publisher: {
+      '@type': 'NewsMediaOrganization',
+      name: a.source,
+      url: a.publisherUrl,
+    },
+  })),
 };
 
 // Grille 12 colonnes façon .ggrid, patron répété pour couvrir 12 photos
@@ -259,30 +272,14 @@ const layout = [
             aria-label={`${a.title}, ${a.source}, ${a.date} (nouvelle fenêtre)`}
           >
             <div class="press-cover">
-              {a.hasJpgSrcset ? (
-                <img
-                  src={`${a.image}.jpg`}
-                  srcset={`${a.image}-800.jpg 800w, ${a.image}.jpg 1000w`}
-                  sizes="(max-width: 720px) 100vw, 33vw"
-                  alt={a.imageAlt}
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <picture>
-                  <source
-                    type="image/webp"
-                    srcset={`${a.image}-800.webp 800w, ${a.image}-1400.webp 1400w`}
-                    sizes="(max-width: 720px) 100vw, 33vw"
-                  />
-                  <img
-                    src={`${a.image}.jpg`}
-                    alt={a.imageAlt}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </picture>
-              )}
+              <img
+                src={`${a.image}.jpg`}
+                srcset={`${a.image}-800.jpg 800w, ${a.image}.jpg 1200w`}
+                sizes="(max-width: 720px) 100vw, (max-width: 960px) 50vw, 33vw"
+                alt={a.imageAlt}
+                loading="lazy"
+                decoding="async"
+              />
               {a.credit && <span class="press-credit">{a.credit}</span>}
             </div>
             <div class="press-body">
@@ -301,32 +298,6 @@ const layout = [
             </div>
           </a>
         ))}
-      </div>
-
-      <div class="press-more reveal">
-        <div class="press-more-head">Voir aussi</div>
-        <ul class="press-links">
-          {pressLinks.map((a) => (
-            <li>
-              <a
-                href={a.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${a.title}, ${a.source}, ${a.date} (nouvelle fenêtre)`}
-              >
-                <span class="press-links-title">« {a.title} »</span>
-                <span class="press-links-meta">
-                  <span class="press-source">{a.source}</span>
-                  <span class="press-sep">·</span>
-                  <span class="press-date">{a.date}</span>
-                  <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
-                    <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 3 L11 8 L6 13 M3.5 8 L11 8"/>
-                  </svg>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   </section>
@@ -378,7 +349,6 @@ const layout = [
       aspect-ratio: 16 / 10;
       background: var(--cream);
     }
-    .press-cover picture,
     .press-cover img {
       display: block;
       width: 100%;
@@ -446,69 +416,8 @@ const layout = [
       pointer-events: none;
     }
 
-    .press-more { margin-top: 44px; }
-    .press-more-head {
-      font-family: var(--sans);
-      font-size: 11px;
-      letter-spacing: 1.6px;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .press-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      border-top: 1px solid var(--line);
-    }
-    .press-links li { border-bottom: 1px solid var(--line); }
-    .press-links a {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 16px 4px;
-      color: var(--ink);
-      text-decoration: none;
-      transition: color .2s ease, background .2s ease, padding .2s ease;
-    }
-    .press-links a:hover,
-    .press-links a:focus-visible {
-      color: var(--sand);
-      padding-left: 10px;
-    }
-    .press-links-title {
-      font-family: var(--disp);
-      font-weight: 500;
-      font-size: clamp(15px, 1.4vw, 17px);
-      line-height: 1.35;
-      flex: 1;
-      min-width: 0;
-    }
-    .press-links-meta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--sans);
-      font-size: 11px;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 600;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .press-links a:hover .press-links-meta,
-    .press-links a:focus-visible .press-links-meta { color: var(--sand); }
-
     @media (max-width: 720px) {
-      .press-list { grid-template-columns: 1fr; }
-      .press-links a {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-      }
+      .press-list { grid-template-columns: 1fr; gap: 22px; }
     }
   </style>
 
