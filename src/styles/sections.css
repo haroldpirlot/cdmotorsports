@@ -14,7 +14,7 @@
   height: 100%;
   object-fit: cover;
 }
-.hero .poster { background: url('/img/hero_poster.jpg') center/cover; }
+.hero .poster { background: url('/videos/hero-home-poster-v2.jpg') center/cover; }
 .hero::after {
   content: "";
   position: absolute;
