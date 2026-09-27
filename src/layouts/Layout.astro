@@ -250,15 +250,17 @@ const organizationJsonLd = {
     });
   }, { passive: true });
 
-  // lightbox
+  // lightbox : galerie du raid + galerie hôtels
   const lb = document.getElementById('lb');
   const lbi = lb?.querySelector('img');
-  document.querySelectorAll<HTMLAnchorElement>('.ggrid a').forEach((a) => {
+  document.querySelectorAll<HTMLAnchorElement>('.ggrid a, .hotels-grid a').forEach((a) => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const img = a.querySelector('img');
       if (lb && lbi && img) {
-        lbi.src = img.src;
+        // Pour la lightbox, on préfère le href (image full quality) si présent,
+        // sinon on retombe sur le src de la miniature.
+        lbi.src = a.getAttribute('href') || img.src;
         lb.style.display = 'flex';
       }
     });

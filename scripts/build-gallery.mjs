@@ -17,6 +17,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const IMG_DIR = join(ROOT, 'public/img');
 const GAL_DIR = join(IMG_DIR, 'gallery');
+const HOTELS_DIR = join(IMG_DIR, 'hotels');
 
 const WIDTHS = [800, 1400];
 const QUALITY = 78;
@@ -36,6 +37,15 @@ if (existsSync(GAL_DIR)) {
 for (const f of readdirSync(IMG_DIR)) {
   if (/^(g\d+|infos)\.jpe?g$/i.test(f)) {
     sources.push({ path: join(IMG_DIR, f), outDir: IMG_DIR, name: basename(f, extname(f)) });
+  }
+}
+
+// Photos hôtels (bloc "Où vous dormez" sur pages-raid)
+if (existsSync(HOTELS_DIR)) {
+  for (const f of readdirSync(HOTELS_DIR)) {
+    if (/^hotel-\d+\.jpe?g$/i.test(f)) {
+      sources.push({ path: join(HOTELS_DIR, f), outDir: HOTELS_DIR, name: basename(f, extname(f)) });
+    }
   }
 }
 

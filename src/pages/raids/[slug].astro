@@ -11,6 +11,7 @@ import IncludedExcluded from '../../components/raid/IncludedExcluded.astro';
 import RaidGallery from '../../components/raid/RaidGallery.astro';
 import RaidBike from '../../components/raid/RaidBike.astro';
 import RaidCTA from '../../components/raid/RaidCTA.astro';
+import RaidHotels from '../../components/raid/RaidHotels.astro';
 import RaidNav from '../../components/raid/RaidNav.astro';
 import { SITE } from '../../config';
 
@@ -138,6 +139,7 @@ const touristTripJsonLd = {
     <RaidItinerary stages={raid.data.stages} />
   )}
   <IncludedExcluded />
+  <RaidHotels />
   <RaidGallery gallery={raid.data.gallery} name={raid.data.name} />
   <RaidBike />
   <RaidCTA status={raid.data.status} />
