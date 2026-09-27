@@ -73,6 +73,10 @@ const discover = [
     padding: 22px 0;
     /* pas de mix-blend-mode sur le header : le CTA plein ne doit pas s'inverser */
     /* le logo reste visible en permanence : le hide ne s'applique qu'au bloc droit */
+    /* pointer-events none sur l'enveloppe → la moitié gauche vide du header ne
+       vole plus les clics destinés au SiteLogo (z-index 1, dessous). Les
+       enfants interactifs réactivent pointer-events explicitement. */
+    pointer-events: none;
   }
   .nav {
     display: flex;
@@ -85,6 +89,7 @@ const discover = [
     align-items: center;
     gap: 28px;
     transition: transform .4s ease, opacity .3s ease;
+    pointer-events: auto;
   }
   header.hide .nav-right {
     transform: translateY(-140%);
