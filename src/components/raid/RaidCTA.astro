@@ -1,10 +1,25 @@
 ---
+interface Props {
+  status?: 'live' | 'coming-soon';
+}
+const { status = 'live' } = Astro.props;
+const isComing = status === 'coming-soon';
 ---
 <section class="cta pad">
   <div class="bg" style="background-image:url('/img/pin.jpg')"></div>
   <div class="wrap reveal">
-    <div class="eyebrow" style="color:#e8c9a6;margin-bottom:16px">Réservation</div>
-    <div class="big">Ce raid vous <em>appelle ?</em></div>
-    <a href="/reserver" class="btn">Demander une date</a>
+    <div class="eyebrow" style="color:#e8c9a6;margin-bottom:16px">
+      {isComing ? 'Bientôt' : 'Réservation'}
+    </div>
+    <div class="big">
+      {isComing ? (
+        <>Envie d'être <em>prévenu ?</em></>
+      ) : (
+        <>Ce raid vous <em>appelle ?</em></>
+      )}
+    </div>
+    <a href={isComing ? '/#contact' : '/reserver'} class="btn">
+      {isComing ? "Être informé de l'ouverture" : 'Demander une date'}
+    </a>
   </div>
 </section>

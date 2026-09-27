@@ -108,7 +108,18 @@ const touristTripJsonLd = {
     <Content />
   </RaidIntro>
 
-  {gpx ? (
+  {raid.data.status === 'coming-soon' ? (
+    <section class="mapwrap pad">
+      <div class="wrap reveal" style="text-align:center;padding:40px 20px;border:1px dashed var(--line);border-radius:8px;background:var(--cream)">
+        <div class="eyebrow" style="margin-bottom:12px;color:#b56a5a">Itinéraire</div>
+        <div class="big" style="font-size:clamp(20px,2.4vw,28px)">En cours de finalisation</div>
+        <p style="margin-top:14px;color:#6b6155;max-width:520px;margin-left:auto;margin-right:auto">
+          Le tracé, les étapes et les hébergements précis sont en cours de repérage.
+          Contactez-nous pour être informé dès l'ouverture des réservations.
+        </p>
+      </div>
+    </section>
+  ) : gpx ? (
     <section class="mapwrap pad">
       <div class="wrap reveal">
         <div class="eyebrow" style="margin-bottom:16px">L'itinéraire</div>
@@ -123,11 +134,13 @@ const touristTripJsonLd = {
     <RaidMap map={raid.data.map} name={raid.data.name} />
   )}
 
-  <RaidItinerary stages={raid.data.stages} />
+  {raid.data.status !== 'coming-soon' && (
+    <RaidItinerary stages={raid.data.stages} />
+  )}
   <IncludedExcluded />
   <RaidGallery gallery={raid.data.gallery} name={raid.data.name} />
   <RaidBike />
-  <RaidCTA />
+  <RaidCTA status={raid.data.status} />
   <RaidNav
     prev={{ slug: prev.id, name: prev.data.name }}
     next={{ slug: next.id, name: next.data.name }}
