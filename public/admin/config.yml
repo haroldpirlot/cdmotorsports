@@ -27,6 +27,8 @@ collections:
       - { label: "Itinéraire", name: itin,  widget: string,  hint: "ex. Agadir → Ouarzazate (par le sud)" }
       - { label: "Jours",      name: days,  widget: number,  value_type: int, min: 1 }
       - { label: "Niveau",     name: level, widget: select,  options: [Découverte, Intermédiaire, Confirmé] }
+      - { label: "Statut",     name: status, widget: select, options: [live, coming-soon], default: live, hint: "coming-soon = raid en développement, sans prix ni tracé" }
+      - { label: "Prix par personne (€)", name: pricePerPerson, widget: number, value_type: int, min: 0, required: false, hint: "Laissez vide pour un raid en développement" }
       - { label: "Photo hero",   name: hero, widget: image }
       - { label: "Carte itinéraire", name: map,  widget: image }
       - label: "Galerie (6 photos)"

@@ -4,6 +4,7 @@ name: "Océan & Atlas"
 itin: "Agadir → Marrakech"
 days: 6
 level: Confirmé
+pricePerPerson: 2300
 hero: /img/raid_cote.jpg
 map: /img/raids/ocean-atlas.png
 gallery:

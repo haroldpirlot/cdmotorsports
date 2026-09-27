@@ -4,6 +4,7 @@ name: "Immersion Erg"
 itin: "Errachidia → Errachidia"
 days: 3
 level: Découverte
+pricePerPerson: 1500
 hero: /img/gallery/gallery-16.jpg
 map: /img/raids/immersion-erg.png
 gallery:

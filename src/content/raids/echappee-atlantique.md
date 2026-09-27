@@ -4,6 +4,7 @@ name: "Échappée Atlantique"
 itin: "Agadir → Agadir"
 days: 3
 level: Intermédiaire
+pricePerPerson: 1500
 hero: /img/gallery/gallery-01.jpg
 map: /img/raids/echappee-atlantique.png
 gallery:

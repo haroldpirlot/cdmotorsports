@@ -4,6 +4,7 @@ name: "Odyssée du Sud"
 itin: "Agadir → Ouarzazate (par le sud)"
 days: 7
 level: Confirmé
+pricePerPerson: 2600
 hero: /img/raid_dune.jpg
 map: /img/raids/odyssee-du-sud.png
 gallery:

@@ -4,6 +4,7 @@ name: "Boucle de l'Anti-Atlas"
 itin: "Ouarzazate → Ouarzazate"
 days: 5
 level: Intermédiaire
+pricePerPerson: 2200
 hero: /img/raid_mont.jpg
 map: /img/raids/boucle-anti-atlas.png
 gallery:

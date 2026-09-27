@@ -4,6 +4,7 @@ name: "Escapade Drâa"
 itin: "Ouarzazate → Ouarzazate"
 days: 3
 level: Confirmé
+pricePerPerson: 1500
 hero: /img/band.jpg
 map: /img/raids/escapade-draa.png
 gallery:

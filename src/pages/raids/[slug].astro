@@ -68,15 +68,28 @@ const touristTripJsonLd = {
     name: SITE.name,
     url: SITE.url,
   },
-  offers: {
-    '@type': 'Offer',
-    availability: 'https://schema.org/InStock',
-    url: new URL('/reserver', SITE.url).href,
-    priceSpecification: {
-      '@type': 'PriceSpecification',
-      description: 'Prix sur demande',
-    },
-  },
+  offers: raid.data.pricePerPerson
+    ? {
+        '@type': 'Offer',
+        availability: raid.data.status === 'coming-soon'
+          ? 'https://schema.org/PreOrder'
+          : 'https://schema.org/InStock',
+        url: new URL('/reserver', SITE.url).href,
+        price: raid.data.pricePerPerson,
+        priceCurrency: 'EUR',
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          price: raid.data.pricePerPerson,
+          priceCurrency: 'EUR',
+          unitText: 'par personne',
+        },
+      }
+    : {
+        '@type': 'Offer',
+        availability: 'https://schema.org/PreOrder',
+        url: new URL('/reserver', SITE.url).href,
+        description: 'Prix & dates — en développement',
+      },
 };
 ---
 <Layout title={title} description={description} ogImage={raid.data.hero}>
@@ -88,6 +101,8 @@ const touristTripJsonLd = {
     days={raid.data.days}
     hero={raid.data.hero}
     totalKm={totalKm}
+    pricePerPerson={raid.data.pricePerPerson}
+    status={raid.data.status}
   />
   <RaidIntro totalKm={totalKm} highlights={raid.data.highlights}>
     <Content />

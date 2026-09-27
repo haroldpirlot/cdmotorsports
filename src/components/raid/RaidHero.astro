@@ -6,21 +6,49 @@ interface Props {
   days: number;
   hero: string;
   totalKm: number;
+  pricePerPerson?: number;
+  status?: 'live' | 'coming-soon';
 }
-const { n, name, itin, days, hero, totalKm } = Astro.props;
+const { n, name, itin, days, hero, totalKm, pricePerPerson, status = 'live' } = Astro.props;
 const departure = itin.split(' → ')[0];
-const totalKmStr = totalKm.toLocaleString('fr-FR').replace(/ /g, ' ');
+const totalKmStr = totalKm.toLocaleString('fr-FR').replace(/ /g, ' ');
+const priceStr = pricePerPerson
+  ? pricePerPerson.toLocaleString('fr-FR').replace(/ /g, ' ').replace(/ /g, ' ') + ' €'
+  : null;
+const isComing = status === 'coming-soon';
 ---
 <section class="rhero" style={`background-image:url('${hero}')`}>
   <div class="wrap c">
     <div class="k">Raid {n} · {days} jours</div>
+    {isComing && <div class="rhero-badge">Bientôt · En développement</div>}
     <h1>{name}</h1>
     <div class="itin">{itin}</div>
     <div class="chips">
       <span class="chip"><b>{days} jours</b></span>
       <span class="chip"><b>{totalKmStr} km</b></span>
       <span class="chip">Départ <b>{departure}</b></span>
-      <span class="chip">Prix &amp; dates <b>sur demande</b></span>
+      {priceStr ? (
+        <span class="chip"><b>{priceStr}</b> · par personne</span>
+      ) : (
+        <span class="chip">Prix &amp; dates <b>en développement</b></span>
+      )}
     </div>
   </div>
 </section>
+
+<style>
+  .rhero-badge {
+    display: inline-block;
+    margin: 12px 0 6px;
+    background: rgba(20, 16, 8, .88);
+    color: #f4c48b;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 2px;
+    border: 1px solid rgba(244, 196, 139, .5);
+  }
+</style>

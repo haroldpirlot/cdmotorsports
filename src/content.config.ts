@@ -10,6 +10,8 @@ const raids = defineCollection({
     itin: z.string(),
     days: z.number().int().min(1),
     level: z.enum(['Découverte', 'Intermédiaire', 'Confirmé']),
+    pricePerPerson: z.number().int().min(0).optional(),
+    status: z.enum(['live', 'coming-soon']).default('live'),
     hero: z.string(),
     map: z.string(),
     gallery: z.array(z.string()).min(1),

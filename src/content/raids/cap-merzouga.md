@@ -4,6 +4,7 @@ name: "Cap Merzouga"
 itin: "Ouarzazate → Ouarzazate (par Merzouga)"
 days: 6
 level: Confirmé
+pricePerPerson: 2300
 hero: /img/pin.jpg
 map: /img/raids/cap-merzouga.png
 gallery:
