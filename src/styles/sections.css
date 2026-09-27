@@ -28,6 +28,16 @@
   bottom: 12vh;
   z-index: 3;
   color: #fff;
+  /* Sur le hero, on sort du .wrap centré 1280 : le bloc titre/slogan est
+     collé à gauche avec une marge nette, pour ne pas empiéter sur le grand
+     logo CDM centré via .site-logo. */
+  max-width: none;
+  margin: 0;
+  padding: 0 34px 0 clamp(24px, 4vw, 60px);
+  text-align: left;
+}
+@media (max-width: 640px) {
+  .hero-c { padding: 0 20px 0 20px; bottom: 15vh; }
 }
 .hero-c .k {
   font-family: var(--sans);
