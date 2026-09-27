@@ -3,8 +3,14 @@ const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-boo
 ---
 <section class="hero" id="top">
   <div class="poster"></div>
-  <video autoplay muted loop playsinline preload="metadata" poster="/videos/hero-home-poster-v2.jpg">
-    <source src="/videos/hero-home.mp4" type="video/mp4" />
+  <video
+    id="hero-video"
+    loop
+    playsinline
+    preload="metadata"
+    poster="/videos/hero-home-poster-v2.jpg"
+  >
+    <source src="/videos/hero-home-hq-son.mp4" type="video/mp4" />
   </video>
   <div class="wrap hero-c">
     <div class="k">CDM Motorsport · Raids moto · Maroc</div>
@@ -15,12 +21,64 @@ const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-boo
     <div class="tagline">Live the rally. Ride the legend.</div>
     <div class="sc">Défilez pour explorer</div>
   </div>
+  <button
+    type="button"
+    id="hero-sound"
+    class="hero-sound"
+    aria-label="Activer le son"
+    aria-pressed="false"
+  >
+    <svg class="hero-sound-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      <!-- haut-parleur (état muet par défaut, barré) -->
+      <path class="spk" fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
+      <g class="waves" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M16.5 8.5a5 5 0 0 1 0 7"/>
+        <path d="M19 6a8 8 0 0 1 0 12"/>
+      </g>
+      <line class="slash" x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
   <div class="marq">
     <div class="row" id="mrow">
       {[...marqueeWords, ...marqueeWords].map((w) => <span>{w}</span>)}
     </div>
   </div>
 </section>
+
+<style>
+  .hero-sound {
+    position: absolute;
+    right: 22px;
+    bottom: 22px;
+    z-index: 4;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .5);
+    background: rgba(20, 16, 8, .45);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .hero-sound:hover {
+    background: rgba(20, 16, 8, .7);
+    border-color: #fff;
+    transform: translateY(-1px);
+  }
+  .hero-sound:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+  .hero-sound[aria-pressed="true"] .slash { display: none; }
+  .hero-sound[aria-pressed="false"] .waves { opacity: .4; }
+  @media (max-width: 640px) {
+    .hero-sound { right: 14px; bottom: 14px; width: 40px; height: 40px; }
+  }
+</style>
 
 <script>
   function heroIn() {
@@ -35,4 +93,41 @@ const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-boo
     });
   }
   document.addEventListener('cdm:loaded', heroIn);
+
+  // Autoplay avec son si le navigateur l'autorise. Sinon, on retombe en muet
+  // pour que la vidéo tourne quand même.
+  (function () {
+    const video = document.getElementById('hero-video') as HTMLVideoElement | null;
+    const btn = document.getElementById('hero-sound') as HTMLButtonElement | null;
+    if (!video || !btn) return;
+
+    const setPressed = (unmuted: boolean) => {
+      btn.setAttribute('aria-pressed', String(unmuted));
+      btn.setAttribute('aria-label', unmuted ? 'Couper le son' : 'Activer le son');
+    };
+
+    // Tentative 1 : autoplay AVEC son
+    video.muted = false;
+    video.volume = 1;
+    const p = video.play();
+    if (p && typeof p.then === 'function') {
+      p.then(() => {
+        setPressed(true);
+      }).catch(() => {
+        // Autoplay non-muet refusé → repli muet
+        video.muted = true;
+        setPressed(false);
+        video.play().catch(() => {
+          /* si même le muet échoue on laisse le poster */
+        });
+      });
+    }
+
+    btn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      setPressed(!video.muted);
+      if (!video.paused) return;
+      video.play().catch(() => {});
+    });
+  })();
 </script>
