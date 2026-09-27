@@ -217,44 +217,94 @@ const maptilerKey = import.meta.env.PUBLIC_MAPTILER_KEY ?? '';
       }
     }
 
-    // Marqueurs numérotés au départ de chaque étape.
-    // Le marqueur 1 = ville de départ du raid, mis en évidence en vert.
+    // Marqueurs numérotés + étoile finale. Villes qui se répètent (raids en
+    // boucle, ville visitée 2× dans un même raid) → offset horizontal en px
+    // pour que TOUS les numéros restent lisibles. Le "1" (départ) est toujours
+    // placé le plus à gauche du groupe et au premier plan.
+    type MarkerSpec = {
+      kind: 'day' | 'finish';
+      day: number | null;
+      lat: number;
+      lon: number;
+      isDeparture: boolean;
+      stage: { day: number; from: string; name: string; km: number };
+    };
+    const markerSpecs: MarkerSpec[] = [];
     for (let i = 0; i < data.stages.length; i++) {
       const stage = data.stages[i];
       const [lon, lat] = stage.start;
-      const isDeparture = i === 0;
-      const bg = isDeparture ? '#2d6a4f' : '#C8702A';
-      const icon = L.divIcon({
-        className: 'raidmap-marker',
-        html: `<div class="raidmap-marker-inner" style="background:${bg}">${stage.day}</div>`,
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
-        popupAnchor: [0, -14],
+      markerSpecs.push({
+        kind: 'day',
+        day: stage.day,
+        lat, lon,
+        isDeparture: i === 0,
+        stage,
       });
-      const title = isDeparture
-        ? `Départ, ${stage.from}`
-        : `Jour ${stage.day}, ${stage.from}`;
-      const marker = L.marker([lat, lon], { icon, title }).addTo(map);
-      const label = isDeparture ? `Départ · ${escapeHtml(stage.from)}` : escapeHtml(stage.from);
-      marker.bindPopup(
-        `<strong>${label}</strong><br/>Jour ${stage.day} · ${escapeHtml(stage.from)} → ${escapeHtml(stage.name)}<br/><span style="color:#C8702A;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">${stage.km} km</span>`
-      );
     }
-
-    // Marqueur d'arrivée finale
     const last = data.stages[data.stages.length - 1];
     if (last) {
       const [lon, lat] = last.end;
+      markerSpecs.push({
+        kind: 'finish',
+        day: null,
+        lat, lon,
+        isDeparture: false,
+        stage: last,
+      });
+    }
+
+    // Groupement par coordonnée arrondie (~11 m à 4 décimales)
+    const groups = new Map<string, MarkerSpec[]>();
+    for (const m of markerSpecs) {
+      const key = `${m.lat.toFixed(4)},${m.lon.toFixed(4)}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key)!.push(m);
+    }
+
+    // Étalement horizontal des marqueurs partageant une même ville
+    const OFFSET_PX = 20;
+    const offsetMap = new Map<MarkerSpec, number>();
+    for (const group of groups.values()) {
+      // Tri : Départ (jour 1) en tête, puis jours croissants, puis étoile en fin
+      group.sort((a, b) => {
+        if (a.isDeparture !== b.isDeparture) return a.isDeparture ? -1 : 1;
+        if (a.kind !== b.kind) return a.kind === 'finish' ? 1 : -1;
+        return (a.day ?? 999) - (b.day ?? 999);
+      });
+      const n = group.length;
+      for (let i = 0; i < n; i++) {
+        offsetMap.set(group[i], (i - (n - 1) / 2) * OFFSET_PX);
+      }
+    }
+
+    for (const m of markerSpecs) {
+      const offsetX = offsetMap.get(m) ?? 0;
+      const bg = m.kind === 'finish' ? '#1a1613' : (m.isDeparture ? '#2d6a4f' : '#C8702A');
+      const label = m.kind === 'finish' ? '★' : String(m.day);
       const icon = L.divIcon({
         className: 'raidmap-marker',
-        html: `<div class="raidmap-marker-inner" style="background:#1a1613">★</div>`,
+        html: `<div class="raidmap-marker-inner" style="background:${bg}">${label}</div>`,
         iconSize: [28, 28],
-        iconAnchor: [14, 14],
-        popupAnchor: [0, -14],
+        iconAnchor: [14 - offsetX, 14],
+        popupAnchor: [offsetX, -14],
       });
-      L.marker([lat, lon], { icon, title: `Arrivée, ${last.name}` })
+      let title: string;
+      let popupHtml: string;
+      if (m.kind === 'finish') {
+        title = `Arrivée, ${m.stage.name}`;
+        popupHtml = `<strong>Arrivée · ${escapeHtml(m.stage.name)}</strong>`;
+      } else {
+        title = m.isDeparture ? `Départ, ${m.stage.from}` : `Jour ${m.day}, ${m.stage.from}`;
+        const lbl = m.isDeparture
+          ? `Départ · ${escapeHtml(m.stage.from)}`
+          : escapeHtml(m.stage.from);
+        popupHtml = `<strong>${lbl}</strong><br/>Jour ${m.day} · ${escapeHtml(m.stage.from)} → ${escapeHtml(m.stage.name)}<br/><span style="color:#C8702A;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">${m.stage.km} km</span>`;
+      }
+      // Z-index : Départ toujours au-dessus ; étoile au fond ; jours entre les deux.
+      const zIndexOffset = m.isDeparture ? 1000 : m.kind === 'finish' ? 100 : 500 - (m.day ?? 0);
+      L.marker([m.lat, m.lon], { icon, title, zIndexOffset })
         .addTo(map)
-        .bindPopup(`<strong>Arrivée · ${escapeHtml(last.name)}</strong>`);
+        .bindPopup(popupHtml);
     }
 
     // Zoom molette : uniquement au clic sur la carte (évite de piéger le scroll de page)

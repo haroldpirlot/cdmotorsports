@@ -82,36 +82,32 @@ const distKm = (p1, p2) => haversineKm(p1[1], p1[0], p2[1], p2[0]);
 const asArray = (x) => (x == null ? [] : Array.isArray(x) ? x : [x]);
 
 // ------------- polyline lissée entre villes ------------------------------
-// Bezier quadratique avec point de contrôle décalé perpendiculairement
-// au segment (bulge léger, alterné à chaque étape pour éviter l'aspect droit).
-function bezierLeg(a, b, bulgeSign = 1) {
-  const steps = 24;
-  const [ax, ay] = a;
-  const [bx, by] = b;
-  const mx = (ax + bx) / 2;
-  const my = (ay + by) / 2;
-  const dx = bx - ax;
-  const dy = by - ay;
-  const len = Math.hypot(dx, dy) || 1;
-  // Perpendiculaire, décalage = 8% de la longueur du segment
-  const nx = -dy / len;
-  const ny = dx / len;
-  const bulge = len * 0.08 * bulgeSign;
-  const cx = mx + nx * bulge;
-  const cy = my + ny * bulge;
-  const out = [];
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps;
-    const omt = 1 - t;
-    const x = omt * omt * ax + 2 * omt * t * cx + t * t * bx;
-    const y = omt * omt * ay + 2 * omt * t * cy + t * t * by;
-    out.push([x, y]);
-  }
-  return out;
-}
+// Objectif : jamais dépasser les points-étapes vers l'océan. On chaîne les
+// villes en polyligne quasi-droite, on ajoute quelques relais côté terre sur
+// les tronçons côtiers, puis on adoucit les angles avec Chaikin 1 itération
+// (jamais de dépassement hors du corridor de la polyligne d'entrée).
 
-// Chaikin smoothing (arrondit les angles aux villes-étapes)
-function chaikin(points, iters = 2) {
+// Relais [lon, lat] insérés entre deux villes pour forcer le tracé à passer
+// côté terre (loin de la mer). Clé = "Ville A→Ville B", indépendant du sens.
+const RELAYS = {
+  // Côte atlantique : Agadir ↔ villes du sud/nord. Points calés dans les
+  // terres, à l'est de la route N1 littorale, pour que le lissage reste sur
+  // la terre ferme.
+  'Agadir→Sidi Ifni':      [[-9.7302, 29.6974]], // Tiznit
+  'Agadir→Mirleft':        [[-9.7302, 29.6974]], // Tiznit
+  'Mirleft→Agadir':        [[-9.7302, 29.6974]],
+  'Agadir→Essaouira':      [[-9.5000, 30.9000], [-9.6500, 31.2500]], // Immouzer / arrière-pays
+  'Essaouira→Agadir':      [[-9.6500, 31.2500], [-9.5000, 30.9000]],
+  'Agadir→Guelmim':        [[-9.7302, 29.6974], [-9.9800, 29.2500]], // Tiznit puis avant Guelmim
+  'Guelmim→Mirleft':       [[-9.9800, 29.2500]],
+  'Mirleft→Guelmim':       [[-9.9800, 29.2500]],
+  'Sidi Ifni→Ksar Tafnidilt': [[-10.5000, 28.9200]], // route intérieure
+};
+
+// Chaikin smoothing (arrondit les angles aux villes-étapes). Ne dépasse
+// jamais l'enveloppe convexe de la polyligne d'entrée → pas de débordement
+// possible au-delà des points-étapes.
+function chaikin(points, iters = 1) {
   let pts = points;
   for (let k = 0; k < iters; k++) {
     if (pts.length < 3) break;
@@ -129,25 +125,26 @@ function chaikin(points, iters = 2) {
 }
 
 function buildSmoothedTrace(stages) {
-  const legs = [];
+  // Chaîne toutes les étapes en une seule polyligne : [start_1, (relais…),
+  // start_2, (relais…), ..., end_N]. Les villes intermédiaires apparaissent
+  // une seule fois (fin_étape_i == début_étape_{i+1}).
+  const points = [];
   for (let i = 0; i < stages.length; i++) {
-    const from = CITIES[stages[i].from];
-    const to = CITIES[stages[i].to];
+    const s = stages[i];
+    const from = CITIES[s.from];
+    const to = CITIES[s.to];
     if (!from || !to) {
-      throw new Error(`Ville manquante dans CITIES: ${stages[i].from} ou ${stages[i].to}`);
+      throw new Error(`Ville manquante dans CITIES: ${s.from} ou ${s.to}`);
     }
-    // Sens du bulge alterné + petit "shake" en fonction de l'index
-    // pour éviter des courbes trop répétitives.
-    const sign = i % 2 === 0 ? 1 : -1;
-    legs.push(bezierLeg(from, to, sign));
+    if (i === 0) points.push(from);
+    const relayKey = `${s.from}→${s.to}`;
+    const relays = RELAYS[relayKey];
+    if (relays) points.push(...relays);
+    points.push(to);
   }
-  // Concatener toutes les jambes (le dernier point d'une jambe = premier de la suivante)
-  const merged = [];
-  for (let i = 0; i < legs.length; i++) {
-    const leg = legs[i];
-    merged.push(...(i === 0 ? leg : leg.slice(1)));
-  }
-  return chaikin(merged, 2);
+  // Chaikin 1 itération : arrondit doucement les angles aux villes sans
+  // dépasser le corridor de la polyligne, donc pas de risque océanique.
+  return chaikin(points, 1);
 }
 
 // ------------- parsing GPX ------------------------------------------------
