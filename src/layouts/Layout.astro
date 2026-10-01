@@ -93,7 +93,7 @@ const organizationJsonLd = {
 <body>
   <CustomCursor />
 
-  <div id="loader">
+  <button type="button" id="loader" aria-label="Entrer">
     <img
       id="llogo"
       class="loader-logo"
@@ -104,7 +104,7 @@ const organizationJsonLd = {
     />
     <div class="bar" id="lbar"></div>
     <div class="l1" id="lw"></div>
-  </div>
+  </button>
 
   <SiteLogo />
   <Header />
@@ -133,7 +133,16 @@ const organizationJsonLd = {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
   }
+  #loader:focus-visible { outline: none; }
   #loader .l1 {
     font-family: var(--disp);
     font-weight: 300;
@@ -214,16 +223,21 @@ const organizationJsonLd = {
     if (lbar) setTimeout(() => (lbar.style.width = '180px'), 900);
 
     let done = false;
-    function start() {
+    function start(immediate = false) {
       if (done) return;
       done = true;
+      const delay = immediate ? 0 : 2000;
       setTimeout(() => {
         document.body.classList.add('loaded');
         document.dispatchEvent(new CustomEvent('cdm:loaded'));
-      }, 2000);
+      }, delay);
     }
-    window.addEventListener('load', start);
-    setTimeout(start, 3000);
+    window.addEventListener('load', () => start());
+    setTimeout(() => start(), 3000);
+
+    // Clic sur le loader → passe à la suite immédiatement (sans attendre l'anim).
+    const loader = document.getElementById('loader');
+    loader?.addEventListener('click', () => start(true));
   })();
 
   // reveal observer

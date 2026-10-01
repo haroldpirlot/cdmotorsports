@@ -596,6 +596,8 @@
 /* raid hero */
 .rhero {
   position: relative;
+  /* z-index 0 : sous le SiteLogo global (z-index 1) → logo visible via blend sur le hero */
+  z-index: 0;
   height: 82vh;
   min-height: 560px;
   display: flex;

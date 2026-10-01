@@ -1,0 +1,111 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="Chaque raid, je l'ai reconnu moi-même · CDM Motorsport"
+  description="Reconnaissance des raids moto au Maroc : chaque itinéraire est repéré sur le terrain, en amont, pour un raid qui a vraiment du sens."
+  ogImage="/videos/reco-raids-poster.jpg"
+>
+  <section class="phero short" style="background-image:url('/videos/reco-raids-poster.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">Coulisses</div>
+      <h1>Reconnaissance <em>raids</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap article">
+      <div class="meta reveal">Coulisses · 4 min de lecture</div>
+      <div class="big reveal" style="margin-bottom:24px">
+        Chaque raid, je l'ai <em>reconnu</em><br />moi-même
+      </div>
+      <div class="reveal">
+        <p>
+          Il y a une chose sur laquelle je ne transige jamais : aucun de nos 7 raids n'a été
+          tracé sur une carte depuis un bureau. Chacun, je l'ai reconnu moi-même, sur le
+          terrain, avant de vous y emmener. C'est pour moi la base d'un vrai raid, et c'est
+          ce qui fait la différence.
+        </p>
+        <p>
+          Je connais le Maroc depuis près de 25 ans. Ce pays, ses pistes et ses gens, je les
+          ai appris au fil des années, et ça change tout quand il s'agit de dessiner un
+          itinéraire. Je sais où le sable devient piégeux, où une piste s'efface après les
+          pluies, où trouver de l'essence au bon moment, et surtout où se cachent les plus
+          beaux passages, ceux qu'on ne voit sur aucune carte.
+        </p>
+
+        <figure class="reco-video reveal">
+          <video
+            controls
+            preload="metadata"
+            playsinline
+            poster="/videos/reco-raids-poster.jpg"
+          >
+            <source src="/videos/reco-raids.mp4" type="video/mp4" />
+          </video>
+          <figcaption>
+            Aperçu d'une reconnaissance, au volant du 4×4 le long de l'Atlantique.
+          </figcaption>
+        </figure>
+
+        <p>
+          Reconnaître un raid, c'est repartir sur place, souvent en 4×4 et à moto, et rouler
+          chaque étape en amont. Je vérifie l'état des pistes, la difficulté réelle des
+          tronçons, les points d'eau et de carburant, les hôtels où l'on dormira, et la
+          sécurité de bout en bout. Rien n'est laissé au hasard, parce que c'est ce travail
+          invisible qui vous permet, une fois sur place, de ne penser qu'à rouler et à
+          profiter.
+        </p>
+        <p>
+          C'est aussi ce qui me permet d'adapter chaque parcours aux conditions du moment,
+          et de vous offrir des itinéraires qui ont du sens, du rythme et de la beauté.
+          Quand vous suivez la trace, vous suivez un chemin que j'ai déjà parcouru, testé et
+          choisi pour vous.
+        </p>
+        <p>
+          Au fond, c'est ça, l'esprit CDM Motorsport : des raids pensés par quelqu'un qui
+          roule vraiment, pas des circuits achetés sur catalogue.
+        </p>
+
+        <p style="margin-top:28px">
+          Envie de rouler sur un terrain reconnu mètre par mètre ?
+        </p>
+        <a href="/#raids" class="btn dark" style="margin-top:14px">Découvrir les raids</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .reco-video {
+    margin: 32px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .reco-video video {
+    width: 100%;
+    max-width: 360px;
+    max-height: 72vh;
+    aspect-ratio: 9 / 16;
+    background: #141008;
+    border-radius: 4px;
+    display: block;
+    object-fit: cover;
+  }
+  .reco-video figcaption {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: #7a7064;
+    text-align: center;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+  @media (max-width: 540px) {
+    .reco-video video {
+      max-width: 100%;
+      max-height: 80vh;
+    }
+  }
+</style>
