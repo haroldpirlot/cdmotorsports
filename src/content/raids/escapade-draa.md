@@ -11,7 +11,7 @@ gallery:
   - /img/band.jpg
   - /img/g4.jpg
   - /img/g3.jpg
-  - /img/g8.jpg
+  - /img/village.jpg
   - /img/g5.jpg
   - /img/pin.jpg
 stages:

@@ -13,7 +13,7 @@ gallery:
   - /img/band.jpg
   - /img/g5.jpg
   - /img/g2.jpg
-  - /img/g8.jpg
+  - /img/raid_dune.jpg
 stages:
   - { from: Ouarzazate,       to: Zagora,           km: 216 }
   - { from: Zagora,           to: Ouzina,           km: 238 }

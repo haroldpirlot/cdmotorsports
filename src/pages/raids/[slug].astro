@@ -139,8 +139,12 @@ const touristTripJsonLd = {
     <RaidItinerary stages={raid.data.stages} />
   )}
   <IncludedExcluded />
-  <RaidHotels />
-  <RaidGallery gallery={raid.data.gallery} name={raid.data.name} />
+  {raid.data.status !== 'coming-soon' && (
+    <>
+      <RaidHotels />
+      <RaidGallery gallery={raid.data.gallery} name={raid.data.name} />
+    </>
+  )}
   <RaidBike />
   <RaidCTA status={raid.data.status} />
   <RaidNav

@@ -10,7 +10,7 @@ map: /img/raids/odyssee-du-sud.png
 gallery:
   - /img/g4.jpg
   - /img/g3.jpg
-  - /img/g8.jpg
+  - /img/vast.jpg
   - /img/g2.jpg
   - /img/g5.jpg
   - /img/g9.jpg
