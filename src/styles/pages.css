@@ -309,6 +309,33 @@ p.lead {
 }
 .prose h2:first-child { margin-top: 0; }
 
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 22px;
+  font-size: 15px;
+  color: #4a443c;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+.prose table th,
+.prose table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.prose table th {
+  background: var(--cream);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.prose table tr:last-child td { border-bottom: none; }
+
 .note {
   background: #fff;
   border-left: 3px solid var(--sand);
