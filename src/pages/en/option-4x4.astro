@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { t, pathTo } from '../../i18n';
+const lang = 'en';
+const T = t(lang);
+---
+<Layout title={T.meta.option4x4.title} description={T.meta.option4x4.description} lang={lang}>
+  <section class="phero" style="background-image:url('/img/infos.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">{T.option4x4.heroEyebrow}</div>
+      <h1>{T.option4x4.heroH1Start} <em>{T.option4x4.heroH1Em}</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap two">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">4×4 option</div>
+        <div class="big">Live the raid<br />without <em>riding.</em></div>
+        <p class="lead" style="margin-top:18px">{T.option4x4.introBody1}</p>
+        <p style="margin-top:12px">{T.option4x4.introBody2}</p>
+        <a href={pathTo('/reserver', lang)} class="btn dark" style="margin-top:22px">{T.option4x4.ctaBtn}</a>
+      </div>
+      <div class="reveal">
+        <img src="/img/assitance.jpeg" alt="CDM Motorsport 4×4 support vehicle" style="aspect-ratio:4/5;object-fit:cover;width:100%" />
+      </div>
+    </div>
+  </section>
+
+  <section class="pad" style="background:var(--cream)">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">{T.option4x4.priceEyebrow}</div>
+        <div class="big">{T.option4x4.priceTitle}</div>
+      </div>
+      <div class="feat reveal">
+        {T.option4x4.features.map((f, i) => (
+          <div class="it">
+            <div class="n">{String(i + 1).padStart(2, '0')}</div>
+            <h4>{f.h}</h4>
+            <p>{f.p}</p>
+          </div>
+        ))}
+      </div>
+      <div class="note reveal" style="margin-top:30px">{T.option4x4.priceBody}</div>
+    </div>
+  </section>
+</Layout>

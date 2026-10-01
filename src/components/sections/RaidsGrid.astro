@@ -1,17 +1,24 @@
 ---
 import { getCollection } from 'astro:content';
+import { t, pathTo, type Lang } from '../../i18n';
 
-const raids = (await getCollection('raids')).sort((a, b) => a.data.n - b.data.n);
-const fmtKm = (n: number) => n.toLocaleString('fr-FR').replace(/ /g, ' ');
-const fmtPrice = (n: number) => n.toLocaleString('fr-FR').replace(/ /g, ' ').replace(/ /g, ' ') + ' €';
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
+
+const collection = lang === 'en' ? 'raidsEn' : 'raids';
+const raids = (await getCollection(collection)).sort((a, b) => a.data.n - b.data.n);
+const fmtLocale = lang === 'en' ? 'en-US' : 'fr-FR';
+const fmtKm = (n: number) => n.toLocaleString(fmtLocale);
+const fmtPrice = (n: number) => n.toLocaleString(fmtLocale) + ' €';
 ---
 <section class="raids pad" id="raids">
   <div class="wrap head">
     <div class="reveal">
-      <div class="eyebrow" style="margin-bottom:16px">Les raids</div>
-      <div class="big">Choisissez votre <em>terrain</em></div>
+      <div class="eyebrow" style="margin-bottom:16px">{T.raidsGrid.eyebrow}</div>
+      <div class="big">{T.raidsGrid.titleStart}<em>{T.raidsGrid.titleEm}</em></div>
     </div>
-    <div class="drag-note reveal">↔ Glissez pour explorer</div>
+    <div class="drag-note reveal">{T.raidsGrid.dragNote}</div>
   </div>
   <div class="rtrack" id="rtrack">
     {raids.map((raid) => {
@@ -21,12 +28,12 @@ const fmtPrice = (n: number) => n.toLocaleString('fr-FR').replace(/ /g, ' ').r
         <div class={`rcard${isComing ? ' coming' : ''}`}>
           <div class="ph">
             <span class="idx">{String(raid.data.n).padStart(2, '0')}</span>
-            {isComing && <span class="badge-coming">Bientôt · En développement</span>}
+            {isComing && <span class="badge-coming">{T.raidsGrid.badgeComing}</span>}
             <img src={raid.data.hero} alt={raid.data.name} />
             <div class="cap">
               <h3>{raid.data.name}</h3>
               <div class="meta">
-                <span><b>{raid.data.days}</b> jours</span>
+                <span><b>{raid.data.days}</b> {T.raidsGrid.daysLabel}</span>
                 <span>{fmtKm(totalKm)} km</span>
                 <span>{raid.data.itin}</span>
               </div>
@@ -34,11 +41,11 @@ const fmtPrice = (n: number) => n.toLocaleString('fr-FR').replace(/ /g, ' ').r
           </div>
           <div class="price">
             {raid.data.pricePerPerson
-              ? (<><b>{fmtPrice(raid.data.pricePerPerson)}</b><span class="pp"> · par personne</span></>)
-              : (<>Prix &amp; dates — <b>en développement</b></>)}
+              ? (<><b>{fmtPrice(raid.data.pricePerPerson)}</b><span class="pp">{T.raidsGrid.pricePerPerson}</span></>)
+              : (<>{T.raidsGrid.priceTbd[0]}<b>{T.raidsGrid.priceTbd[1]}</b></>)}
           </div>
-          <a class="rlink" href={`/raids/${raid.id}`}>
-            {isComing ? 'Découvrir →' : 'Voir le raid →'}
+          <a class="rlink" href={pathTo(`/raids/${raid.id}`, lang)}>
+            {isComing ? T.raidsGrid.linkComing : T.raidsGrid.linkLive}
           </a>
         </div>
       );

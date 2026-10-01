@@ -1,36 +1,38 @@
 ---
-// Section "Avis clients" style Restex : note globale + cartes.
-// Prend une liste d'avis en entrée. Prête à recevoir la vraie liste Google
-// (via une API/fetch server-side plus tard) sans changer le rendu.
+import { t, type Lang } from '../../i18n';
 
 export interface Review {
-  name: string;         // "Thomas L."
-  raid: string;         // "Odyssée du Sud"
-  country: string;      // "Belgique"
+  name: string;
+  raid: string;
+  country: string;
   rating: 1 | 2 | 3 | 4 | 5;
   text: string;
-  date: string;         // "Mars 2026"
+  date: string;
 }
 
 interface Props {
   reviews: Review[];
   googleUrl?: string;
   title?: string;
+  lang?: Lang;
 }
 
 const {
   reviews,
   googleUrl = '#',
-  title = "Ils l'ont vécu",
+  lang = 'fr',
 } = Astro.props;
+const T = t(lang);
+const title = Astro.props.title ?? T.reviews.title;
 
 const total = reviews.length;
 const avg = total > 0
   ? (reviews.reduce((s, r) => s + r.rating, 0) / total)
   : 0;
-const avgLabel = avg.toFixed(1).replace('.', ',');
+const avgLabel = lang === 'en'
+  ? avg.toFixed(1)
+  : avg.toFixed(1).replace('.', ',');
 
-// Palette pour les avatars initiales (couleurs terre/sable, rotation)
 const avatarColors = ['#C8702A', '#8B5A2E', '#4C6B54', '#7A5C3D', '#B4642C'];
 const initialOf = (name: string) => {
   const parts = name.trim().split(/\s+/);
@@ -41,17 +43,17 @@ const initialOf = (name: string) => {
 <section class="greviews pad" id="avis">
   <div class="wrap">
     <div class="reveal head">
-      <div class="eyebrow">Avis clients</div>
+      <div class="eyebrow">{T.reviews.eyebrow}</div>
       <h2 class="gtitle">{title}</h2>
       <div class="score">
         <div class="score-num">{avgLabel}</div>
         <div class="score-detail">
-          <div class="stars-big" aria-label={`${avgLabel} sur 5`}>
+          <div class="stars-big" aria-label={T.reviews.starsOutOf(avgLabel)}>
             {[1, 2, 3, 4, 5].map((i) => (
               <span class={i <= Math.round(avg) ? 'on' : ''}>★</span>
             ))}
           </div>
-          <div class="score-count">{total} avis Google</div>
+          <div class="score-count">{T.reviews.googleCount(total)}</div>
         </div>
       </div>
     </div>
@@ -68,7 +70,7 @@ const initialOf = (name: string) => {
               <span>{r.country} · {r.raid}</span>
             </div>
           </div>
-          <div class="stars" aria-label={`${r.rating} étoiles sur 5`}>
+          <div class="stars" aria-label={T.reviews.starsOf5(r.rating)}>
             {[1, 2, 3, 4, 5].map((n) => (
               <span class={n <= r.rating ? 'on' : ''}>★</span>
             ))}
@@ -81,7 +83,7 @@ const initialOf = (name: string) => {
 
     <div class="gcta reveal">
       <a href={googleUrl} class="btn dark" target="_blank" rel="noopener">
-        Voir tous les avis sur Google
+        {T.reviews.seeOnGoogle}
       </a>
     </div>
   </div>

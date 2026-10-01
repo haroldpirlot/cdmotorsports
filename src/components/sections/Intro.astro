@@ -1,19 +1,19 @@
 ---
+import { t, type Lang } from '../../i18n';
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
 ---
 <section class="intro pad">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow" style="margin-bottom:24px">Bienvenue chez CDM Motorsport</div>
+      <div class="eyebrow" style="margin-bottom:24px">{T.intro.eyebrow}</div>
       <div class="big">
-        Ce n'est pas simplement<br />
-        rouler au Maroc. C'est<br />
-        <em>vivre le rallye-raid.</em>
+        {T.intro.big1}<br />
+        {T.intro.big2}<br />
+        <em>{T.intro.big3em}</em>
       </div>
     </div>
-    <p class="reveal">
-      Près de 8 000 km de pistes, au guidon d'une véritable machine de rallye : la KOVE 450 Rally.
-      Des montagnes de l'Atlas aux dunes du Sahara, chaque journée vous plonge dans un environnement
-      différent. Votre histoire commence ici.
-    </p>
+    <p class="reveal">{T.intro.body}</p>
   </div>
 </section>

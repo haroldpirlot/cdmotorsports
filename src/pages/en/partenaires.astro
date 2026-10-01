@@ -1,0 +1,45 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { t, pathTo } from '../../i18n';
+const lang = 'en';
+const T = t(lang);
+
+const partners = [
+  { logo: 'KOVE',           name: 'KOVE',             text: "The motorcycle brand behind the bikes we ride. The KOVE 450 Rally is at the heart of the CDM Motorsport experience." },
+  { logo: 'One Race',       name: 'One Race',         text: 'Race and rally-raid outfit. A key technical and sporting partner.' },
+  { logo: 'MX Mag',         name: 'MX Mag',           text: 'Specialist motorcycle magazine that follows our raids and tells our stories.' },
+  { logo: 'Hotels & Riads', name: 'Hotels & Riads',   text: 'Our stopover hosts — hand-picked for their welcome, their food and their setting.' },
+];
+---
+<Layout title={T.meta.partners.title} description={T.meta.partners.description} lang={lang}>
+  <section class="phero short" style="background-image:url('/img/g5.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">{T.partnersPage.heroEyebrow}</div>
+      <h1>{T.partnersPage.heroH1Start}<em>{T.partnersPage.heroH1Em}</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom:20px">
+        <div class="eyebrow" style="margin-bottom:16px">They ride with us</div>
+        <div class="big">Our <em>partners</em></div>
+        <p class="lead" style="margin-top:16px">{T.partnersPage.intro}</p>
+      </div>
+      {partners.map((p) => (
+        <div class="partner reveal">
+          <div class="plogo">{p.logo}</div>
+          <div>
+            <h3>{p.name}</h3>
+            <p>{p.text}</p>
+          </div>
+        </div>
+      ))}
+      <div class="reveal" style="margin-top:34px">
+        <h3 style="font-family:var(--disp);text-transform:uppercase;font-weight:700;font-size:clamp(20px,2.4vw,28px);margin-bottom:10px">{T.partnersPage.becomeTitle}</h3>
+        <p style="color:#4c4438">{T.partnersPage.becomeBody}</p>
+      </div>
+      <a href={pathTo('/reserver', lang)} class="btn dark reveal" style="margin-top:22px">{T.partnersPage.becomeCta}</a>
+    </div>
+  </section>
+</Layout>

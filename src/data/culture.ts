@@ -1,6 +1,12 @@
 // Données des 6 pages thématiques "Le Maroc" :
 // - source unique consommée par Morocco.astro (vignettes cliquables)
 //   et par src/pages/le-maroc/[slug].astro (rendu des pages).
+//
+// FR : `cultureItems` (export historique, utilisé partout en français).
+// EN : `cultureItemsEn` (même shape, textes traduits).
+// Utiliser `getCulture(lang)` pour résoudre selon la langue.
+
+import type { Lang } from '../i18n';
 
 export interface CultureItem {
   slug: string;
@@ -139,3 +145,121 @@ export const cultureItems: CultureItem[] = [
     showVisitMorocco: false,
   },
 ];
+
+export const cultureItemsEn: CultureItem[] = [
+  {
+    slug: 'villages-de-l-atlas',
+    caption: 'Villages of the Atlas',
+    title: 'Villages of the Atlas',
+    keyword: 'Berber villages of the Atlas, Morocco',
+    description:
+      "Berber villages of the Atlas: a preserved Amazigh way of life in Morocco's mountains. Living stops on every CDM Motorsport raid.",
+    imageAlt: 'Traditional Berber village clinging to the Moroccan Atlas slopes',
+    image: '/img/village.jpg',
+    body: [
+      `Clinging to the mountainsides, the Berber villages of the Atlas look like they grew out of the rock itself. Earthen houses the color of ochre, stacked one against the next, narrow alleys where you cross a mule more often than a car, flat rooftops where the harvest is laid out to dry. You almost always arrive at a crawl, and that's just as well: time here doesn't run at the same speed as it does anywhere else.`,
+      `These villages are the heart of the Amazigh world, the Berber people who settled in these mountains long before the Arabs ever arrived. People still speak Tamazight, still grow barley, walnuts, almonds and apples on terraced slopes, and still raise goats and sheep on hillsides you'd swear were impossible to walk, let alone farm. The houses are built of pisé, that mix of raw earth and straw that keeps the cool inside in summer and holds the warmth in winter. An architecture born of common sense and climate, handed down from one generation to the next.`,
+      `Riding through them on a motorcycle, you brush up against a way of life that has held its ground against modernity, and against a kind of welcome whose simplicity disarms you. You stop at a water point, an old man raises a hand, kids come running, you swap three words and a smile, and sometimes you leave again with a handful of dates or a glass of tea you never asked for.`,
+      `On my raids, these villages aren't postcards you shoot through a visor on the way past: they're living stops, the places where the adventure takes on its real human flavor. Behind every pass, there are people, a story, a way of living in the mountains that commands respect. <a href="/en/#raids">Discover my raids →</a>`,
+    ],
+    cta: { label: 'Discover my raids', href: '/en/#raids' },
+    showVisitMorocco: true,
+  },
+  {
+    slug: 'aux-portes-du-sahara',
+    caption: 'At the gates of the Sahara',
+    title: 'At the gates of the Sahara',
+    keyword: 'Moroccan Sahara desert, erg dunes',
+    description:
+      'At the gates of the Moroccan Sahara: erg Chebbi and Chegaga dunes, silence and bivouacs under the stars. The ultimate rally-raid terrain.',
+    imageAlt: 'Line of erg dunes at the gates of the Moroccan Sahara',
+    image: '/img/g1.jpg',
+    body: [
+      `Where the piste fades out, the great desert begins. The rocky plateaus and stony regs slowly give way to the long dune ridges of the erg, those waves of sand the wind redraws every single day. The first time you see them rise up on the horizon it always catches you, and more than anything it makes you itch to ride straight into them.`,
+      `Morocco has two great mythical ergs: erg Chebbi, near Merzouga, with its tall dunes that glow red at sunrise, and erg Chegaga, wilder, out at the far end of the Drâa valley, where the road truly stops. Between the two, a whole world of nomads, dromedaries and hidden oases where the date palms grow. This desert isn't empty: it's inhabited, crossed for centuries by the caravans that linked sub-Saharan Africa to the north of the continent.`,
+      `Riding here means learning to read the sand, to feel how firm it is, to pick your line according to how the dunes are aligned and where the light is coming from. You come away with smoother, more supple riding, and a serious dose of humility. And then there's that silence you don't find anywhere else, so complete you can hear your own heartbeat. At sunset, the whole landscape turns to gold, then pink, before the cold drops in all at once.`,
+      `This is the ultimate training ground for rally-raid, demanding and intoxicating at the same time. And our bivouacs under the stars, far from any artificial light, with the Milky Way splitting the sky in two, are among the strongest memories you bring home from a raid. <a href="/en/#raids">My desert raids →</a>`,
+    ],
+    cta: { label: 'My desert raids', href: '/en/#raids' },
+    showVisitMorocco: true,
+  },
+  {
+    slug: 'l-immensite',
+    caption: 'The immensity',
+    title: 'The immensity',
+    keyword: 'wide open spaces Morocco, landscapes southern Morocco',
+    description:
+      "Southern Morocco's wide open spaces: endless plateaus, horizons without end, hamadas and oueds. On a bike, immensity turns into freedom.",
+    imageAlt: 'Endless plateaus and horizons in southern Morocco',
+    image: '/img/vast.jpg',
+    body: [
+      `The first thing that hits you in southern Morocco is the scale. Plateaus running on as far as the eye can see, horizons without end, mountains that cut their shape fifty kilometers away in air so clean it feels unreal. Raw, mineral country where you feel tiny. Immensity here isn't a word borrowed from a brochure: you feel it in your gut the moment you cut the engine.`,
+      `The scenery keeps changing and never repeats itself. You move from hamadas, those black stone plateaus swept by the wind, to dry oueds lined with oleander, from the deep gorges of the Atlas to the rounded, colored ridges of the Anti-Atlas, ochre, violet, verdigris depending on the rock. In a single day you can cross three or four landscapes that have nothing in common with each other.`,
+      `On a bike, that immensity becomes pure open ground. You eat the kilometers, you hold a bearing, you let the terrain carry you. There's no fence, no sign, no noise: just the piste ahead, and your choice of line. It's a feeling you forget quickly in our crowded lives, and that comes rushing back the moment you ride out here.`,
+      `It's in these wide open spaces that you reconnect with the essentials, and that your head really empties out. Each stage then takes on something almost meditative: you ride, you look, you breathe, and the rest can wait. <a href="/en/reserver">Book a raid →</a>`,
+    ],
+    cta: { label: 'Book a raid', href: '/en/reserver' },
+    showVisitMorocco: false,
+  },
+  {
+    slug: 'the-a-la-menthe',
+    caption: 'Mint tea',
+    title: 'Mint tea',
+    keyword: 'Moroccan mint tea, Morocco tradition',
+    description:
+      'Mint tea, the Moroccan ritual of hospitality, poured from high up in a foamy stream. A core moment of every CDM Motorsport raid.',
+    imageAlt: 'Mint tea poured from high up into a glass garnished with fresh mint',
+    image: '/img/culture/mint-tea-optimized.jpg',
+    imageBase: '/img/culture/mint-tea',
+    body: [
+      `Poured from high up, in a long foamy, fragrant stream that fills the little glass without spilling a drop, mint tea in Morocco is far more than a drink. It's a ritual, a language all of its own. You share it on arrival, in the shade of a palm grove, on a rug laid straight on the ground or under the canvas of a bivouac, and turning it down would almost be like turning down an outstretched hand.`,
+      `The recipe is simple and jealously guarded: gunpowder green tea, a generous handful of fresh mint, and plenty of sugar. You prepare it carefully, you pour it, pour it back into the pot to blend it, taste, adjust. People say the three glasses traditionally served each have their own character: the first bitter like life, the second strong like love, the third sweet like death. True or not, the saying tells you plenty about the place this drink holds in daily life.`,
+      `This tea sets the rhythm of the day and seals every encounter. It's offered to the traveler, the neighbor, the stranger passing through, and that single gesture opens every door. Accepting a glass is stepping into someone's life for a moment, taking the time to sit down when you were in a hurry, listening to a story you only half understand but that warms you all the same.`,
+      `On my raids, these tea breaks are suspended moments. We cut the engines, pull off the helmets, breathe out, talk, and it's often there, more than out on the piste, that the adventure takes on its full meaning. <a href="/en/edouard-de-moor">The CDM Motorsport experience →</a>`,
+    ],
+    cta: { label: 'The CDM Motorsport experience', href: '/en/edouard-de-moor' },
+    showVisitMorocco: true,
+  },
+  {
+    slug: 'kasbah-berbere',
+    caption: 'Berber kasbah',
+    title: 'Berber kasbah',
+    keyword: 'kasbah Morocco, earthen architecture',
+    description:
+      'Raw-earth fortresses rising in the valleys of southern Morocco, the kasbahs tell centuries of history. Living stops on our rally-raid routes.',
+    imageAlt: 'Berber pisé kasbah at the heart of a southern Moroccan valley',
+    image: '/img/culture/berber-village-optimized.jpg',
+    imageBase: '/img/culture/berber-village',
+    body: [
+      `Earthen fortresses rising up in the heart of the valleys, the kasbahs tell the story of southern Morocco all on their own. Their tall ochre walls, their crenellated corner towers and the geometric patterns carved into the pisé bear witness to a craft passed down over centuries, where entire palaces were built without a single stone, using only the earth of the place, mixed with straw and dried in the sun.`,
+      `Many of these kasbahs, along with the ksour (the fortified villages), once guarded the caravan routes coming up from the Sahara loaded with gold, salt and spices. They served at once as a refuge, a shared granary and a show of power for the great families who controlled the valleys, like the Glaoui. Along the Drâa or the Dadès valleys, you pass dozens of them, some still inhabited, others slowly returning to the earth they came from.`,
+      `The most famous, Aït-Ben-Haddou, has stood with its towers above the oued since the Middle Ages and is now a UNESCO World Heritage site. Not far from there, Ouarzazate has become a small capital of cinema: its kasbahs and sets have hosted dozens of major films and series. You ride through places where others imagined whole worlds.`,
+      `Coming across one at the bend of a track, pulling up for a minute at the foot of its walls, you're looking straight at centuries of history, a striking contrast with the growl of our modern bikes. That's Morocco too: riding fast through a country that has, itself, taken its time. <a href="/en/#raids">My routes →</a>`,
+    ],
+    cta: { label: 'My routes', href: '/en/#raids' },
+    showVisitMorocco: true,
+  },
+  {
+    slug: 'rencontre',
+    caption: 'Encounters',
+    title: 'Encounters',
+    keyword: 'encounters Morocco, Moroccan hospitality',
+    description:
+      "A shepherd, a child, a host: Moroccan hospitality is what gives a motorcycle raid its real depth. Stories of encounters in southern Morocco.",
+    imageAlt: 'Man in djellaba, portrait of Moroccan hospitality',
+    image: '/img/culture/local-portrait-optimized.jpg',
+    imageBase: '/img/culture/local-portrait',
+    body: [
+      `Beyond the pistes and the landscapes, what really sticks with you from a raid in Morocco is the people. A shepherd who appears out of nowhere, right where you thought you were alone in the world. A kid running along the edge of the track, hand up, just to say hello. A host who shares his meal without being asked, and who would almost be hurt if you turned him down.`,
+      `Hospitality in Morocco isn't a polite formula: it's a deep, almost sacred value. You take in the stranger, you feed him, you offer him tea, because tomorrow you might be the one on the road. That kind of generosity, which so often comes from those who have the least, puts your head back on straight and stays with you long after you've gone home.`,
+      `These exchanges usually happen without a shared language: a mix of Arabic, Tamazight, scraps of French, and above all gestures and glances. And yet, you understand each other. A thumbs-up, a shared laugh over a bogged-down bike, a photo pulled up on a phone: that's all it takes to build a real connection.`,
+      `That's what gives the adventure its true depth. You come home with your head full of images, of pistes and dunes, but above all with those encounters that stay. Because in the end, it isn't the kilometers you hold on to, it's everything you lived and shared along the way. <a href="/en/reserver">Head out on the adventure →</a>`,
+    ],
+    cta: { label: 'Head out on the adventure', href: '/en/reserver' },
+    showVisitMorocco: false,
+  },
+];
+
+export function getCulture(lang: Lang): CultureItem[] {
+  return lang === 'en' ? cultureItemsEn : cultureItems;
+}

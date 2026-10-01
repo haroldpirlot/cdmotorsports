@@ -1,14 +1,13 @@
 ---
-// Logo global positionné à fond bas (z-index: 1), au-dessus du body mais
-// SOUS les sections opaques. Résultat : masqué par les sections à photo /
-// bg opaque, visible via les sections transparentes (= bg beige du body).
-// Le hero vidéo est explicitement en z-index: 0 pour laisser le logo dessus.
-// mix-blend-mode: difference sur la variante blanche → apparaît blanc sur
-// vidéo/photos sombres, et marine sur le beige du body.
+import { t, pathTo, type Lang } from '../i18n';
+
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
 ---
 <div class="site-logo-outer">
   <div class="wrap">
-    <a href="/" class="site-logo" aria-label="Retour à l'accueil">
+    <a href={pathTo('/', lang)} class="site-logo" aria-label={T.siteLogo.aria}>
       <img
         class="site-logo-svg"
         src="/img/cdm-hybrid-white.svg"
@@ -26,11 +25,10 @@
     top: 18px;
     left: 0;
     right: 0;
-    z-index: 1;              /* sous les sections opaques, au-dessus du body */
-    pointer-events: none;    /* les clics passent aux éléments dessous */
+    z-index: 1;
+    pointer-events: none;
   }
   .site-logo-outer .wrap {
-    /* .wrap : max-width 1280px, padding 0 34px, centré, hérité de global.css */
     line-height: 0;
   }
   .site-logo {
@@ -38,8 +36,6 @@
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    /* difference : marine sur fond beige, blanc sur photo sombre. Photos
-       opaques (au-dessus dans la stack) le masquent totalement. */
     mix-blend-mode: difference;
   }
   .site-logo-svg {

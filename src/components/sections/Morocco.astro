@@ -1,57 +1,40 @@
 ---
-import { cultureItems } from '../../data/culture';
+import { getCulture } from '../../data/culture';
+import { t, pathTo, type Lang } from '../../i18n';
 
-// La bande photo puise dans les mêmes données que les pages /le-maroc/[slug].
-// Chaque vignette est un lien vers la page dédiée.
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
+const items = getCulture(lang);
 ---
 <section class="maroc pad" id="maroc">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow" style="margin-bottom:16px">Le Maroc</div>
+      <div class="eyebrow" style="margin-bottom:16px">{T.morocco.eyebrow}</div>
       <div class="big">
-        Bien plus qu'un terrain<br />
-        de jeu. Une <em>culture.</em>
+        {T.morocco.big1}<br />
+        {T.morocco.big2a}<em>{T.morocco.big2em}</em>
       </div>
-      <p class="lede">
-        Villages berbères, marchés, thé à la menthe et hospitalité légendaire. Ici, la piste
-        traverse une terre vivante, et chaque étape est une rencontre.
-      </p>
+      <p class="lede">{T.morocco.lede}</p>
       <div class="mfacts">
         <div>
-          <h4>Le pays</h4>
-          <p>
-            Le Maroc, « Al Maghrib », occupe l'extrême ouest de l'Afrique du Nord ; capitale Rabat.
-            Bordé par la Méditerranée au nord et l'océan Atlantique à l'ouest (près de 3 000 km de côtes),
-            il est fermé au sud et à l'est par le désert et les montagnes. Nos raids se déroulent dans
-            le Sud, autour d'Agadir, aux portes de l'Anti-Atlas.
-          </p>
+          <h4>{T.morocco.factCountryTitle}</h4>
+          <p>{T.morocco.factCountry}</p>
         </div>
         <div>
-          <h4>Le climat</h4>
-          <p>
-            Grâce à sa longue façade atlantique et à ses chaînes de montagnes, le Maroc offre une
-            grande diversité climatique. La côte reste douce et maritime toute l'année ; à l'intérieur
-            des terres, le climat varie selon l'altitude, journées chaudes et nuits fraîches dans le
-            désert.
-          </p>
+          <h4>{T.morocco.factClimateTitle}</h4>
+          <p>{T.morocco.factClimate}</p>
         </div>
       </div>
 
       <div class="mrencontres">
-        <h3>Une terre, des rencontres</h3>
-        <p>
-          Au Maroc, l'accueil n'est pas une formule, c'est une manière d'être. Sur les pistes,
-          on partage le thé avec un berger, on échange quelques mots dans un village, on croise
-          des regards curieux et bienveillants. Ce sont ces rencontres, simples et sincères,
-          qui donnent au raid toute sa saveur. Derrière chaque étape il y a des gens, une
-          hospitalité et une culture façonnée par le temps, qui transforment un voyage à moto
-          en une véritable aventure humaine.
-        </p>
+        <h3>{T.morocco.meetTitle}</h3>
+        <p>{T.morocco.meetBody}</p>
       </div>
     </div>
     <div class="mstrip reveal">
-      {cultureItems.map((s) => (
-        <a class="mtile" href={`/le-maroc/${s.slug}`} aria-label={`Découvrir : ${s.title}`}>
+      {items.map((s) => (
+        <a class="mtile" href={pathTo(`/le-maroc/${s.slug}`, lang)} aria-label={T.morocco.tileLabel(s.title)}>
           {s.imageBase ? (
             <picture>
               <source
@@ -93,8 +76,6 @@ import { cultureItems } from '../../data/culture';
     line-height: 1.65;
   }
 
-  /* Les vignettes deviennent des liens : styles reproduits pour la balise <a>
-     (l'ancien sélecteur .mstrip figure devient .mstrip .mtile). */
   .mtile {
     position: relative;
     overflow: hidden;
@@ -105,7 +86,6 @@ import { cultureItems } from '../../data/culture';
     cursor: pointer;
   }
   .mtile::after {
-    /* dégradé sombre en bas pour lisibilité de la légende */
     content: "";
     position: absolute;
     inset: 0;

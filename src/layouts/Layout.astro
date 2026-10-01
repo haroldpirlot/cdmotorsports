@@ -9,22 +9,33 @@ import Partners from '../components/sections/Partners.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 import FloatingActions from '../components/FloatingActions.astro';
 import { SITE } from '../config';
+import { t, altLangPath, type Lang } from '../i18n';
 
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
-  lang?: string;
+  lang?: Lang;
 }
-const {
-  title = 'CDM Motorsport, Every ride tells a story',
-  description = 'Raids moto (rallye-raid) au Maroc en KOVE 450 Rally. Live the rally. Ride the legend.',
-  ogImage = '/img/og-cover.png',
-  lang = 'fr',
-} = Astro.props;
+
+const { ogImage = '/img/og-cover.png', lang = 'fr' } = Astro.props;
+const T = t(lang);
+
+const title = Astro.props.title ?? T.meta.home.title;
+const description = Astro.props.description ?? T.meta.home.description;
 
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImageAbs = new URL(ogImage, SITE.url).href;
+
+// hreflang : URL de l'alternative + x-default = FR (langue par défaut)
+const altPath = altLangPath(Astro.url.pathname, lang === 'fr' ? 'en' : 'fr');
+const frPath = lang === 'fr' ? Astro.url.pathname : altLangPath(Astro.url.pathname, 'fr');
+const enPath = lang === 'en' ? Astro.url.pathname : altLangPath(Astro.url.pathname, 'en');
+const frAbs = new URL(frPath, SITE.url).href;
+const enAbs = new URL(enPath, SITE.url).href;
+
+const htmlLang = lang === 'fr' ? 'fr-BE' : 'en';
+const ogLocale = lang === 'fr' ? 'fr_FR' : 'en_US';
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -33,14 +44,14 @@ const organizationJsonLd = {
   url: SITE.url,
   logo: new URL('/img/hero.jpg', SITE.url).href,
   image: ogImageAbs,
-  description: SITE.description,
+  description,
   slogan: SITE.tagline,
-  areaServed: { '@type': 'Country', name: 'Maroc' },
+  areaServed: { '@type': 'Country', name: 'Morocco' },
   knowsLanguage: ['fr', 'en'],
 };
 ---
 <!doctype html>
-<html lang={lang}>
+<html lang={htmlLang} data-lang={lang}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,6 +59,9 @@ const organizationJsonLd = {
   <meta name="generator" content={Astro.generator} />
   <title>{title}</title>
   <link rel="canonical" href={canonical} />
+  <link rel="alternate" hreflang="fr" href={frAbs} />
+  <link rel="alternate" hreflang="en" href={enAbs} />
+  <link rel="alternate" hreflang="x-default" href={frAbs} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=3" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3" />
@@ -57,7 +71,8 @@ const organizationJsonLd = {
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content={SITE.name} />
-  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:locale" content={ogLocale} />
+  <meta property="og:locale:alternate" content={lang === 'fr' ? 'en_US' : 'fr_FR'} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
@@ -71,12 +86,34 @@ const organizationJsonLd = {
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImageAbs} />
 
-
-  <!-- JSON-LD : identité de l'organisation, présent sur toutes les pages -->
+  <!-- JSON-LD : identité de l'organisation -->
   <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
 
-  <!-- slot pour JSON-LD spécifique à la page (TouristTrip, FAQPage, etc.) -->
+  <!-- slot pour JSON-LD spécifique à la page -->
   <slot name="head" />
+
+  <!-- Language auto-detect on first visit; respects cdm-lang cookie. -->
+  <script is:inline define:vars={{ currentLang: lang, altPath }}>
+    (function () {
+      try {
+        var sel = (document.cookie.match(/(?:^|; )cdm-lang=([^;]+)/) || [])[1];
+        if (sel) {
+          // Choix enregistré : on respecte, pas de redirection auto.
+          if (sel !== currentLang && location.pathname.indexOf('/en') !== 0 && sel === 'en') {
+            location.replace(altPath);
+          } else if (sel !== currentLang && location.pathname.indexOf('/en') === 0 && sel === 'fr') {
+            location.replace(altPath);
+          }
+          return;
+        }
+        var browser = (navigator.language || 'fr').slice(0, 2).toLowerCase();
+        var browserLang = browser === 'en' ? 'en' : 'fr';
+        if (browserLang !== currentLang) {
+          location.replace(altPath);
+        }
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
 
   {import.meta.env.PROD && SITE.gaId && (
     <>
@@ -93,7 +130,7 @@ const organizationJsonLd = {
 <body>
   <CustomCursor />
 
-  <button type="button" id="loader" aria-label="Entrer">
+  <button type="button" id="loader" aria-label={T.loader.enterAria}>
     <img
       id="llogo"
       class="loader-logo"
@@ -106,17 +143,17 @@ const organizationJsonLd = {
     <div class="l1" id="lw"></div>
   </button>
 
-  <SiteLogo />
-  <Header />
+  <SiteLogo lang={lang} />
+  <Header lang={lang} />
 
   <main>
     <slot />
   </main>
 
-  <Partners />
-  <Footer />
+  <Partners lang={lang} />
+  <Footer lang={lang} />
 
-  <FloatingActions />
+  <FloatingActions lang={lang} />
 
   <div id="lb"><img src="" alt="" /></div>
 </body>
@@ -190,7 +227,7 @@ const organizationJsonLd = {
 </style>
 
 <script>
-  // loader word reveal
+  // loader word reveal — slogan toujours anglais (identité de marque)
   (function () {
     const words = 'Every ride tells a story'.split(' ');
     const lw = document.getElementById('lw');
@@ -208,7 +245,6 @@ const organizationJsonLd = {
         );
       });
     }
-    // Logo apparaît en premier (au-dessus), le slogan et la barre suivent
     const llogo = document.getElementById('llogo');
     if (llogo) {
       llogo.animate(
@@ -235,7 +271,6 @@ const organizationJsonLd = {
     window.addEventListener('load', () => start());
     setTimeout(() => start(), 3000);
 
-    // Clic sur le loader → passe à la suite immédiatement (sans attendre l'anim).
     const loader = document.getElementById('loader');
     loader?.addEventListener('click', () => start(true));
   })();
@@ -264,7 +299,7 @@ const organizationJsonLd = {
     });
   }, { passive: true });
 
-  // lightbox : galerie du raid + galerie hôtels
+  // lightbox
   const lb = document.getElementById('lb');
   const lbi = lb?.querySelector('img');
   document.querySelectorAll<HTMLAnchorElement>('.ggrid a, .hotels-grid a').forEach((a) => {
@@ -272,8 +307,6 @@ const organizationJsonLd = {
       e.preventDefault();
       const img = a.querySelector('img');
       if (lb && lbi && img) {
-        // Pour la lightbox, on préfère le href (image full quality) si présent,
-        // sinon on retombe sur le src de la miniature.
         lbi.src = a.getAttribute('href') || img.src;
         lb.style.display = 'flex';
       }

@@ -1,24 +1,24 @@
 ---
-// Bloc commun "Où vous dormez", affiché sur chaque page-raid juste après
-// la liste "Compris / Non compris" pour rendre concret le "hôtel demi-pension".
+import { t, type Lang } from '../../i18n';
+
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
+
 const photos = [
-  { src: '/img/hotels/hotel-01', alt: 'Kasbah traditionnelle, patio et palmier',                  small: false },
-  { src: '/img/hotels/hotel-02', alt: 'Piscine d\'un hôtel au cœur du désert marocain',           small: false },
-  { src: '/img/hotels/hotel-03', alt: 'Chambre d\'hôtel de charme, ambiance berbère',             small: false },
-  { src: '/img/hotels/hotel-04', alt: 'Campement de charme, tente berbère aménagée',              small: true  },
-  { src: '/img/hotels/hotel-05', alt: 'Détail d\'un hébergement : décor et confort après piste',  small: true  },
+  { src: '/img/hotels/hotel-01', alt: T.raid.hotels.photos[0].alt, small: false },
+  { src: '/img/hotels/hotel-02', alt: T.raid.hotels.photos[1].alt, small: false },
+  { src: '/img/hotels/hotel-03', alt: T.raid.hotels.photos[2].alt, small: false },
+  { src: '/img/hotels/hotel-04', alt: T.raid.hotels.photos[3].alt, small: true  },
+  { src: '/img/hotels/hotel-05', alt: T.raid.hotels.photos[4].alt, small: true  },
 ];
 ---
 <section class="hotels pad">
   <div class="wrap">
     <div class="hotels-head reveal">
-      <div class="eyebrow" style="margin-bottom:14px">Après la piste</div>
-      <h3>Où vous dormez</h3>
-      <p>
-        Après chaque journée de piste, on dort dans de vrais hôtels et campements
-        de charme, en demi-pension. Kasbahs traditionnelles, piscines, cuisine
-        locale : le confort après l'effort fait partie de l'expérience.
-      </p>
+      <div class="eyebrow" style="margin-bottom:14px">{T.raid.hotels.eyebrow}</div>
+      <h3>{T.raid.hotels.title}</h3>
+      <p>{T.raid.hotels.body}</p>
     </div>
     <div class="hotels-grid reveal">
       {photos.map((p) => (

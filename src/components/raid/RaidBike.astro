@@ -1,7 +1,18 @@
 ---
 import { getEntry } from 'astro:content';
+import { t, type Lang } from '../../i18n';
 
-const bike = await getEntry('globals', 'bike');
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
+
+const collection = lang === 'en' ? 'globalsEn' : 'globals';
+const bike = await getEntry(collection, 'bike');
+
+const bikeAltBase = T.raid.bike.body;
+const tagline = lang === 'en'
+  ? 'A real rally-raid machine, not a touring bike dressed up for the desert.'
+  : 'Une véritable machine de rallye-raid, pas une moto de tourisme transformée.';
 ---
 <section class="moto pad">
   <div class="wrap">
@@ -9,16 +20,14 @@ const bike = await getEntry('globals', 'bike');
       <img src="/img/g9.jpg" alt={bike?.data.title ?? 'KOVE 450 Rally'} />
     </div>
     <div class="reveal">
-      <div class="eyebrow" style="margin-bottom:16px">La machine</div>
+      <div class="eyebrow" style="margin-bottom:16px">{T.raid.bike.eyebrow}</div>
       <div class="big" style="font-size:clamp(26px,3.4vw,42px)">{bike?.data.title}</div>
       <ul class="specs">
         {bike?.data.specs?.map((s) => (
           <li><span>{s.label}</span><b>{s.value}</b></li>
         ))}
       </ul>
-      <p style="margin-top:16px;color:#5f574b">
-        Une véritable machine de rallye-raid, pas une moto de tourisme transformée.
-      </p>
+      <p style="margin-top:16px;color:#5f574b">{tagline}</p>
     </div>
   </div>
 </section>

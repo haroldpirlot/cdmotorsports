@@ -1,13 +1,17 @@
 ---
+import { t, type Lang } from '../../i18n';
 interface Props {
   map: string;
   name: string;
+  lang?: Lang;
 }
-const { map, name } = Astro.props;
+const { map, name, lang = 'fr' } = Astro.props;
+const T = t(lang);
+const mapAlt = lang === 'en' ? `Route map of ${name}` : `Carte itinéraire ${name}`;
 ---
 <section class="mapwrap pad">
   <div class="wrap reveal">
-    <div class="eyebrow" style="margin-bottom:16px">L'itinéraire</div>
-    <img src={map} alt={`Carte itinéraire ${name}`} />
+    <div class="eyebrow" style="margin-bottom:16px">{T.raid.itineraryEyebrow}</div>
+    <img src={map} alt={mapAlt} />
   </div>
 </section>

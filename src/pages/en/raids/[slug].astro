@@ -1,0 +1,156 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import RaidHero from '../../../components/raid/RaidHero.astro';
+import RaidIntro from '../../../components/raid/RaidIntro.astro';
+import RaidMap from '../../../components/raid/RaidMap.astro';
+import RaidMapInteractive, { type GpxData } from '../../../components/raid/RaidMapInteractive.astro';
+import RaidElevation from '../../../components/raid/RaidElevation.astro';
+import RaidItinerary from '../../../components/raid/RaidItinerary.astro';
+import IncludedExcluded from '../../../components/raid/IncludedExcluded.astro';
+import RaidGallery from '../../../components/raid/RaidGallery.astro';
+import RaidBike from '../../../components/raid/RaidBike.astro';
+import RaidCTA from '../../../components/raid/RaidCTA.astro';
+import RaidHotels from '../../../components/raid/RaidHotels.astro';
+import RaidNav from '../../../components/raid/RaidNav.astro';
+import { SITE } from '../../../config';
+import { t } from '../../../i18n';
+
+const lang = 'en';
+const T = t(lang);
+
+export async function getStaticPaths() {
+  const raids = await getCollection('raidsEn');
+  const sorted = raids.sort((a, b) => a.data.n - b.data.n);
+  return sorted.map((raid, i) => ({
+    params: { slug: raid.id },
+    props: {
+      raid,
+      prev: sorted[(i - 1 + sorted.length) % sorted.length],
+      next: sorted[(i + 1) % sorted.length],
+    },
+  }));
+}
+
+const { raid, prev, next } = Astro.props;
+const { Content } = await render(raid);
+
+const gpxModules = import.meta.glob<{ default: GpxData }>('../../../data/gpx/*.json', { eager: true });
+const gpx = gpxModules[`../../../data/gpx/${raid.id}.json`]?.default ?? null;
+const totalKm = gpx?.announcedKm ?? raid.data.stages.reduce((sum, s) => sum + s.km, 0);
+
+const title = `${raid.data.name}, ${raid.data.itin} · CDM Motorsport`;
+const description = `${raid.data.days} days of motorcycle rally-raid in Morocco, ${totalKm} km on a KOVE 450 Rally. ${raid.data.itin}.`;
+const raidUrl = new URL(`/en/raids/${raid.id}`, SITE.url).href;
+const heroAbs = new URL(raid.data.hero, SITE.url).href;
+const totalKmStr = totalKm.toLocaleString('en-US');
+
+const touristTripJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristTrip',
+  name: raid.data.name,
+  description,
+  url: raidUrl,
+  image: heroAbs,
+  itinerary: {
+    '@type': 'ItemList',
+    numberOfItems: raid.data.stages.length,
+    itemListElement: raid.data.stages.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Place',
+        name: `${s.from} → ${s.to}`,
+        description: `Day ${i + 1} · ${s.km} km · Lodging: ${s.lodging}`,
+      },
+    })),
+  },
+  provider: {
+    '@type': 'TravelAgency',
+    name: SITE.name,
+    url: SITE.url,
+  },
+  offers: raid.data.pricePerPerson
+    ? {
+        '@type': 'Offer',
+        availability: raid.data.status === 'coming-soon'
+          ? 'https://schema.org/PreOrder'
+          : 'https://schema.org/InStock',
+        url: new URL('/en/reserver', SITE.url).href,
+        price: raid.data.pricePerPerson,
+        priceCurrency: 'EUR',
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          price: raid.data.pricePerPerson,
+          priceCurrency: 'EUR',
+          unitText: 'per person',
+        },
+      }
+    : {
+        '@type': 'Offer',
+        availability: 'https://schema.org/PreOrder',
+        url: new URL('/en/reserver', SITE.url).href,
+        description: 'Price & dates — coming soon',
+      },
+};
+---
+<Layout title={title} description={description} ogImage={raid.data.hero} lang={lang}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(touristTripJsonLd)} />
+  <RaidHero
+    n={raid.data.n}
+    name={raid.data.name}
+    itin={raid.data.itin}
+    days={raid.data.days}
+    hero={raid.data.hero}
+    totalKm={totalKm}
+    pricePerPerson={raid.data.pricePerPerson}
+    status={raid.data.status}
+    lang={lang}
+  />
+  <RaidIntro totalKm={totalKm} highlights={raid.data.highlights} lang={lang}>
+    <Content />
+  </RaidIntro>
+
+  {raid.data.status === 'coming-soon' ? (
+    <section class="mapwrap pad">
+      <div class="wrap reveal" style="text-align:center;padding:40px 20px;border:1px dashed var(--line);border-radius:8px;background:var(--cream)">
+        <div class="eyebrow" style="margin-bottom:12px;color:#b56a5a">{T.raid.itineraryTbdEyebrow}</div>
+        <div class="big" style="font-size:clamp(20px,2.4vw,28px)">{T.raid.itineraryTbdTitle}</div>
+        <p style="margin-top:14px;color:#6b6155;max-width:520px;margin-left:auto;margin-right:auto">
+          {T.raid.itineraryTbdBody}
+        </p>
+      </div>
+    </section>
+  ) : gpx ? (
+    <section class="mapwrap pad">
+      <div class="wrap reveal">
+        <div class="eyebrow" style="margin-bottom:16px">{T.raid.itineraryEyebrow}</div>
+        <div class="big" style="font-size:clamp(24px,3vw,36px);margin-bottom:8px">
+          {T.raid.itineraryDaysKm(raid.data.days, totalKmStr)}
+        </div>
+        <RaidMapInteractive gpx={gpx} raidName={raid.data.name} fallbackPng={raid.data.map} />
+        <RaidElevation elevation={gpx.elevation} lang={lang} />
+      </div>
+    </section>
+  ) : (
+    <RaidMap map={raid.data.map} name={raid.data.name} lang={lang} />
+  )}
+
+  {raid.data.status !== 'coming-soon' && (
+    <RaidItinerary stages={raid.data.stages} lang={lang} />
+  )}
+  <IncludedExcluded lang={lang} />
+  {raid.data.status !== 'coming-soon' && (
+    <>
+      <RaidHotels lang={lang} />
+      <RaidGallery gallery={raid.data.gallery} name={raid.data.name} lang={lang} />
+    </>
+  )}
+  <RaidBike lang={lang} />
+  <RaidCTA status={raid.data.status} lang={lang} />
+  <RaidNav
+    prev={{ slug: prev.id, name: prev.data.name }}
+    next={{ slug: next.id, name: next.data.name }}
+    lang={lang}
+  />
+</Layout>

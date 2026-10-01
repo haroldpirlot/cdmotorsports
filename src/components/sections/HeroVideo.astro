@@ -1,5 +1,8 @@
 ---
-const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-book', 'Océan', 'Grand Sud', 'Pistes'];
+import { t, type Lang } from '../../i18n';
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
 ---
 <section class="hero" id="top">
   <div class="poster"></div>
@@ -14,23 +17,24 @@ const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-boo
     <source src="/videos/hero-home-hq-son.mp4" type="video/mp4" />
   </video>
   <div class="wrap hero-c">
-    <div class="k">CDM Motorsport · Raids moto · Maroc</div>
+    <div class="k">{T.hero.eyebrow}</div>
     <h1>
-      <span class="ln"><i>Every ride</i></span>
-      <span class="ln"><i>tells a <em>story</em></i></span>
+      <span class="ln"><i>{T.hero.line1}</i></span>
+      <span class="ln"><i>{T.hero.line2a}<em>{T.hero.line2em}</em></i></span>
     </h1>
-    <div class="tagline">Live the rally. Ride the legend.</div>
-    <div class="sc">Défilez pour explorer</div>
+    <div class="tagline">{T.hero.tagline}</div>
+    <div class="sc">{T.hero.scroll}</div>
   </div>
   <button
     type="button"
     id="hero-sound"
     class="hero-sound"
-    aria-label="Activer le son"
+    data-sound-on={T.hero.soundOn}
+    data-sound-off={T.hero.soundOff}
+    aria-label={T.hero.soundOn}
     aria-pressed="false"
   >
     <svg class="hero-sound-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-      <!-- haut-parleur (état muet par défaut, barré) -->
       <path class="spk" fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/>
       <g class="waves" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
         <path d="M16.5 8.5a5 5 0 0 1 0 7"/>
@@ -41,16 +45,13 @@ const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-boo
   </button>
   <div class="marq">
     <div class="row" id="mrow">
-      {[...marqueeWords, ...marqueeWords].map((w) => <span>{w}</span>)}
+      {[...T.hero.marquee, ...T.hero.marquee].map((w) => <span>{w}</span>)}
     </div>
   </div>
 </section>
 
 <style>
   .hero-sound {
-    /* Bas droite, au-dessus du bouton WhatsApp flottant (fixé à bottom:22px,
-       56px de haut). z-index élevé pour rester au-dessus de la marquee et
-       de tout overlay. */
     position: absolute;
     right: 22px;
     bottom: 92px;
@@ -99,19 +100,18 @@ const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-boo
   }
   document.addEventListener('cdm:loaded', heroIn);
 
-  // Autoplay avec son si le navigateur l'autorise. Sinon, on retombe en muet
-  // pour que la vidéo tourne quand même.
   (function () {
     const video = document.getElementById('hero-video') as HTMLVideoElement | null;
     const btn = document.getElementById('hero-sound') as HTMLButtonElement | null;
     if (!video || !btn) return;
+    const labelOn = btn.getAttribute('data-sound-on') || 'Unmute';
+    const labelOff = btn.getAttribute('data-sound-off') || 'Mute';
 
     const setPressed = (unmuted: boolean) => {
       btn.setAttribute('aria-pressed', String(unmuted));
-      btn.setAttribute('aria-label', unmuted ? 'Couper le son' : 'Activer le son');
+      btn.setAttribute('aria-label', unmuted ? labelOff : labelOn);
     };
 
-    // Tentative 1 : autoplay AVEC son
     video.muted = false;
     video.volume = 1;
     const p = video.play();
@@ -119,12 +119,9 @@ const marqueeWords = ['Dunes', 'Erg Chegaga', 'Bivouac', 'Anti-Atlas', 'Road-boo
       p.then(() => {
         setPressed(true);
       }).catch(() => {
-        // Autoplay non-muet refusé → repli muet
         video.muted = true;
         setPressed(false);
-        video.play().catch(() => {
-          /* si même le muet échoue on laisse le poster */
-        });
+        video.play().catch(() => {});
       });
     }
 

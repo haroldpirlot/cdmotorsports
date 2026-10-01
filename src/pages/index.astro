@@ -14,7 +14,8 @@ import FAQ from '../components/sections/FAQ.astro';
 import ContactBlock from '../components/sections/ContactBlock.astro';
 import GoogleReviews, { type Review } from '../components/sections/GoogleReviews.astro';
 
-// Placeholder d'avis (structure identique à ce que servira l'API Google plus tard).
+const lang = 'fr';
+
 const reviews: Review[] = [
   {
     name: 'Thomas L.',
@@ -58,21 +59,20 @@ const reviews: Review[] = [
   },
 ];
 
-// URL de la fiche Google Business (à mettre à jour quand la fiche sera créée)
 const googleReviewsUrl = '#';
 ---
-<Layout title="CDM Motorsport, Every ride tells a story">
-  <HeroVideo />
-  <Intro />
-  <BandA />
-  <RaidsGrid />
-  <Philosophy />
-  <Story />
-  <BandB />
-  <Morocco />
-  <Gallery />
-  <PracticalInfo />
-  <FAQ />
-  <ContactBlock />
-  <GoogleReviews reviews={reviews} googleUrl={googleReviewsUrl} />
+<Layout lang={lang}>
+  <HeroVideo lang={lang} />
+  <Intro lang={lang} />
+  <BandA lang={lang} />
+  <RaidsGrid lang={lang} />
+  <Philosophy lang={lang} />
+  <Story lang={lang} />
+  <BandB lang={lang} />
+  <Morocco lang={lang} />
+  <Gallery lang={lang} />
+  <PracticalInfo lang={lang} />
+  <FAQ lang={lang} />
+  <ContactBlock lang={lang} />
+  <GoogleReviews lang={lang} reviews={reviews} googleUrl={googleReviewsUrl} />
 </Layout>

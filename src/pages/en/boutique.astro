@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { t, pathTo } from '../../i18n';
+const lang = 'en';
+const T = t(lang);
+---
+<Layout title={T.meta.shop.title} description={T.meta.shop.description} lang={lang}>
+  <section class="phero short" style="background-image:url('/img/g5.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">{T.shop.eyebrow}</div>
+      <h1>The <em>shop</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap" style="text-align:center;max-width:720px">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">{T.shop.eyebrow}</div>
+        <div class="big">{T.shop.bigStart}<em>{T.shop.bigEm}.</em></div>
+        <p class="lead" style="margin:18px auto 26px">{T.shop.lead}</p>
+        <p style="color:#4a443c;max-width:580px;margin:0 auto 30px">{T.shop.body}</p>
+        <span style="display:inline-block;font-family:var(--disp);text-transform:uppercase;letter-spacing:3px;font-size:13px;color:#fff;background:var(--sand);padding:12px 26px;border-radius:2px">
+          {T.shop.badge}
+        </span>
+        <p style="margin-top:26px;color:#6b6255;font-size:14px">
+          {T.shop.ctaInform} · <a href={pathTo('/reserver', lang)} style="color:var(--sand)">Write to me</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,37 +1,19 @@
 ---
-const points = [
-  'Encadrement par guides expérimentés',
-  "Véhicule d'assistance 4×4 & mécanicien",
-  'Bivouac, riad & pension complète',
-  'Trace GPS & transferts',
-];
-const equipment = [
-  'Casque & lunettes tout-terrain',
-  'Veste TT ou gilet de protection + coudières',
-  'Gants · Bottes TT',
-  'Pantalon TT + genouillères',
-  'Collier cervical / neck brace',
-  'Lampe frontale',
-];
-const extras = [
-  'Camel bag ou petit sac à dos',
-  'Serviette de toilette',
-  'Casquette & maillot de bain',
-  'Anti-moustique',
-  'Stick lèvres',
-  'Pansements anti-ampoules (Compeed)',
-];
+import { t, type Lang } from '../../i18n';
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
 ---
 <section class="infos pad" id="infos">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow" style="margin-bottom:20px">Infos pratiques</div>
+      <div class="eyebrow" style="margin-bottom:20px">{T.practical.eyebrow}</div>
       <div class="big" style="font-size:clamp(28px,3.8vw,48px)">
-        Tout est prévu.<br />
-        <em>Vous roulez.</em>
+        {T.practical.big1}<br />
+        <em>{T.practical.big2em}</em>
       </div>
       <ul class="ilist">
-        {points.map((p, i) => (
+        {T.practical.points.map((p, i) => (
           <li><b>{String(i + 1).padStart(2, '0')}</b> {p}</li>
         ))}
       </ul>
@@ -40,7 +22,7 @@ const extras = [
       <img
         class="assistance-photo"
         src="/img/assitance.jpeg"
-        alt="Tente KOVE, véhicule d'assistance 4×4 et motos alignées au bivouac"
+        alt={T.practical.assistanceAlt}
         width="1536"
         height="1024"
       />
@@ -49,34 +31,32 @@ const extras = [
   <div class="wrap prepwrap">
     <div class="prep reveal">
       <div>
-        <h4>Niveau requis</h4>
-        <p>Des pistes accessibles au néophyte encadré comme au pilote confirmé. La pratique du tout-terrain loisir, cross ou enduro suffit.</p>
-        <p>Pour les débutants, un parcours adapté et des conseils sont proposés (groupe de 5 pilotes min.).</p>
+        <h4>{T.practical.levelTitle}</h4>
+        <p>{T.practical.levelP1}</p>
+        <p>{T.practical.levelP2}</p>
       </div>
       <div>
-        <h4>Équipement obligatoire</h4>
+        <h4>{T.practical.equipTitle}</h4>
         <ul>
-          {equipment.map((e) => <li>{e}</li>)}
+          {T.practical.equipment.map((e) => <li>{e}</li>)}
         </ul>
       </div>
       <div>
-        <h4>À ne pas oublier</h4>
+        <h4>{T.practical.extrasTitle}</h4>
         <ul>
-          {extras.map((e) => <li>{e}</li>)}
+          {T.practical.extras.map((e) => <li>{e}</li>)}
         </ul>
       </div>
       <div>
-        <h4>Hébergement &amp; repas</h4>
-        <p>Hôtels et riads « tout confort » (certains avec piscine) et bivouacs organisés dans des sites magiques, du 1<sup>er</sup> au dernier jour.</p>
-        <p>Pension complète : petits-déjeuners, déjeuners et dîners. Tajines, couscous, oranges et thé à la menthe au programme.</p>
+        <h4>{T.practical.lodgingTitle}</h4>
+        <p set:html={T.practical.lodgingP1}></p>
+        <p>{T.practical.lodgingP2}</p>
       </div>
     </div>
   </div>
 </section>
 
 <style is:global>
-  /* La règle globale .infos .im img force aspect-ratio 1/1 + cover.
-     On l'annule pour cette photo précise et on garde le ratio d'origine. */
   .infos .im img.assistance-photo {
     width: 100%;
     height: auto;

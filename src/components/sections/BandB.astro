@@ -1,11 +1,15 @@
 ---
+import { t, type Lang } from '../../i18n';
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
 ---
 <section class="band bandB">
   <div class="bg" data-parallax></div>
   <div class="t reveal">
     <div class="big">
-      Les kilomètres disparaissent.<br />
-      Les <em>histoires restent.</em>
+      {T.bandB.line1}<br />
+      {T.bandB.line2}<em>{T.bandB.line2em}</em>
     </div>
   </div>
 </section>

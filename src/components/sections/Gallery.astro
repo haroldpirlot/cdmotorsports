@@ -1,18 +1,22 @@
 ---
-// Galerie de l'accueil : les 9 premières photos + flèche vers la page complète.
-import { galleryTiles } from '../../data/gallery';
+import { getGalleryTiles } from '../../data/gallery';
+import { t, pathTo, type Lang } from '../../i18n';
 
-const tiles = galleryTiles.slice(0, 9);
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
+
+const tiles = getGalleryTiles(lang).slice(0, 9);
 ---
 <section class="gal pad" id="galerie">
   <div class="wrap">
     <div class="ghead reveal">
       <div>
-        <div class="eyebrow" style="margin-bottom:16px">Galerie</div>
-        <div class="big">Un avant-goût du <em>terrain</em></div>
+        <div class="eyebrow" style="margin-bottom:16px">{T.gallery.eyebrow}</div>
+        <div class="big">{T.gallery.titleStart}<em>{T.gallery.titleEm}</em></div>
       </div>
-      <a href="/galerie" class="more" aria-label="Voir toute la galerie">
-        <span>Voir tout</span>
+      <a href={pathTo('/galerie', lang)} class="more" aria-label={T.gallery.seeAllAria}>
+        <span>{T.gallery.seeAll}</span>
         <svg viewBox="0 0 32 32" width="46" height="46" aria-hidden="true">
           <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.2"/>
           <path d="M13 10 L20 16 L13 22 Z" fill="currentColor"/>
@@ -20,17 +24,17 @@ const tiles = galleryTiles.slice(0, 9);
       </a>
     </div>
     <div class="ggrid reveal">
-      {tiles.map((t, i) => (
-        <a class="gtile" href={t.src} aria-label={t.alt}>
+      {tiles.map((tile, i) => (
+        <a class="gtile" href={tile.src} aria-label={tile.alt}>
           <picture>
             <source
               type="image/webp"
-              srcset={`${t.base}-800.webp 800w, ${t.base}-1400.webp 1400w`}
+              srcset={`${tile.base}-800.webp 800w, ${tile.base}-1400.webp 1400w`}
               sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw"
             />
             <img
-              src={t.src}
-              alt={t.alt}
+              src={tile.src}
+              alt={tile.alt}
               width="2000"
               height="1333"
               loading={i < 3 ? 'eager' : 'lazy'}

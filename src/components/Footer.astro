@@ -1,31 +1,23 @@
 ---
-const links = [
-  { label: 'Raids', href: '/#raids' },
-  { label: 'La Moto', href: '/moto-kove-450-rally' },
-  { label: 'Option 4×4', href: '/option-4x4' },
-  { label: 'Le Maroc', href: '/#maroc' },
-  { label: 'Infos', href: '/#infos' },
-  { label: 'Blog', href: '/actualites' },
-  { label: 'Partenaires', href: '/partenaires' },
-  { label: 'Boutique', href: '/boutique' },
-  { label: 'Réserver', href: '/reserver' },
-  { label: 'CGV', href: '/cgv' },
-  { label: 'Mentions légales', href: '/mentions-legales' },
-  { label: 'Confidentialité', href: '/confidentialite' },
-  { label: 'Contact', href: '/#contact' },
-];
+import { t, pathTo, type Lang } from '../i18n';
+
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
+
+const links = T.footer.links.map((l) => ({ label: l.label, href: pathTo(l.path, lang) }));
 const year = new Date().getFullYear();
 ---
 <footer>
   <div class="wrap">
-    <a href="/" class="flogo" aria-label="Accueil CDM Motorsport">
+    <a href={pathTo('/', lang)} class="flogo" aria-label={T.footer.logoAria}>
       <img src="/img/cdm-hybrid-white.svg" alt="CDM Motorsport" width="445" height="197" />
     </a>
     <nav class="fmenu">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
   </div>
-  <div class="fbtm">© {year} CDM Motorsport, Raids moto au Maroc</div>
+  <div class="fbtm">{T.footer.copyright(year)}</div>
 </footer>
 
 <style is:global>

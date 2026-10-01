@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { t, pathTo } from '../../i18n';
+const lang = 'en';
+const T = t(lang);
+---
+<Layout title={T.meta.notFound.title} description={T.meta.notFound.description} lang={lang}>
+  <section class="phero short" style="background-image:url('/img/vast.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">404</div>
+      <h1>{T.notFound.heroH1Start}<em>{T.notFound.heroH1Em}</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap" style="text-align:center;max-width:640px">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">{T.notFound.bigStart}{T.notFound.bigEm}</div>
+        <div class="big">{T.notFound.body}</div>
+        <p class="lead" style="margin:20px auto 30px">
+          Jump back on the main route:
+        </p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a href={pathTo('/', lang)} class="btn dark">{T.notFound.ctaHome}</a>
+          <a href={pathTo('/#raids', lang)} class="btn dark">{T.notFound.ctaRaids}</a>
+          <a href={pathTo('/reserver', lang)} class="btn dark">{T.notFound.ctaBook}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

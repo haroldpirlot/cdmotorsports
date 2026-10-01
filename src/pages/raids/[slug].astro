@@ -14,6 +14,10 @@ import RaidCTA from '../../components/raid/RaidCTA.astro';
 import RaidHotels from '../../components/raid/RaidHotels.astro';
 import RaidNav from '../../components/raid/RaidNav.astro';
 import { SITE } from '../../config';
+import { t } from '../../i18n';
+
+const lang = 'fr';
+const T = t(lang);
 
 export async function getStaticPaths() {
   const raids = await getCollection('raids');
@@ -31,19 +35,16 @@ export async function getStaticPaths() {
 const { raid, prev, next } = Astro.props;
 const { Content } = await render(raid);
 
-// Load GPX-derived data (built by scripts/parse-gpx.mjs)
 const gpxModules = import.meta.glob<{ default: GpxData }>('../../data/gpx/*.json', { eager: true });
 const gpx = gpxModules[`../../data/gpx/${raid.id}.json`]?.default ?? null;
-
-// Preferred total km : announced (from GPX metadata table) > sum of md stages
 const totalKm = gpx?.announcedKm ?? raid.data.stages.reduce((sum, s) => sum + s.km, 0);
 
 const title = `${raid.data.name}, ${raid.data.itin} · CDM Motorsport`;
 const description = `${raid.data.days} jours de raid moto au Maroc, ${totalKm} km au guidon d'une KOVE 450 Rally. ${raid.data.itin}.`;
 const raidUrl = new URL(`/raids/${raid.id}`, SITE.url).href;
 const heroAbs = new URL(raid.data.hero, SITE.url).href;
+const totalKmStr = totalKm.toLocaleString('fr-FR');
 
-// JSON-LD TouristTrip : itinerary structuré pour rich results Google
 const touristTripJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'TouristTrip',
@@ -93,7 +94,7 @@ const touristTripJsonLd = {
       },
 };
 ---
-<Layout title={title} description={description} ogImage={raid.data.hero}>
+<Layout title={title} description={description} ogImage={raid.data.hero} lang={lang}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(touristTripJsonLd)} />
   <RaidHero
     n={raid.data.n}
@@ -104,51 +105,52 @@ const touristTripJsonLd = {
     totalKm={totalKm}
     pricePerPerson={raid.data.pricePerPerson}
     status={raid.data.status}
+    lang={lang}
   />
-  <RaidIntro totalKm={totalKm} highlights={raid.data.highlights}>
+  <RaidIntro totalKm={totalKm} highlights={raid.data.highlights} lang={lang}>
     <Content />
   </RaidIntro>
 
   {raid.data.status === 'coming-soon' ? (
     <section class="mapwrap pad">
       <div class="wrap reveal" style="text-align:center;padding:40px 20px;border:1px dashed var(--line);border-radius:8px;background:var(--cream)">
-        <div class="eyebrow" style="margin-bottom:12px;color:#b56a5a">Itinéraire</div>
-        <div class="big" style="font-size:clamp(20px,2.4vw,28px)">En cours de finalisation</div>
+        <div class="eyebrow" style="margin-bottom:12px;color:#b56a5a">{T.raid.itineraryTbdEyebrow}</div>
+        <div class="big" style="font-size:clamp(20px,2.4vw,28px)">{T.raid.itineraryTbdTitle}</div>
         <p style="margin-top:14px;color:#6b6155;max-width:520px;margin-left:auto;margin-right:auto">
-          Le tracé, les étapes et les hébergements précis sont en cours de repérage.
-          Contactez-nous pour être informé dès l'ouverture des réservations.
+          {T.raid.itineraryTbdBody}
         </p>
       </div>
     </section>
   ) : gpx ? (
     <section class="mapwrap pad">
       <div class="wrap reveal">
-        <div class="eyebrow" style="margin-bottom:16px">L'itinéraire</div>
+        <div class="eyebrow" style="margin-bottom:16px">{T.raid.itineraryEyebrow}</div>
         <div class="big" style="font-size:clamp(24px,3vw,36px);margin-bottom:8px">
-          {raid.data.days} jours · {totalKm} km
+          {T.raid.itineraryDaysKm(raid.data.days, totalKmStr)}
         </div>
         <RaidMapInteractive gpx={gpx} raidName={raid.data.name} fallbackPng={raid.data.map} />
-        <RaidElevation elevation={gpx.elevation} />
+        <RaidElevation elevation={gpx.elevation} lang={lang} />
       </div>
     </section>
   ) : (
-    <RaidMap map={raid.data.map} name={raid.data.name} />
+    <RaidMap map={raid.data.map} name={raid.data.name} lang={lang} />
   )}
 
   {raid.data.status !== 'coming-soon' && (
-    <RaidItinerary stages={raid.data.stages} />
+    <RaidItinerary stages={raid.data.stages} lang={lang} />
   )}
-  <IncludedExcluded />
+  <IncludedExcluded lang={lang} />
   {raid.data.status !== 'coming-soon' && (
     <>
-      <RaidHotels />
-      <RaidGallery gallery={raid.data.gallery} name={raid.data.name} />
+      <RaidHotels lang={lang} />
+      <RaidGallery gallery={raid.data.gallery} name={raid.data.name} lang={lang} />
     </>
   )}
-  <RaidBike />
-  <RaidCTA status={raid.data.status} />
+  <RaidBike lang={lang} />
+  <RaidCTA status={raid.data.status} lang={lang} />
   <RaidNav
     prev={{ slug: prev.id, name: prev.data.name }}
     next={{ slug: next.id, name: next.data.name }}
+    lang={lang}
   />
 </Layout>

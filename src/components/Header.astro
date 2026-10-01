@@ -1,34 +1,32 @@
 ---
-// Navigation restructurée :
-//  - Raids
-//  - Découvrir (dropdown : Moto / Maroc / Qui suis-je / Infos pratiques)
-//  - Blog
-//  - Boutique
-//  - Réserver (bouton mis en avant, plein terracotta)
-//
-// Comportement :
-//  - Desktop : dropdown au survol + focus clavier.
-//  - Mobile : hamburger déroule tout, sous-items "Découvrir" listés en dessous.
-//  - Logo et libellés menu conservent l'inversion via mix-blend-mode: difference
-//    appliqué individuellement (pas sur le header) pour ne pas altérer le CTA.
+// Header + sélecteur de langue (desktop & mobile).
+// Lit ses libellés dans l'i18n dict et calcule l'URL de l'autre langue.
+import { t, altLangPath, pathTo, type Lang } from '../i18n';
+
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
+
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+const otherLangHref = altLangPath(Astro.url.pathname, otherLang);
 
 const primary = [
-  { label: 'Raids',    href: '/#raids' },
-  { label: 'La Moto',  href: '/moto-kove-450-rally' },
-  { label: 'Le Maroc', href: '/#maroc' },
+  { label: T.nav.raids,    href: pathTo('/#raids', lang) },
+  { label: T.nav.moto,     href: pathTo('/moto-kove-450-rally', lang) },
+  { label: T.nav.morocco,  href: pathTo('/#maroc', lang) },
 ];
 const discover = [
-  { label: 'Infos pratiques', href: '/#infos' },
-  { label: 'Option 4×4',      href: '/option-4x4' },
-  { label: 'Qui suis-je',     href: '/edouard-de-moor' },
-  { label: 'Blog',            href: '/actualites' },
-  { label: 'Boutique',        href: '/boutique' },
+  { label: T.nav.practical, href: pathTo('/#infos', lang) },
+  { label: T.nav.option4x4, href: pathTo('/option-4x4', lang) },
+  { label: T.nav.about,     href: pathTo('/edouard-de-moor', lang) },
+  { label: T.nav.blog,      href: pathTo('/actualites', lang) },
+  { label: T.nav.shop,      href: pathTo('/boutique', lang) },
 ];
 ---
 <header id="hd">
   <div class="wrap nav">
     <div class="nav-right" id="nav-right">
-    <nav class="menu" id="menu" aria-label="Navigation principale">
+    <nav class="menu" id="menu" aria-label={T.nav.ariaMain}>
       {primary.map((item) => (
         <a href={item.href} class="menu-link">{item.label}</a>
       ))}
@@ -41,7 +39,7 @@ const discover = [
           aria-expanded="false"
           aria-controls="dropdown-panel"
         >
-          Découvrir
+          {T.nav.discover}
           <svg class="chev" viewBox="0 0 12 8" width="10" height="7" aria-hidden="true">
             <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 1.5 L6 6.5 L11 1.5"/>
           </svg>
@@ -53,10 +51,22 @@ const discover = [
         </div>
       </div>
 
-      <a href="/reserver" class="menu-cta">Réserver</a>
+      <a
+        href={otherLangHref}
+        class="menu-lang"
+        data-lang-switch={otherLang}
+        aria-label={T.nav.switchLangAria}
+        title={T.nav.switchLang}
+      >
+        <span class="menu-lang-current" aria-hidden="true">{T.nav.currentLangLabel}</span>
+        <span class="menu-lang-sep" aria-hidden="true">/</span>
+        <span class="menu-lang-other" aria-hidden="true">{T.nav.otherLangLabel}</span>
+      </a>
+
+      <a href={pathTo('/reserver', lang)} class="menu-cta">{T.nav.book}</a>
     </nav>
 
-    <button type="button" class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
+    <button type="button" class="burger" id="burger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span>
     </button>
     </div>
@@ -71,11 +81,6 @@ const discover = [
     right: 0;
     z-index: 200;
     padding: 22px 0;
-    /* pas de mix-blend-mode sur le header : le CTA plein ne doit pas s'inverser */
-    /* le logo reste visible en permanence : le hide ne s'applique qu'au bloc droit */
-    /* pointer-events none sur l'enveloppe → la moitié gauche vide du header ne
-       vole plus les clics destinés au SiteLogo (z-index 1, dessous). Les
-       enfants interactifs réactivent pointer-events explicitement. */
     pointer-events: none;
   }
   .nav {
@@ -174,6 +179,29 @@ const discover = [
   }
   .menu-panel-link:hover { background: var(--cream); color: #B4642C; }
 
+  .menu-lang {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #fff;
+    mix-blend-mode: difference;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border: 1px solid rgba(255, 255, 255, .55);
+    border-radius: 2px;
+    line-height: 1;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .menu-lang:hover,
+  .menu-lang:focus-visible { border-color: #fff; }
+  .menu-lang-current { font-weight: 800; }
+  .menu-lang-sep { opacity: .55; }
+  .menu-lang-other { opacity: .78; }
+
   .menu-cta {
     font-family: var(--sans);
     font-weight: 700;
@@ -257,9 +285,18 @@ const discover = [
       border-bottom: 1px solid rgba(255, 255, 255, .06);
     }
     .menu.open .menu-panel-link:hover { background: transparent; color: #B4642C; }
-    .menu.open .menu-cta {
+    .menu.open .menu-lang {
       align-self: flex-start;
       margin-top: 18px;
+      font-size: 13px;
+      padding: 10px 14px;
+      color: #fff;
+      mix-blend-mode: normal;
+      border-color: rgba(255, 255, 255, .4);
+    }
+    .menu.open .menu-cta {
+      align-self: flex-start;
+      margin-top: 14px;
       font-size: 14px;
       padding: 14px 26px;
     }
@@ -287,11 +324,8 @@ const discover = [
       const open = menu.classList.toggle('open');
       burger.setAttribute('aria-expanded', String(open));
       document.body.style.overflow = open ? 'hidden' : '';
-      // Réaffiche la partie droite du header pendant que le menu mobile est ouvert
-      // (évite tout containing block transformé qui casserait le fullscreen fixed).
       if (open && hd) hd.classList.remove('hide');
     });
-    // Ferme le menu mobile au clic sur un lien (mais pas sur le trigger dropdown)
     menu.querySelectorAll<HTMLElement>('a').forEach((a) => {
       a.addEventListener('click', () => {
         if (menu.classList.contains('open')) {
@@ -305,21 +339,18 @@ const discover = [
   }
 
   if (dropdown && trigger) {
-    // Tap/clic : toggle explicite (utile mobile + a11y clavier).
     trigger.addEventListener('click', (e) => {
       e.preventDefault();
       const isOpen = dropdown.getAttribute('data-open') === 'true';
       dropdown.setAttribute('data-open', String(!isOpen));
       trigger.setAttribute('aria-expanded', String(!isOpen));
     });
-    // Ferme au clic extérieur.
     document.addEventListener('click', (e) => {
       if (!dropdown.contains(e.target as Node)) {
         dropdown.setAttribute('data-open', 'false');
         trigger.setAttribute('aria-expanded', 'false');
       }
     });
-    // Escape ferme.
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         dropdown.setAttribute('data-open', 'false');
@@ -328,4 +359,14 @@ const discover = [
       }
     });
   }
+
+  // Mémorise le choix manuel de langue (cookie 1 an) pour bloquer l'auto-redirect.
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-switch]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const choice = a.getAttribute('data-lang-switch');
+      if (!choice) return;
+      const maxAge = 60 * 60 * 24 * 365;
+      document.cookie = `cdm-lang=${choice}; path=/; max-age=${maxAge}; samesite=lax`;
+    });
+  });
 </script>

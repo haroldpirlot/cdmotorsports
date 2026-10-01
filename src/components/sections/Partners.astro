@@ -1,7 +1,10 @@
 ---
-// Bande "Partenaires" sobre : fond crème, 4 logos alignés, hauteur homogène,
-// grille responsive (4 colonnes desktop / 2 colonnes mobile). Chaque logo est
-// un lien cliquable qui ouvre l'onglet externe.
+import { t, type Lang } from '../../i18n';
+
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
+
 const partners = [
   { name: 'MX Mag',           logo: '/img/partners/mxmag.png',           href: 'https://mxmag.be/' },
   { name: 'Enduro Magazine',  logo: '/img/partners/enduro-magazine.png', href: 'https://enduromag.fr/' },
@@ -12,8 +15,8 @@ const partners = [
 <section class="partners" id="partenaires">
   <div class="wrap">
     <div class="phead reveal">
-      <div class="eyebrow">Ils nous accompagnent</div>
-      <div class="ptitle">Nos <em>partenaires</em></div>
+      <div class="eyebrow">{T.partnersStrip.eyebrow}</div>
+      <div class="ptitle">{T.partnersStrip.titleStart}<em>{T.partnersStrip.titleEm}</em></div>
     </div>
     <ul class="pgrid reveal">
       {partners.map((p) => (

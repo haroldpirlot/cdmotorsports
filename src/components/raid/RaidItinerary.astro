@@ -1,4 +1,6 @@
 ---
+import { t, type Lang } from '../../i18n';
+
 interface Stage {
   from: string;
   to: string;
@@ -7,31 +9,38 @@ interface Stage {
 }
 interface Props {
   stages: Stage[];
+  lang?: Lang;
 }
-const { stages } = Astro.props;
+const { stages, lang = 'fr' } = Astro.props;
+const T = t(lang);
+const dayLabel = T.raid.itinerary.dayLabel;
+const lodgingLabel = T.raid.itinerary.lodgingLabel;
+const trailingNote = lang === 'en'
+  ? 'Terrain and exact lodging confirmed with CDM Motorsport.'
+  : 'Terrains et hébergements précis à détailler avec CDM Motorsport.';
 ---
 <section class="iti pad">
   <div class="wrap">
     <div class="reveal" style="margin-bottom:24px">
-      <div class="eyebrow" style="margin-bottom:16px">Étape par étape</div>
-      <div class="big">Le <em>déroulé</em></div>
+      <div class="eyebrow" style="margin-bottom:16px">{T.raid.itinerary.eyebrow}</div>
+      <div class="big">{T.raid.itinerary.titleStart}<em>{T.raid.itinerary.titleEm}</em></div>
     </div>
     <div class="reveal">
       {stages.map((s, i) => (
         <div class="day">
-          <div class="d">Jour {i + 1}</div>
+          <div class="d">{dayLabel(i + 1)}</div>
           <div>
             <h3>{s.from} → {s.to}</h3>
             <div class="meta">
               <span><b>{s.km} km</b></span>
-              <span>Hébergement <b>{s.lodging}</b></span>
+              <span>{lodgingLabel} <b>{s.lodging}</b></span>
             </div>
           </div>
         </div>
       ))}
     </div>
     <p class="reveal" style="margin-top:16px;color:#8c8375;font-size:13px;font-style:italic">
-      Terrains et hébergements précis à détailler avec CDM Motorsport.
+      {trailingNote}
     </p>
   </div>
 </section>

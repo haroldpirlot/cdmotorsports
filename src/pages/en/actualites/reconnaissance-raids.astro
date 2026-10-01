@@ -1,0 +1,112 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+const lang = 'en';
+---
+<Layout
+  title="Every raid, I've scouted it myself · CDM Motorsport"
+  description="Scouting the motorcycle rally-raid routes in Morocco: every itinerary is checked on the ground, in advance, for a dirt bike tour that truly means something."
+  ogImage="/img/reco-raids-hero.jpg"
+  lang={lang}
+>
+  <section class="phero short" style="background-image:url('/img/reco-raids-hero.jpg')">
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">Behind the scenes</div>
+      <h1>Raid <em>scouting</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap article">
+      <div class="meta reveal">Behind the scenes · 4 min read</div>
+      <div class="big reveal" style="margin-bottom:24px">
+        Every raid, I've <em>scouted it</em><br />myself
+      </div>
+      <div class="reveal">
+        <p>
+          There's one thing I never compromise on: not a single one of our 7 raids has been
+          drawn on a map from behind a desk. Each one, I've scouted myself, on the ground,
+          before taking you there. To me, that's the foundation of a real raid, and it's
+          what makes the difference.
+        </p>
+        <p>
+          I've known Morocco for close to 25 years. This country, its pistes and its
+          people, I've learned them over the years, and that changes everything when it
+          comes to laying out a route. I know where the sand gets tricky, where a track
+          fades after the rains, where to find fuel at the right moment, and most of all
+          where the most beautiful passages hide, the ones you won't find on any map.
+        </p>
+
+        <figure class="reco-video reveal">
+          <video
+            controls
+            preload="metadata"
+            playsinline
+            poster="/videos/reco-raids-poster.jpg"
+          >
+            <source src="/videos/reco-raids.mp4" type="video/mp4" />
+          </video>
+          <figcaption>
+            A glimpse of a scouting run, at the wheel of the 4x4 along the Atlantic.
+          </figcaption>
+        </figure>
+
+        <p>
+          Scouting a raid means going back out there, often by 4x4 and motorcycle, and
+          riding every stage in advance. I check the state of the pistes, the real
+          difficulty of each section, the water and fuel points, the hotels where we'll
+          sleep, and safety from end to end. Nothing is left to chance, because it's that
+          invisible work that lets you, once you're on site, think about nothing but
+          riding and enjoying yourself.
+        </p>
+        <p>
+          It's also what lets me adapt each route to the conditions of the moment, and
+          offer you itineraries that have meaning, rhythm and beauty. When you follow the
+          track, you're following a path I've already ridden, tested and chosen for you.
+        </p>
+        <p>
+          At heart, that's the CDM Motorsport spirit: raids designed by someone who
+          actually rides, not off-the-shelf circuits bought from a catalog.
+        </p>
+
+        <p style="margin-top:28px">
+          Want to ride terrain that's been scouted meter by meter?
+        </p>
+        <a href="/en/#raids" class="btn dark" style="margin-top:14px">Discover the raids</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .reco-video {
+    margin: 32px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .reco-video video {
+    width: 100%;
+    max-width: 360px;
+    max-height: 72vh;
+    aspect-ratio: 9 / 16;
+    background: #141008;
+    border-radius: 4px;
+    display: block;
+    object-fit: cover;
+  }
+  .reco-video figcaption {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: #7a7064;
+    text-align: center;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+  @media (max-width: 540px) {
+    .reco-video video {
+      max-width: 100%;
+      max-height: 80vh;
+    }
+  }
+</style>

@@ -1,8 +1,13 @@
 ---
 import { getEntry } from 'astro:content';
+import type { Lang } from '../../i18n';
 
-const included = await getEntry('globals', 'included');
-const excluded = await getEntry('globals', 'excluded');
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+
+const collection = lang === 'en' ? 'globalsEn' : 'globals';
+const included = await getEntry(collection, 'included');
+const excluded = await getEntry(collection, 'excluded');
 ---
 <section class="incl pad">
   <div class="wrap">

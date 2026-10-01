@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HeroVideo from '../../components/sections/HeroVideo.astro';
+import Intro from '../../components/sections/Intro.astro';
+import BandA from '../../components/sections/BandA.astro';
+import RaidsGrid from '../../components/sections/RaidsGrid.astro';
+import Philosophy from '../../components/sections/Philosophy.astro';
+import Story from '../../components/sections/Story.astro';
+import BandB from '../../components/sections/BandB.astro';
+import Morocco from '../../components/sections/Morocco.astro';
+import Gallery from '../../components/sections/Gallery.astro';
+import PracticalInfo from '../../components/sections/PracticalInfo.astro';
+import FAQ from '../../components/sections/FAQ.astro';
+import ContactBlock from '../../components/sections/ContactBlock.astro';
+import GoogleReviews, { type Review } from '../../components/sections/GoogleReviews.astro';
+
+const lang = 'en';
+
+const reviews: Review[] = [
+  {
+    name: 'Thomas L.',
+    raid: 'Odyssée du Sud',
+    country: 'Belgium',
+    rating: 5,
+    text: "Organized to the letter from start to finish. Edouard knows the terrain by heart and adapts to every rider. The landscapes are unreal. I'm already planning next year.",
+    date: 'March 2026',
+  },
+  {
+    name: 'Julie D.',
+    raid: 'Océan & Atlas',
+    country: 'France',
+    rating: 5,
+    text: "First time in rally-raid, and I felt supported and safe at every moment. You progress fast and have an absolute blast doing it.",
+    date: 'February 2026',
+  },
+  {
+    name: 'Marc V.',
+    raid: 'Cap Merzouga',
+    country: 'Belgium',
+    rating: 5,
+    text: "The Merzouga dunes at sunrise — unforgettable. Flawless support, magical bivouacs, great group.",
+    date: 'April 2026',
+  },
+  {
+    name: 'Nicolas P.',
+    raid: "Boucle de l'Anti-Atlas",
+    country: 'France',
+    rating: 5,
+    text: "Real rally-raid, demanding and thrilling. The KOVE is spot on and Edouard shares his experience without holding back. A must-do.",
+    date: 'January 2026',
+  },
+  {
+    name: 'Sophie & Antoine',
+    raid: 'Échappée Atlantique',
+    country: 'Belgium',
+    rating: 5,
+    text: "We loved all of it: the tracks, the landscapes, the vibe and the welcome. Everything is thought out so you just enjoy the ride. We'll be back.",
+    date: 'May 2026',
+  },
+];
+
+const googleReviewsUrl = '#';
+---
+<Layout lang={lang}>
+  <HeroVideo lang={lang} />
+  <Intro lang={lang} />
+  <BandA lang={lang} />
+  <RaidsGrid lang={lang} />
+  <Philosophy lang={lang} />
+  <Story lang={lang} />
+  <BandB lang={lang} />
+  <Morocco lang={lang} />
+  <Gallery lang={lang} />
+  <PracticalInfo lang={lang} />
+  <FAQ lang={lang} />
+  <ContactBlock lang={lang} />
+  <GoogleReviews lang={lang} reviews={reviews} googleUrl={googleReviewsUrl} />
+</Layout>

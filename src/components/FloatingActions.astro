@@ -1,5 +1,10 @@
 ---
 import { SITE } from '../config';
+import { t, type Lang } from '../i18n';
+
+interface Props { lang?: Lang }
+const { lang = 'fr' } = Astro.props;
+const T = t(lang);
 ---
 <a
   id="wa-float"
@@ -7,7 +12,7 @@ import { SITE } from '../config';
   href={SITE.whatsappUrl}
   target="_blank"
   rel="noopener"
-  aria-label="Écrire sur WhatsApp"
+  aria-label={T.float.whatsappAria}
   title="WhatsApp"
 >
   <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
@@ -15,7 +20,7 @@ import { SITE } from '../config';
   </svg>
 </a>
 
-<button id="back-top" class="back-top" aria-label="Remonter en haut de la page" title="Remonter">
+<button id="back-top" class="back-top" aria-label={T.float.backTopAria} title={T.float.backTopTitle}>
   <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
     <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7"/>
   </svg>

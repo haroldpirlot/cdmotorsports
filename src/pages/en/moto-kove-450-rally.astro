@@ -1,0 +1,130 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { t, pathTo } from '../../i18n';
+const lang = 'en';
+const T = t(lang);
+
+const specs = [
+  'Stainless steel exhaust',
+  'Double overhead cam engine, balancing performance and easy maintenance',
+  'Carbon engine guard',
+  'Torque damper',
+  'Digital dash controllable from the handlebar buttons, with roadbook nav tower',
+  'Switchable ABS',
+  'Fully adjustable Factory 49 mm fork',
+  'Shock with 300 mm travel (tall version), fully adjustable',
+  'Factory air filter — access in 2 seconds',
+  'High-volume radiators with fan',
+  'Oil cooler with carbon guard',
+  'LED lighting',
+  '~550 km range',
+  'Bosch ECU',
+];
+
+const highlights = [
+  { label: 'Fuel',        value: '3 tanks, 30 L total' },
+  { label: 'Range',       value: '~550 km' },
+  { label: 'Navigation',  value: 'Roadbook tower / GPS' },
+  { label: 'Profile',     value: 'Rally-raid off-road' },
+];
+---
+<Layout title={T.meta.moto.title} description={T.meta.moto.description} lang={lang}>
+  <section class="phero phero-video">
+    <video
+      class="phero-media"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="/videos/hero-moto-poster.jpg"
+    >
+      <source src="/videos/hero-moto.webm" type="video/webm" />
+      <source src="/videos/hero-moto.mp4" type="video/mp4" />
+    </video>
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">{T.motoPage.heroEyebrow}</div>
+      <h1>{T.motoPage.heroH1Start}<em>{T.motoPage.heroH1Em}</em></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap two">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">{T.motoPage.introEyebrow}</div>
+        <div class="big">{T.motoPage.introTitle1}<br />{T.motoPage.introTitle2a}<em>{T.motoPage.introTitle2em}</em></div>
+        <p class="lead" style="margin-top:22px">
+          The KOVE 450 Rally Standard is pure rally DNA, straight from
+          <a href="https://kove-racing.com/" target="_blank" rel="noopener" class="ext">KOVE Racing</a>:
+          a light, durable machine, built on the brand's race experience.
+        </p>
+        <p style="margin-top:14px">{T.motoPage.introBody1}</p>
+        <p style="margin-top:14px">{T.motoPage.introBody2}</p>
+        <ul class="specs">
+          {highlights.map((s) => (
+            <li><span>{s.label}</span><b>{s.value}</b></li>
+          ))}
+        </ul>
+        <a href={pathTo('/reserver', lang)} class="btn dark" style="margin-top:26px">{T.motoPage.ctaBtn}</a>
+      </div>
+      <div class="reveal">
+        <img src="/img/gallery/gallery-13.jpg" alt="KOVE 450 Rally" style="aspect-ratio:4/5" />
+      </div>
+    </div>
+  </section>
+
+  <section class="pad" style="background:var(--cream)">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:16px">Technical specifications</div>
+        <div class="big">Prepped like a<br /><em>race bike.</em></div>
+      </div>
+      <ul class="speclist reveal">
+        {specs.map((s) => <li>{s}</li>)}
+      </ul>
+      <p class="note reveal" style="margin-top:36px;font-style:italic">
+        This machine is built for the tracks, with CDM Motorsport.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ext {
+    color: var(--sand);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+  .ext:hover { color: var(--ink); }
+
+  .speclist {
+    list-style: none;
+    padding: 0;
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .speclist li {
+    padding: 16px 8px 16px 26px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+    line-height: 1.5;
+    color: #4c4438;
+    position: relative;
+  }
+  .speclist li::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 24px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sand);
+  }
+  @media (max-width: 720px) {
+    .speclist { grid-template-columns: 1fr; }
+  }
+</style>
