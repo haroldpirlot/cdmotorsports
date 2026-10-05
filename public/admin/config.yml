@@ -1,3 +1,20 @@
+# Decap CMS — CDM Motorsport
+# Backend : GitHub (OAuth App "CDMotorsports CMS") via proxy Vercel Functions.
+# Les secrets OAUTH_CLIENT_ID / OAUTH_CLIENT_SECRET sont stockés côté Vercel
+# et consommés par api/auth.js + api/callback.js.
+#
+# Contenu éditable :
+#   • Raids (FR) : src/content/raids/*.md
+#   • Raids (EN) : src/content/raids-en/*.md
+#   • Textes globaux (FR) : src/content/globals/*.md
+#   • Textes globaux (EN) : src/content/globals-en/*.md
+#
+# Non éditable depuis le CMS (encore en dur dans le code) :
+#   • Articles du blog (src/pages/actualites/*.astro)
+#   • Pages "Le Maroc" (src/data/culture.ts)
+#   • Page "Qui suis-je" (src/pages/edouard-de-moor.astro)
+#   À convertir en content collections markdown pour les exposer ici.
+
 backend:
   name: github
   repo: haroldpirlot/cdmotorsports
@@ -8,11 +25,18 @@ backend:
 media_folder: "public/img"
 public_folder: "/img"
 
+site_url: https://cdmmotorsport.com
+display_url: https://cdmmotorsport.com
+logo_url: https://cdmmotorsport.com/apple-touch-icon.png
+
 locale: fr
 
 collections:
+  # ─────────────────────────────────────────────────────────────
+  # RAIDS — FR
+  # ─────────────────────────────────────────────────────────────
   - name: raids
-    label: "Raids"
+    label: "Raids (FR)"
     label_singular: "Raid"
     folder: "src/content/raids"
     extension: md
@@ -29,7 +53,7 @@ collections:
       - { label: "Niveau",     name: level, widget: select,  options: [Découverte, Intermédiaire, Confirmé] }
       - { label: "Statut",     name: status, widget: select, options: [live, coming-soon], default: live, hint: "coming-soon = raid en développement, sans prix ni tracé" }
       - { label: "Prix par personne (€)", name: pricePerPerson, widget: number, value_type: int, min: 0, required: false, hint: "Laissez vide pour un raid en développement" }
-      - { label: "Photo hero",   name: hero, widget: image }
+      - { label: "Photo hero",       name: hero, widget: image }
       - { label: "Carte itinéraire", name: map,  widget: image }
       - label: "Galerie (6 photos)"
         name: gallery
@@ -50,8 +74,53 @@ collections:
         field: { label: Point, name: point, widget: string }
       - { label: "Introduction (2 paragraphes)", name: body, widget: markdown }
 
+  # ─────────────────────────────────────────────────────────────
+  # RAIDS — EN
+  # ─────────────────────────────────────────────────────────────
+  - name: raids-en
+    label: "Raids (EN)"
+    label_singular: "Raid"
+    folder: "src/content/raids-en"
+    extension: md
+    format: yaml-frontmatter
+    create: false
+    slug: "{{slug}}"
+    identifier_field: name
+    summary: "{{n}} · {{name}}, {{days}}d · {{level}}"
+    fields:
+      - { label: "Number",        name: n,     widget: number,  value_type: int, min: 1, max: 99 }
+      - { label: "Name",          name: name,  widget: string }
+      - { label: "Route",         name: itin,  widget: string,  hint: "e.g. Agadir → Ouarzazate (southern route)" }
+      - { label: "Days",          name: days,  widget: number,  value_type: int, min: 1 }
+      - { label: "Level",         name: level, widget: select,  options: [Discovery, Intermediate, Advanced] }
+      - { label: "Status",        name: status, widget: select, options: [live, coming-soon], default: live, hint: "coming-soon = raid in development, no price or track" }
+      - { label: "Price per person (€)", name: pricePerPerson, widget: number, value_type: int, min: 0, required: false, hint: "Leave empty for a raid in development" }
+      - { label: "Hero photo",       name: hero, widget: image }
+      - { label: "Route map",        name: map,  widget: image }
+      - label: "Gallery (6 photos)"
+        name: gallery
+        widget: list
+        field: { label: Photo, name: photo, widget: image }
+      - label: "Stages"
+        name: stages
+        widget: list
+        summary: "Day, {{fields.from}} → {{fields.to}} · {{fields.km}} km"
+        fields:
+          - { label: From,         name: from,    widget: string }
+          - { label: To,           name: to,      widget: string }
+          - { label: Km,           name: km,      widget: number, value_type: int, min: 1 }
+          - { label: Lodging,      name: lodging, widget: string, default: "hotel / bivouac", required: false }
+      - label: "Highlights"
+        name: highlights
+        widget: list
+        field: { label: Point, name: point, widget: string }
+      - { label: "Introduction (2 paragraphs)", name: body, widget: markdown }
+
+  # ─────────────────────────────────────────────────────────────
+  # GLOBALS — FR
+  # ─────────────────────────────────────────────────────────────
   - name: globals
-    label: "Contenus globaux"
+    label: "Textes globaux (FR)"
     label_singular: "Contenu"
     files:
       - name: included
@@ -86,3 +155,43 @@ collections:
             fields:
               - { label: Label,  name: label, widget: string }
               - { label: Valeur, name: value, widget: string }
+
+  # ─────────────────────────────────────────────────────────────
+  # GLOBALS — EN
+  # ─────────────────────────────────────────────────────────────
+  - name: globals-en
+    label: "Global content (EN)"
+    label_singular: "Content"
+    files:
+      - name: included
+        label: "Included"
+        file: "src/content/globals-en/included.md"
+        fields:
+          - { label: Title, name: title, widget: string }
+          - label: "Items"
+            name: items
+            widget: list
+            field: { label: Item, name: item, widget: string }
+
+      - name: excluded
+        label: "Not included"
+        file: "src/content/globals-en/excluded.md"
+        fields:
+          - { label: Title, name: title, widget: string }
+          - label: "Items"
+            name: items
+            widget: list
+            field: { label: Item, name: item, widget: string }
+
+      - name: bike
+        label: "Bike (KOVE 450 Rally)"
+        file: "src/content/globals-en/bike.md"
+        fields:
+          - { label: Title, name: title, widget: string }
+          - label: "Specs"
+            name: specs
+            widget: list
+            summary: "{{fields.label}} · {{fields.value}}"
+            fields:
+              - { label: Label,  name: label, widget: string }
+              - { label: Value,  name: value, widget: string }
