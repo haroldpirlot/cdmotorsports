@@ -1,11 +1,13 @@
 ---
-import { getCulture } from '../../data/culture';
+import { getCollection } from 'astro:content';
 import { t, pathTo, type Lang } from '../../i18n';
 
 interface Props { lang?: Lang }
 const { lang = 'fr' } = Astro.props;
 const T = t(lang);
-const items = getCulture(lang);
+
+const items = (await getCollection(lang === 'en' ? 'cultureEn' : 'culture'))
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 <section class="maroc pad" id="maroc">
   <div class="wrap">
@@ -34,20 +36,20 @@ const items = getCulture(lang);
     </div>
     <div class="mstrip reveal">
       {items.map((s) => (
-        <a class="mtile" href={pathTo(`/le-maroc/${s.slug}`, lang)} aria-label={T.morocco.tileLabel(s.title)}>
-          {s.imageBase ? (
+        <a class="mtile" href={pathTo(`/le-maroc/${s.id}`, lang)} aria-label={T.morocco.tileLabel(s.data.title)}>
+          {s.data.imageBase ? (
             <picture>
               <source
                 type="image/webp"
-                srcset={`${s.imageBase}-800.webp 800w, ${s.imageBase}-1400.webp 1400w`}
+                srcset={`${s.data.imageBase}-800.webp 800w, ${s.data.imageBase}-1400.webp 1400w`}
                 sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw"
               />
-              <img src={s.image} alt={s.imageAlt} loading="lazy" decoding="async" />
+              <img src={s.data.image} alt={s.data.imageAlt} loading="lazy" decoding="async" />
             </picture>
           ) : (
-            <img src={s.image} alt={s.imageAlt} loading="lazy" decoding="async" />
+            <img src={s.data.image} alt={s.data.imageAlt} loading="lazy" decoding="async" />
           )}
-          <span class="mcap">{s.caption}</span>
+          <span class="mcap">{s.data.caption}</span>
         </a>
       ))}
     </div>

@@ -1,59 +1,9 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 
 const lang = 'en';
-
-const articles = [
-  {
-    img: '/img/reco-raids-hero.jpg',
-    tag: 'Behind the scenes',
-    title: "Every raid, I've scouted it myself",
-    excerpt: "No route is drawn from behind a desk: every raid is scouted on the ground, by 4x4 and motorcycle, before I take you there.",
-    href: '/en/actualites/reconnaissance-raids',
-  },
-  {
-    img: '/img/gallery/gallery-05.jpg',
-    tag: 'Advice',
-    title: 'Preparing for your first motorcycle rally-raid in Morocco',
-    excerpt: "Experience, fitness, gear, navigation: what you really need to know before setting off on your first raid.",
-    href: '/en/actualites/preparer-son-premier-raid',
-  },
-  {
-    img: '/img/gallery/gallery-13.jpg',
-    tag: 'Practical',
-    title: "Riding in Morocco on your own motorcycle",
-    excerpt: "Shipping, paperwork, insurance and support: how to join a raid with your own machine.",
-    href: '/en/actualites/venir-avec-sa-propre-moto',
-  },
-  {
-    img: '/img/village.jpg',
-    tag: 'Destination',
-    title: 'Why southern Morocco is my playground',
-    excerpt: "Variety of terrain, rally-raid heritage, perfect climate, warm hospitality: why I chose southern Morocco.",
-    href: '/en/actualites/sud-marocain-paradis-rallye-raid',
-  },
-  {
-    img: '/img/gallery/gallery-07.jpg',
-    tag: 'Gear',
-    title: "The KOVE 450 Rally: why I chose it",
-    excerpt: "A true rally machine, three tanks, generous range: why the KOVE 450 Rally is my ride of choice.",
-    href: '/en/actualites/kove-450-rally-accessible',
-  },
-  {
-    img: '/img/gallery/gallery-15.jpg',
-    tag: 'Technique',
-    title: 'Navigation: finding your way in the desert',
-    excerpt: "GPS tracks and reading the terrain: how to find your bearings in a rally-raid without being glued to the screen.",
-    href: '/en/actualites/navigation-rallye-raid',
-  },
-  {
-    img: '/img/gallery/gallery-04.jpg',
-    tag: 'Advice',
-    title: 'Getting physically ready for a motorcycle raid',
-    excerpt: "Cardio, strength, hydration, recovery: how to prepare without overcomplicating things.",
-    href: '/en/actualites/preparation-physique-raid',
-  },
-];
+const posts = (await getCollection('blogEn')).sort((a, b) => a.data.order - b.data.order);
 ---
 <Layout
   title="Blog, advice, stories & behind the scenes · CDM Motorsport"
@@ -77,13 +27,13 @@ const articles = [
         </p>
       </div>
       <div class="grid3">
-        {articles.map((a) => (
-          <a class="pcard reveal" href={a.href}>
-            <div class="ph"><img src={a.img} alt={a.title} loading="lazy" /></div>
+        {posts.map((p) => (
+          <a class="pcard reveal" href={`/en/actualites/${p.id}`}>
+            <div class="ph"><img src={p.data.hero} alt={p.data.cardTitle} loading="lazy" /></div>
             <div class="b">
-              <div class="tag">{a.tag}</div>
-              <h3>{a.title}</h3>
-              <p>{a.excerpt}</p>
+              <div class="tag">{p.data.cardTag}</div>
+              <h3>{p.data.cardTitle}</h3>
+              <p>{p.data.cardExcerpt}</p>
               <span class="more">Read the article →</span>
             </div>
           </a>

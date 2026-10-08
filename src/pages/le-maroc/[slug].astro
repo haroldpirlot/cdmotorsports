@@ -1,25 +1,29 @@
 ---
+import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import { cultureItems } from '../../data/culture';
 
 const lang = 'fr';
 
 export async function getStaticPaths() {
-  return cultureItems.map((item) => ({
-    params: { slug: item.slug },
-    props: { item },
+  const items = (await getCollection('culture')).sort((a, b) => a.data.order - b.data.order);
+  return items.map((item) => ({
+    params: { slug: item.id },
+    props: {
+      item,
+      otherItems: items.filter((c) => c.id !== item.id).slice(0, 3),
+    },
   }));
 }
 
-const { item } = Astro.props;
-const title = `${item.title} · CDM Motorsport`;
-const otherItems = cultureItems.filter((c) => c.slug !== item.slug).slice(0, 3);
+const { item, otherItems } = Astro.props;
+const { Content } = await render(item);
+const title = `${item.data.title} · CDM Motorsport`;
 ---
-<Layout title={title} description={item.description} ogImage={item.image} lang={lang}>
-  <section class="phero cphero" style={`background-image:url('${item.image}')`}>
+<Layout title={title} description={item.data.description} ogImage={item.data.image} lang={lang}>
+  <section class="phero cphero" style={`background-image:url('${item.data.image}')`}>
     <div class="wrap c">
       <div class="eyebrow" style="color:#e8c9a6">Le Maroc</div>
-      <h1>{item.title}</h1>
+      <h1>{item.data.title}</h1>
     </div>
   </section>
 
@@ -27,11 +31,9 @@ const otherItems = cultureItems.filter((c) => c.slug !== item.slug).slice(0, 3);
     <div class="wrap article">
       <div class="meta reveal">Culture · Sud marocain</div>
       <div class="reveal cbody">
-        {item.body.map((p) => (
-          <p set:html={p}></p>
-        ))}
+        <Content />
 
-        {item.showVisitMorocco && (
+        {item.data.showVisitMorocco && (
           <p class="cvm">
             En savoir plus sur la destination :
             <a href="https://www.visitmorocco.com/" target="_blank" rel="noopener">site officiel du tourisme marocain →</a>
@@ -39,7 +41,7 @@ const otherItems = cultureItems.filter((c) => c.slug !== item.slug).slice(0, 3);
         )}
 
         <div class="ccta">
-          <a href={item.cta.href} class="btn dark">{item.cta.label}</a>
+          <a href={item.data.ctaHref} class="btn dark">{item.data.ctaLabel}</a>
         </div>
       </div>
     </div>
@@ -55,20 +57,20 @@ const otherItems = cultureItems.filter((c) => c.slug !== item.slug).slice(0, 3);
       </div>
       <div class="crelated reveal">
         {otherItems.map((c) => (
-          <a class="cctile" href={`/le-maroc/${c.slug}`}>
-            {c.imageBase ? (
+          <a class="cctile" href={`/le-maroc/${c.id}`}>
+            {c.data.imageBase ? (
               <picture>
                 <source
                   type="image/webp"
-                  srcset={`${c.imageBase}-800.webp 800w, ${c.imageBase}-1400.webp 1400w`}
+                  srcset={`${c.data.imageBase}-800.webp 800w, ${c.data.imageBase}-1400.webp 1400w`}
                   sizes="(max-width: 640px) 100vw, 33vw"
                 />
-                <img src={c.image} alt={c.imageAlt} loading="lazy" decoding="async" />
+                <img src={c.data.image} alt={c.data.imageAlt} loading="lazy" decoding="async" />
               </picture>
             ) : (
-              <img src={c.image} alt={c.imageAlt} loading="lazy" decoding="async" />
+              <img src={c.data.image} alt={c.data.imageAlt} loading="lazy" decoding="async" />
             )}
-            <span class="cclab">{c.caption}</span>
+            <span class="cclab">{c.data.caption}</span>
           </a>
         ))}
       </div>
@@ -78,9 +80,9 @@ const otherItems = cultureItems.filter((c) => c.slug !== item.slug).slice(0, 3);
 
 <style>
   .cphero { min-height: 55vh; }
-  .cbody p { color: #4c4438; margin-bottom: 18px; font-size: 17px; line-height: 1.7; }
-  .cbody p a { color: var(--sand); text-decoration: none; border-bottom: 1px solid currentColor; }
-  .cbody p a:hover { color: var(--ink); }
+  .cbody :global(p) { color: #4c4438; margin-bottom: 18px; font-size: 17px; line-height: 1.7; }
+  .cbody :global(p a) { color: var(--sand); text-decoration: none; border-bottom: 1px solid currentColor; }
+  .cbody :global(p a:hover) { color: var(--ink); }
   .cvm {
     margin-top: 18px;
     padding-top: 18px;

@@ -1,94 +1,18 @@
 ---
+import { getEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { SITE } from '../../config';
-import { t, pathTo } from '../../i18n';
 
 const lang = 'en';
-const T = t(lang);
+const entry = await getEntry('pagesEn', 'edouard-de-moor');
+if (!entry) throw new Error('Missing singleton content: pages-en/edouard-de-moor');
+const data = entry.data;
 
-const heroPhoto = '/img/edouard/edouard-01.jpg';
-const galleryPhotos = Array.from({ length: 12 }, (_, i) =>
-  `/img/edouard/edouard-${String(i + 2).padStart(2, '0')}.jpg`
-);
-
-const pressArticles = [
-  {
-    title: 'Morocco: a fast immersion into a project, tracks, dunes and freedom',
-    source: 'OneRace',
-    date: 'March 2026',
-    datePublished: '2026-03',
-    url: 'https://onerace.be/maroc-immersion-express-au-coeur-dun-projet-pistes-dunes-et-liberte/',
-    image: '/img/press/onerace-maroc-2026',
-    imageAlt: 'OneRace feature in Morocco with CDM Motorsport, southern dunes and tracks',
-    credit: '© OneRace',
-    publisherUrl: 'https://onerace.be/',
-  },
-  {
-    title: 'Head-to-head 250 4-stroke: KTM EXC-F Six Days vs Sherco SEF-R Factory, a winning pair',
-    source: 'MotocrossMag.be',
-    date: 'September 2023',
-    datePublished: '2023-09',
-    url: 'https://fr.motocrossmag.be/index.php/2023/09/face-a-face-250-4-temps-ktm-exc-f-six-days-sherco-sef-r-factory-un-duo-gagnant/',
-    image: '/img/press/face-a-face-2023',
-    imageAlt: 'KTM EXC-F Six Days and Sherco SEF-R Factory head-to-head test, MotocrossMag',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Fantic 125 XE & 250 XEF test: a winning return',
-    source: 'MotocrossMag.be',
-    date: 'March 2021',
-    datePublished: '2021-03',
-    url: 'https://fr.motocrossmag.be/index.php/2021/03/essai-fantic-125-xe-et-250-xef-le-retour-gagnant/',
-    image: '/img/press/essai-fantic-2021',
-    imageAlt: 'Edouard De Moor testing the Fantic 125 XE and 250 XEF, MotocrossMag',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Edouard Charles De Moor with Xavier de Soultrait and Camille Chapelière in Spain',
-    source: 'MotocrossMag.be',
-    date: 'July 2020',
-    datePublished: '2020-07',
-    url: 'https://fr.motocrossmag.be/index.php/2020/07/edouard-charles-de-moor-avec-xavier-de-soultrait-et-camille-chapeliere-en-espagne/',
-    image: '/img/press/espagne',
-    imageAlt: 'Edouard De Moor, Xavier de Soultrait and Camille Chapelière in rally gear, Spain',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Video: Team Yamaha Zone Rouge in action',
-    source: 'MotocrossMag.be',
-    date: 'May 2019',
-    datePublished: '2019-05',
-    url: 'https://fr.motocrossmag.be/index.php/2019/05/video-le-team-yamaha-zone-rouge-en-action/',
-    image: '/img/press/yamaha-zone-rouge-video-2019',
-    imageAlt: 'Team Yamaha Zone Rouge in action, 2019 season',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Six riders in Team Yamaha Zone Rouge colors',
-    source: 'MotocrossMag.be',
-    date: 'March 2019',
-    datePublished: '2019-03',
-    url: 'https://fr.motocrossmag.be/index.php/2019/03/six-pilotes-sous-les-couleurs-du-team-yamaha-zone-rouge/',
-    image: '/img/press/yamaha-zone-rouge-pilotes-2019',
-    imageAlt: 'The six riders of Team Yamaha Zone Rouge 2019',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Photos: Team Yamaha Zone Rouge 2019',
-    source: 'MotocrossMag.be',
-    date: 'March 2019',
-    datePublished: '2019-03',
-    url: 'https://fr.motocrossmag.be/index.php/2019/03/photos-le-team-yamaha-zone-rouge-2019/',
-    image: '/img/press/yamaha-zone-rouge-photos-2019',
-    imageAlt: 'Team Yamaha Zone Rouge 2019 photo shoot',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
+const layout = [
+  's6 r2', 's3', 's3',
+  's3', 's3', 's6',
+  's4', 's4', 's4',
+  's6', 's3', 's3',
 ];
 
 const personJsonLd = {
@@ -97,22 +21,22 @@ const personJsonLd = {
   name: 'Edouard Charles De Moor',
   givenName: 'Edouard Charles',
   familyName: 'De Moor',
-  jobTitle: 'Founder, rider and rally-raid guide',
-  nationality: 'BE',
+  jobTitle: data.jsonLd.jobTitle,
+  nationality: data.jsonLd.nationality,
   url: new URL('/en/edouard-de-moor', SITE.url).href,
-  image: new URL(heroPhoto, SITE.url).href,
-  knowsAbout: ['Rally-raid', 'Motocross', 'Enduro', 'KOVE 450 Rally', 'Morocco'],
+  image: new URL(data.heroPhoto, SITE.url).href,
+  knowsAbout: data.jsonLd.knowsAbout,
   worksFor: {
     '@type': 'Organization',
     name: SITE.name,
     url: SITE.url,
   },
-  subjectOf: pressArticles.map((a) => ({
+  subjectOf: data.press.map((a) => ({
     '@type': 'NewsArticle',
     headline: a.title,
     url: a.url,
     datePublished: a.datePublished,
-    inLanguage: 'fr',
+    inLanguage: data.jsonLd.inLanguage,
     image: new URL(`${a.image}.jpg`, SITE.url).href,
     about: { '@type': 'Person', name: 'Edouard Charles De Moor' },
     publisher: {
@@ -122,143 +46,49 @@ const personJsonLd = {
     },
   })),
 };
-
-const layout = [
-  's6 r2', 's3', 's3',
-  's3', 's3', 's6',
-  's4', 's4', 's4',
-  's6', 's3', 's3',
-];
 ---
 <Layout
-  title={T.meta.edouard.title}
-  description={T.meta.edouard.description}
-  ogImage={heroPhoto}
+  title={data.seoTitle}
+  description={data.seoDescription}
+  ogImage={data.heroPhoto}
   lang={lang}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
-  <section class="phero" style={`background-image:url('${heroPhoto}')`}>
+  <section class="phero" style={`background-image:url('${data.heroPhoto}')`}>
     <div class="wrap c">
-      <div class="eyebrow" style="color:#e8c9a6">The guide</div>
-      <h1>Edouard Charles<br /><em>De Moor</em></h1>
+      <div class="eyebrow" style="color:#e8c9a6">{data.heroEyebrow}</div>
+      <h1 set:html={data.heroTitle}></h1>
     </div>
   </section>
 
-  <section class="pad">
-    <div class="wrap article">
-      <div class="meta reveal">Portrait · CDM Motorsport founder</div>
-      <div class="big reveal" style="margin-bottom:26px">
-        A life on <em>two wheels.</em>
+  {data.sections.map((s) => (
+    <section class="pad">
+      <div class="wrap article">
+        <div class="meta reveal">{s.meta}</div>
+        <div class="big reveal" style="margin-bottom:26px" set:html={s.bigTitle}></div>
+        <div class="reveal">
+          {s.paragraphs.map((p) => (
+            <p set:html={p}></p>
+          ))}
+        </div>
       </div>
-      <div class="reveal">
-        <p>I'm 32, and motorcycles have been part of my life since I was five.</p>
-        <p>
-          I grew up on two wheels and in competition from the very beginning, with
-          many years spent in motocross. At 19 I switched to enduro, a discipline
-          that took my riding to a new level — including the chance to join the
-          Husqvarna Trophy in the Belgian Championship, and later to continue the
-          adventure with Yamaha Belgium.
-        </p>
-        <p>
-          Those years gradually pushed me toward what has now become my single
-          focus: <em>rally-raid.</em>
-        </p>
-        <p>
-          Alongside the raids, I'm also a test rider for new models with the
-          Belgian outlet <a href="https://onerace.be/" target="_blank" rel="noopener noreferrer">OneRace</a>.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="pad">
-    <div class="wrap article">
-      <div class="meta reveal">The project</div>
-      <div class="big reveal" style="margin-bottom:26px">
-        Why <em>CDM Motorsport?</em>
-      </div>
-      <div class="reveal">
-        <p>
-          CDM Motorsport is the result of a long reflection. The goal was to build
-          my own business while staying inside the world I want to keep living in:
-          motorcycles, the terrain, and above all, competition.
-        </p>
-        <p>
-          Rally-raid sits right at the intersection of those pieces. It lets me
-          share my experience with my clients, guide them into the discipline, and
-          make them live something strong — while showing them a country I know
-          particularly well. And it keeps a big part of my time free for my own
-          training and my own racing goals.
-        </p>
-        <p>
-          Morocco is ideal ground, both for training and for racing. The variety
-          of its tracks and landscapes makes it a true playground to discover
-          rally-raid in exceptional conditions.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="pad">
-    <div class="wrap article">
-      <div class="meta reveal">The mindset</div>
-      <div class="big reveal" style="margin-bottom:26px">
-        The <em>CDM Motorsport</em> spirit.
-      </div>
-      <div class="reveal">
-        <p>
-          Through CDM Motorsport, my first goal is to let you live your own
-          adventure: your passion, the sharing, and the honest side of this
-          beautiful country. I'll be happy to welcome you at the start line of
-          the raid you choose, to ride with you from day one to the last, and to
-          pass on a part of what competition and years of riding have taught me.
-        </p>
-        <p>
-          The idea isn't just to show you a destination on a motorcycle — it's to
-          pass on as much know-how as I can along the way. Reading the terrain,
-          learning to move on the tracks and experiencing rally-raid from the
-          inside, at your own level, is part of the adventure.
-        </p>
-        <p>
-          Rally-raid is also about sharing and solidarity. The moments we live
-          together, the conversations, the problems we face on the tracks and
-          the satisfaction of solving them, all feed the experience. The goal is
-          to give you the keys to progress, to build confidence in the face of
-          difficulty, and above all to enjoy every moment in an exceptional
-          setting.
-        </p>
-        <p>
-          Beyond the bike, there are the people. The ones you'll meet, the ones
-          you'll ride with, and the ties that build up as the kilometers roll by
-          are a huge part of what you'll bring home from a raid. Because in the
-          end, it isn't just the kilometers you remember, it's everything you
-          lived and shared along the way.
-        </p>
-        <p>
-          CDM Motorsport's purpose, really, is to be the best possible companion
-          for your adventure, with one essential priority: seeing you cross the
-          finish line safely, but above all with a smile. Beyond the kilometers
-          and the challenges, my real reward is seeing you leave happy with the
-          experience, already thinking about the next one.
-        </p>
-      </div>
-    </div>
-  </section>
+    </section>
+  ))}
 
   <section class="pad press-section">
     <div class="wrap">
       <div class="reveal" style="margin-bottom:32px">
-        <div class="eyebrow" style="margin-bottom:16px">Press &amp; media</div>
-        <div class="big" style="font-size:clamp(24px,3vw,36px)">They've <em>covered it.</em></div>
+        <div class="eyebrow" style="margin-bottom:16px">{data.pressEyebrow}</div>
+        <div class="big" style="font-size:clamp(24px,3vw,36px)" set:html={data.pressTitle}></div>
       </div>
       <div class="press-list reveal">
-        {pressArticles.map((a) => (
+        {data.press.map((a) => (
           <a
             class="press-card"
             href={a.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${a.title}, ${a.source}, ${a.date} (opens in a new tab)`}
+            aria-label={`${a.title}, ${a.source}, ${a.date} ${data.pressAriaNewTab}`}
           >
             <div class="press-cover">
               <img
@@ -279,7 +109,7 @@ const layout = [
               </div>
               <h3 class="press-title">« {a.title} »</h3>
               <span class="press-arrow" aria-hidden="true">
-                Read the article
+                {data.pressReadLabel}
                 <svg viewBox="0 0 16 16" width="14" height="14">
                   <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 3 L11 8 L6 13 M3.5 8 L11 8"/>
                 </svg>
@@ -288,22 +118,24 @@ const layout = [
           </a>
         ))}
       </div>
-      <p style="margin-top:14px;color:#6b6255;font-size:13px;font-style:italic">
-        Articles are in French — a brief English title is shown here for context.
-      </p>
+      {data.pressFooterNote && (
+        <p style="margin-top:14px;color:#6b6255;font-size:13px;font-style:italic">
+          {data.pressFooterNote}
+        </p>
+      )}
     </div>
   </section>
 
   <section class="gal pad">
     <div class="wrap">
       <div class="reveal" style="margin-bottom:40px">
-        <div class="eyebrow" style="margin-bottom:16px">In pictures</div>
-        <div class="big">On the <em>tracks.</em></div>
+        <div class="eyebrow" style="margin-bottom:16px">{data.galleryEyebrow}</div>
+        <div class="big" set:html={data.galleryTitle}></div>
       </div>
       <div class="ggrid reveal">
-        {galleryPhotos.map((src, i) => (
-          <a class={layout[i] ?? 's4'} href={src} aria-label={`Photo ${i + 2} of Edouard De Moor`}>
-            <img src={src} alt={`Edouard De Moor riding, photo ${i + 2}`} loading="lazy" />
+        {data.galleryPhotos.map((src, i) => (
+          <a class={layout[i] ?? 's4'} href={src} aria-label={data.galleryAriaPrefix.replace('{n}', String(i + 2))}>
+            <img src={src} alt={`${data.galleryAltPrefix} ${i + 2}`} loading="lazy" />
           </a>
         ))}
       </div>
@@ -414,13 +246,14 @@ const layout = [
   </style>
 
   <section class="cta pad">
-    <div class="bg" style={`background-image:url('${heroPhoto}')`}></div>
+    <div class="bg" style={`background-image:url('${data.heroPhoto}')`}></div>
     <div class="wrap reveal">
-      <div class="eyebrow" style="color:#e8c9a6;margin-bottom:16px">Next step</div>
-      <div class="big">Ride with <em>Edouard?</em></div>
+      <div class="eyebrow" style="color:#e8c9a6;margin-bottom:16px">{data.ctaEyebrow}</div>
+      <div class="big" set:html={data.ctaTitle}></div>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px">
-        <a href={pathTo('/#raids', lang)} class="btn">See the raids</a>
-        <a href={pathTo('/reserver', lang)} class="btn">Book</a>
+        {data.ctaButtons.map((b) => (
+          <a href={b.href} class="btn">{b.label}</a>
+        ))}
       </div>
     </div>
   </section>

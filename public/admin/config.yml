@@ -4,16 +4,14 @@
 # et consommés par api/auth.js + api/callback.js.
 #
 # Contenu éditable :
-#   • Raids (FR) : src/content/raids/*.md
-#   • Raids (EN) : src/content/raids-en/*.md
-#   • Textes globaux (FR) : src/content/globals/*.md
-#   • Textes globaux (EN) : src/content/globals-en/*.md
+#   • Raids (FR / EN)       — src/content/raids(-en)/*.md
+#   • Textes globaux (FR/EN)— src/content/globals(-en)/*.md
+#   • Blog (FR / EN)        — src/content/blog(-en)/*.md
+#   • Le Maroc (FR / EN)    — src/content/culture(-en)/*.md
+#   • Qui suis-je (FR / EN) — src/content/pages(-en)/edouard-de-moor.md
 #
-# Non éditable depuis le CMS (encore en dur dans le code) :
-#   • Articles du blog (src/pages/actualites/*.astro)
-#   • Pages "Le Maroc" (src/data/culture.ts)
-#   • Page "Qui suis-je" (src/pages/edouard-de-moor.astro)
-#   À convertir en content collections markdown pour les exposer ici.
+# Astuce édition : certains champs titres acceptent du HTML inline
+# (<em>, <br />) pour conserver le rendu existant.
 
 backend:
   name: github
@@ -115,6 +113,270 @@ collections:
         widget: list
         field: { label: Point, name: point, widget: string }
       - { label: "Introduction (2 paragraphs)", name: body, widget: markdown }
+
+  # ─────────────────────────────────────────────────────────────
+  # BLOG — FR
+  # ─────────────────────────────────────────────────────────────
+  - name: blog
+    label: "Blog (FR)"
+    label_singular: "Article"
+    folder: "src/content/blog"
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    slug: "{{slug}}"
+    identifier_field: cardTitle
+    summary: "{{order}} · {{cardTitle}}"
+    fields:
+      - { label: "Ordre d'affichage",  name: order, widget: number, value_type: int, min: 1, hint: "1 = en haut de l'index du blog" }
+      - { label: "Titre SEO (<title>)", name: title, widget: string }
+      - { label: "Description SEO",     name: description, widget: text }
+      - { label: "Image hero",           name: hero, widget: image, hint: "Fond de la bannière + vignette sur l'index" }
+      - { label: "Catégorie (hero)",     name: heroEyebrow, widget: string, hint: "ex. Coulisses, Conseils, Pratique…" }
+      - { label: "Titre hero (H1)",      name: heroTitle, widget: string, hint: "HTML autorisé : <em>mot</em> pour italique" }
+      - { label: "Ligne 'meta'",         name: meta, widget: string, hint: "ex. Coulisses · 4 min de lecture" }
+      - { label: "Grand titre d'article", name: bigTitle, widget: string, hint: "HTML autorisé : <em>, <br />" }
+      - { label: "Tag (carte index)",    name: cardTag, widget: string }
+      - { label: "Titre carte",          name: cardTitle, widget: string, hint: "Titre long affiché sur la carte de l'index blog" }
+      - { label: "Extrait carte",        name: cardExcerpt, widget: text }
+      - { label: "Teaser avant CTA",     name: ctaIntro, widget: string, hint: "ex. Envie de…" }
+      - { label: "Libellé du bouton CTA", name: ctaLabel, widget: string }
+      - { label: "Lien du bouton CTA",   name: ctaHref, widget: string, hint: "ex. /#raids, /reserver, /actualites/…" }
+      - { label: "Corps de l'article",   name: body, widget: markdown, hint: "Markdown + HTML inline autorisé (figure vidéo, liens target=_blank)" }
+
+  # ─────────────────────────────────────────────────────────────
+  # BLOG — EN
+  # ─────────────────────────────────────────────────────────────
+  - name: blog-en
+    label: "Blog (EN)"
+    label_singular: "Article"
+    folder: "src/content/blog-en"
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    slug: "{{slug}}"
+    identifier_field: cardTitle
+    summary: "{{order}} · {{cardTitle}}"
+    fields:
+      - { label: "Display order",       name: order, widget: number, value_type: int, min: 1, hint: "1 = top of the blog index" }
+      - { label: "SEO title (<title>)",  name: title, widget: string }
+      - { label: "SEO description",      name: description, widget: text }
+      - { label: "Hero image",            name: hero, widget: image, hint: "Banner background + thumbnail in index" }
+      - { label: "Category (hero)",       name: heroEyebrow, widget: string }
+      - { label: "Hero title (H1)",       name: heroTitle, widget: string, hint: "Inline HTML allowed (<em>, <br />)" }
+      - { label: "Meta line",             name: meta, widget: string, hint: "e.g. Advice · 6 min read" }
+      - { label: "Big article title",     name: bigTitle, widget: string, hint: "Inline HTML allowed" }
+      - { label: "Card tag",              name: cardTag, widget: string }
+      - { label: "Card title",            name: cardTitle, widget: string }
+      - { label: "Card excerpt",          name: cardExcerpt, widget: text }
+      - { label: "Teaser before CTA",     name: ctaIntro, widget: string }
+      - { label: "CTA button label",      name: ctaLabel, widget: string }
+      - { label: "CTA button link",       name: ctaHref, widget: string }
+      - { label: "Article body",          name: body, widget: markdown }
+
+  # ─────────────────────────────────────────────────────────────
+  # LE MAROC — FR
+  # ─────────────────────────────────────────────────────────────
+  - name: culture
+    label: "Le Maroc (FR)"
+    label_singular: "Vignette"
+    folder: "src/content/culture"
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{order}} · {{title}}"
+    fields:
+      - { label: "Ordre d'affichage", name: order, widget: number, value_type: int, min: 1 }
+      - { label: "Légende vignette (home)", name: caption, widget: string, hint: "Libellé court en bas de la vignette" }
+      - { label: "Titre (H1 de la page)", name: title, widget: string }
+      - { label: "Mot-clé SEO", name: keyword, widget: string }
+      - { label: "Description SEO", name: description, widget: text }
+      - { label: "Alt image", name: imageAlt, widget: string }
+      - { label: "Image hero", name: image, widget: image }
+      - { label: "Base image WebP (sans extension)", name: imageBase, widget: string, required: false, hint: "ex. /img/culture/mint-tea (si versions WebP responsive)" }
+      - { label: "Afficher le lien 'visitmorocco.com'", name: showVisitMorocco, widget: boolean, default: false }
+      - { label: "Libellé bouton CTA final", name: ctaLabel, widget: string }
+      - { label: "Lien bouton CTA final", name: ctaHref, widget: string }
+      - { label: "Corps (paragraphes)", name: body, widget: markdown, hint: "Markdown pur, liens [texte](/url)" }
+
+  # ─────────────────────────────────────────────────────────────
+  # LE MAROC — EN
+  # ─────────────────────────────────────────────────────────────
+  - name: culture-en
+    label: "Morocco (EN)"
+    label_singular: "Tile"
+    folder: "src/content/culture-en"
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{order}} · {{title}}"
+    fields:
+      - { label: "Display order", name: order, widget: number, value_type: int, min: 1 }
+      - { label: "Tile caption (home)", name: caption, widget: string }
+      - { label: "Title (page H1)", name: title, widget: string }
+      - { label: "SEO keyword", name: keyword, widget: string }
+      - { label: "SEO description", name: description, widget: text }
+      - { label: "Image alt", name: imageAlt, widget: string }
+      - { label: "Hero image", name: image, widget: image }
+      - { label: "WebP image base (no extension)", name: imageBase, widget: string, required: false }
+      - { label: "Show 'visitmorocco.com' link", name: showVisitMorocco, widget: boolean, default: false }
+      - { label: "Final CTA button label", name: ctaLabel, widget: string }
+      - { label: "Final CTA button link", name: ctaHref, widget: string }
+      - { label: "Body (paragraphs)", name: body, widget: markdown }
+
+  # ─────────────────────────────────────────────────────────────
+  # QUI SUIS-JE — Pages singleton (FR)
+  # ─────────────────────────────────────────────────────────────
+  - name: pages
+    label: "Pages singleton (FR)"
+    label_singular: "Page"
+    files:
+      - name: edouard-de-moor
+        label: "Qui suis-je — Edouard De Moor"
+        file: "src/content/pages/edouard-de-moor.md"
+        fields:
+          - { label: "Titre SEO", name: seoTitle, widget: string }
+          - { label: "Description SEO", name: seoDescription, widget: text }
+          - { label: "Photo hero", name: heroPhoto, widget: image }
+          - { label: "Petit titre au-dessus du H1", name: heroEyebrow, widget: string, hint: "ex. Le guide" }
+          - { label: "Titre hero (H1)", name: heroTitle, widget: string, hint: "HTML autorisé : <em>, <br />" }
+          - label: "Sections de bio (répétables)"
+            name: sections
+            widget: list
+            summary: "{{fields.meta}}"
+            fields:
+              - { label: "Ligne 'meta'", name: meta, widget: string, hint: "ex. Portrait · Fondateur CDM Motorsport" }
+              - { label: "Grand titre de section", name: bigTitle, widget: string, hint: "HTML autorisé" }
+              - label: "Paragraphes"
+                name: paragraphs
+                widget: list
+                field: { label: Paragraphe, name: p, widget: text, hint: "HTML inline autorisé (<em>, <a>)" }
+          - { label: "Petit titre presse", name: pressEyebrow, widget: string, hint: "ex. Presse & médias" }
+          - { label: "Grand titre presse", name: pressTitle, widget: string, hint: "HTML autorisé" }
+          - { label: "Libellé 'Lire l'article'", name: pressReadLabel, widget: string }
+          - { label: "Suffixe aria 'nouvelle fenêtre'", name: pressAriaNewTab, widget: string }
+          - label: "Articles de presse"
+            name: press
+            widget: list
+            summary: "{{fields.source}} · {{fields.date}} — {{fields.title}}"
+            fields:
+              - { label: Titre, name: title, widget: string }
+              - { label: Source, name: source, widget: string }
+              - { label: "Date (affichée)", name: date, widget: string, hint: "ex. Mars 2026" }
+              - { label: "Date publiée (ISO)", name: datePublished, widget: string, hint: "ex. 2026-03" }
+              - { label: URL, name: url, widget: string }
+              - { label: "Base image (sans extension)", name: image, widget: string, hint: "ex. /img/press/onerace-maroc-2026" }
+              - { label: "Alt image", name: imageAlt, widget: string }
+              - { label: "Crédit photo", name: credit, widget: string, required: false }
+              - { label: "URL de l'éditeur", name: publisherUrl, widget: string }
+          - { label: "Note sous les cartes presse (optionnel)", name: pressFooterNote, widget: string, required: false }
+          - { label: "Petit titre galerie", name: galleryEyebrow, widget: string }
+          - { label: "Grand titre galerie", name: galleryTitle, widget: string, hint: "HTML autorisé" }
+          - label: "Photos de galerie"
+            name: galleryPhotos
+            widget: list
+            field: { label: Photo, name: photo, widget: image }
+          - { label: "Préfixe alt galerie", name: galleryAltPrefix, widget: string, hint: "ex. Edouard De Moor en action, photo (le numéro est ajouté)" }
+          - { label: "Préfixe aria galerie", name: galleryAriaPrefix, widget: string, hint: "ex. Photo {n} d'Edouard De Moor" }
+          - { label: "Petit titre CTA final", name: ctaEyebrow, widget: string }
+          - { label: "Grand titre CTA final", name: ctaTitle, widget: string, hint: "HTML autorisé" }
+          - label: "Boutons CTA"
+            name: ctaButtons
+            widget: list
+            summary: "{{fields.label}} → {{fields.href}}"
+            fields:
+              - { label: Libellé, name: label, widget: string }
+              - { label: Lien,    name: href,  widget: string }
+          - label: "JSON-LD (SEO structuré)"
+            name: jsonLd
+            widget: object
+            fields:
+              - { label: "Fonction (jobTitle)", name: jobTitle, widget: string }
+              - { label: "Nationalité (code)", name: nationality, widget: string, default: BE }
+              - label: "Thèmes maîtrisés (knowsAbout)"
+                name: knowsAbout
+                widget: list
+                field: { label: Thème, name: topic, widget: string }
+              - { label: "Langue (inLanguage)", name: inLanguage, widget: string, hint: "fr ou en" }
+
+  # ─────────────────────────────────────────────────────────────
+  # QUI SUIS-JE — Pages singleton (EN)
+  # ─────────────────────────────────────────────────────────────
+  - name: pages-en
+    label: "Singleton pages (EN)"
+    label_singular: "Page"
+    files:
+      - name: edouard-de-moor
+        label: "About — Edouard De Moor"
+        file: "src/content/pages-en/edouard-de-moor.md"
+        fields:
+          - { label: "SEO title", name: seoTitle, widget: string }
+          - { label: "SEO description", name: seoDescription, widget: text }
+          - { label: "Hero photo", name: heroPhoto, widget: image }
+          - { label: "Small eyebrow above H1", name: heroEyebrow, widget: string }
+          - { label: "Hero title (H1)", name: heroTitle, widget: string, hint: "Inline HTML allowed" }
+          - label: "Bio sections (repeatable)"
+            name: sections
+            widget: list
+            summary: "{{fields.meta}}"
+            fields:
+              - { label: "Meta line", name: meta, widget: string }
+              - { label: "Section big title", name: bigTitle, widget: string, hint: "Inline HTML allowed" }
+              - label: "Paragraphs"
+                name: paragraphs
+                widget: list
+                field: { label: Paragraph, name: p, widget: text, hint: "Inline HTML allowed" }
+          - { label: "Press eyebrow", name: pressEyebrow, widget: string }
+          - { label: "Press big title", name: pressTitle, widget: string, hint: "Inline HTML allowed" }
+          - { label: "'Read the article' label", name: pressReadLabel, widget: string }
+          - { label: "'opens in a new tab' aria suffix", name: pressAriaNewTab, widget: string }
+          - label: "Press articles"
+            name: press
+            widget: list
+            summary: "{{fields.source}} · {{fields.date}} — {{fields.title}}"
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Source, name: source, widget: string }
+              - { label: "Date (displayed)", name: date, widget: string }
+              - { label: "Date published (ISO)", name: datePublished, widget: string }
+              - { label: URL, name: url, widget: string }
+              - { label: "Image base (no ext)", name: image, widget: string }
+              - { label: "Image alt", name: imageAlt, widget: string }
+              - { label: "Photo credit", name: credit, widget: string, required: false }
+              - { label: "Publisher URL", name: publisherUrl, widget: string }
+          - { label: "Press footer note (optional)", name: pressFooterNote, widget: string, required: false }
+          - { label: "Gallery eyebrow", name: galleryEyebrow, widget: string }
+          - { label: "Gallery big title", name: galleryTitle, widget: string, hint: "Inline HTML allowed" }
+          - label: "Gallery photos"
+            name: galleryPhotos
+            widget: list
+            field: { label: Photo, name: photo, widget: image }
+          - { label: "Gallery alt prefix", name: galleryAltPrefix, widget: string }
+          - { label: "Gallery aria prefix", name: galleryAriaPrefix, widget: string, hint: "Use {n} as placeholder" }
+          - { label: "Final CTA eyebrow", name: ctaEyebrow, widget: string }
+          - { label: "Final CTA big title", name: ctaTitle, widget: string, hint: "Inline HTML allowed" }
+          - label: "CTA buttons"
+            name: ctaButtons
+            widget: list
+            summary: "{{fields.label}} → {{fields.href}}"
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link,  name: href,  widget: string }
+          - label: "Structured SEO (JSON-LD)"
+            name: jsonLd
+            widget: object
+            fields:
+              - { label: "Job title", name: jobTitle, widget: string }
+              - { label: "Nationality (code)", name: nationality, widget: string, default: BE }
+              - label: "Topics (knowsAbout)"
+                name: knowsAbout
+                widget: list
+                field: { label: Topic, name: topic, widget: string }
+              - { label: "Language (inLanguage)", name: inLanguage, widget: string, hint: "fr or en" }
 
   # ─────────────────────────────────────────────────────────────
   # GLOBALS — FR

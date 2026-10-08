@@ -1,57 +1,8 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
-const articles = [
-  {
-    img: '/img/reco-raids-hero.jpg',
-    tag: 'Coulisses',
-    title: "Chaque raid, je l'ai reconnu moi-même",
-    excerpt: "Aucun itinéraire n'est tracé depuis un bureau : chaque raid est repéré sur le terrain, en 4×4 et à moto, avant de vous y emmener.",
-    href: '/actualites/reconnaissance-raids',
-  },
-  {
-    img: '/img/gallery/gallery-05.jpg',
-    tag: 'Conseils',
-    title: 'Préparer son premier raid moto au Maroc',
-    excerpt: "Expérience, forme, équipement, navigation : ce qu'il faut vraiment savoir avant de se lancer sur un premier raid.",
-    href: '/actualites/preparer-son-premier-raid',
-  },
-  {
-    img: '/img/gallery/gallery-13.jpg',
-    tag: 'Pratique',
-    title: "Venir rouler au Maroc avec sa propre moto",
-    excerpt: "Transport, formalités, assurances et assistance : comment participer à un raid avec ta propre machine.",
-    href: '/actualites/venir-avec-sa-propre-moto',
-  },
-  {
-    img: '/img/village.jpg',
-    tag: 'Destination',
-    title: 'Pourquoi le Sud marocain est mon terrain de jeu',
-    excerpt: "Diversité des terrains, tradition du rallye-raid, climat idéal, hospitalité : pourquoi j'ai choisi le Sud du Maroc.",
-    href: '/actualites/sud-marocain-paradis-rallye-raid',
-  },
-  {
-    img: '/img/gallery/gallery-07.jpg',
-    tag: 'Matériel',
-    title: "La KOVE 450 Rally : pourquoi je l'ai choisie",
-    excerpt: "Vraie machine de rallye, trois réservoirs, autonomie généreuse : pourquoi la KOVE 450 Rally est ma monture.",
-    href: '/actualites/kove-450-rally-accessible',
-  },
-  {
-    img: '/img/gallery/gallery-15.jpg',
-    tag: 'Technique',
-    title: 'La navigation : trouver son chemin dans le désert',
-    excerpt: "Trace GPS et lecture du terrain : comment s'orienter en rallye-raid sans dépendre uniquement de l'écran.",
-    href: '/actualites/navigation-rallye-raid',
-  },
-  {
-    img: '/img/gallery/gallery-04.jpg',
-    tag: 'Conseils',
-    title: 'Se préparer physiquement pour un raid moto',
-    excerpt: "Cardio, renforcement, hydratation, récupération : comment se préparer sans se compliquer la vie.",
-    href: '/actualites/preparation-physique-raid',
-  },
-];
+const posts = (await getCollection('blog')).sort((a, b) => a.data.order - b.data.order);
 ---
 <Layout
   title="Blog, Conseils, récits & coulisses · CDM Motorsport"
@@ -74,13 +25,13 @@ const articles = [
         </p>
       </div>
       <div class="grid3">
-        {articles.map((a) => (
-          <a class="pcard reveal" href={a.href}>
-            <div class="ph"><img src={a.img} alt={a.title} loading="lazy" /></div>
+        {posts.map((p) => (
+          <a class="pcard reveal" href={`/actualites/${p.id}`}>
+            <div class="ph"><img src={p.data.hero} alt={p.data.cardTitle} loading="lazy" /></div>
             <div class="b">
-              <div class="tag">{a.tag}</div>
-              <h3>{a.title}</h3>
-              <p>{a.excerpt}</p>
+              <div class="tag">{p.data.cardTag}</div>
+              <h3>{p.data.cardTitle}</h3>
+              <p>{p.data.cardExcerpt}</p>
               <span class="more">Lire l'article →</span>
             </div>
           </a>

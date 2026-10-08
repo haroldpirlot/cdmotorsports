@@ -12,6 +12,9 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
+  markdown: {
+    smartypants: false,
+  },
   integrations: [
     sitemap({
       i18n: {

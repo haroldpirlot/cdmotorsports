@@ -1,95 +1,18 @@
 ---
+import { getEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import { SITE } from '../config';
 
-// La photo hero + les 12 autres en galerie. Ordre lexicographique = ordre du dossier
-// source, Harold peut réordonner en renommant les fichiers dans public/img/edouard/.
-const heroPhoto = '/img/edouard/edouard-01.jpg';
-const galleryPhotos = Array.from({ length: 12 }, (_, i) =>
-  `/img/edouard/edouard-${String(i + 2).padStart(2, '0')}.jpg`
-);
+const lang = 'fr';
+const entry = await getEntry('pages', 'edouard-de-moor');
+if (!entry) throw new Error('Missing singleton content: pages/edouard-de-moor');
+const data = entry.data;
 
-// Presse & médias — cartes uniformes (photo, source, date, titre), triées
-// du plus récent au plus ancien. Chaque image est hébergée localement,
-// crédit affiché en overlay.
-const pressArticles = [
-  {
-    title: 'Maroc : immersion express au cœur d\'un projet, pistes, dunes et liberté',
-    source: 'OneRace',
-    date: 'Mars 2026',
-    datePublished: '2026-03',
-    url: 'https://onerace.be/maroc-immersion-express-au-coeur-dun-projet-pistes-dunes-et-liberte/',
-    image: '/img/press/onerace-maroc-2026',
-    imageAlt: "Reportage OneRace au Maroc avec CDM Motorsport, dunes et pistes du sud",
-    credit: '© OneRace',
-    publisherUrl: 'https://onerace.be/',
-  },
-  {
-    title: 'Face-à-face 250 4-temps : KTM EXC-F Six Days vs Sherco SEF-R Factory, un duo gagnant',
-    source: 'MotocrossMag.be',
-    date: 'Septembre 2023',
-    datePublished: '2023-09',
-    url: 'https://fr.motocrossmag.be/index.php/2023/09/face-a-face-250-4-temps-ktm-exc-f-six-days-sherco-sef-r-factory-un-duo-gagnant/',
-    image: '/img/press/face-a-face-2023',
-    imageAlt: 'Face-à-face KTM EXC-F Six Days et Sherco SEF-R Factory, essai MotocrossMag',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Essai Fantic 125 XE et 250 XEF : le retour gagnant',
-    source: 'MotocrossMag.be',
-    date: 'Mars 2021',
-    datePublished: '2021-03',
-    url: 'https://fr.motocrossmag.be/index.php/2021/03/essai-fantic-125-xe-et-250-xef-le-retour-gagnant/',
-    image: '/img/press/essai-fantic-2021',
-    imageAlt: 'Edouard De Moor à l\'essai des Fantic 125 XE et 250 XEF, MotocrossMag',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Edouard Charles de Moor avec Xavier de Soultrait et Camille Chapelière en Espagne',
-    source: 'MotocrossMag.be',
-    date: 'Juillet 2020',
-    datePublished: '2020-07',
-    url: 'https://fr.motocrossmag.be/index.php/2020/07/edouard-charles-de-moor-avec-xavier-de-soultrait-et-camille-chapeliere-en-espagne/',
-    image: '/img/press/espagne',
-    imageAlt: "Edouard De Moor, Xavier de Soultrait et Camille Chapelière en tenue rally, Espagne",
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Vidéo : le Team Yamaha Zone Rouge en action',
-    source: 'MotocrossMag.be',
-    date: 'Mai 2019',
-    datePublished: '2019-05',
-    url: 'https://fr.motocrossmag.be/index.php/2019/05/video-le-team-yamaha-zone-rouge-en-action/',
-    image: '/img/press/yamaha-zone-rouge-video-2019',
-    imageAlt: 'Le Team Yamaha Zone Rouge en action, saison 2019',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Six pilotes sous les couleurs du Team Yamaha Zone Rouge',
-    source: 'MotocrossMag.be',
-    date: 'Mars 2019',
-    datePublished: '2019-03',
-    url: 'https://fr.motocrossmag.be/index.php/2019/03/six-pilotes-sous-les-couleurs-du-team-yamaha-zone-rouge/',
-    image: '/img/press/yamaha-zone-rouge-pilotes-2019',
-    imageAlt: 'Les six pilotes du Team Yamaha Zone Rouge 2019',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
-  {
-    title: 'Photos : le Team Yamaha Zone Rouge 2019',
-    source: 'MotocrossMag.be',
-    date: 'Mars 2019',
-    datePublished: '2019-03',
-    url: 'https://fr.motocrossmag.be/index.php/2019/03/photos-le-team-yamaha-zone-rouge-2019/',
-    image: '/img/press/yamaha-zone-rouge-photos-2019',
-    imageAlt: 'Séance photo du Team Yamaha Zone Rouge 2019',
-    credit: '© MotocrossMag',
-    publisherUrl: 'https://fr.motocrossmag.be/',
-  },
+const layout = [
+  's6 r2', 's3', 's3',
+  's3', 's3', 's6',
+  's4', 's4', 's4',
+  's6', 's3', 's3',
 ];
 
 const personJsonLd = {
@@ -98,22 +21,22 @@ const personJsonLd = {
   name: 'Edouard Charles De Moor',
   givenName: 'Edouard Charles',
   familyName: 'De Moor',
-  jobTitle: 'Fondateur, pilote et guide rallye-raid',
-  nationality: 'BE',
+  jobTitle: data.jsonLd.jobTitle,
+  nationality: data.jsonLd.nationality,
   url: new URL('/edouard-de-moor', SITE.url).href,
-  image: new URL(heroPhoto, SITE.url).href,
-  knowsAbout: ['Rallye-raid', 'Motocross', 'Enduro', 'KOVE 450 Rally', 'Maroc'],
+  image: new URL(data.heroPhoto, SITE.url).href,
+  knowsAbout: data.jsonLd.knowsAbout,
   worksFor: {
     '@type': 'Organization',
     name: SITE.name,
     url: SITE.url,
   },
-  subjectOf: pressArticles.map((a) => ({
+  subjectOf: data.press.map((a) => ({
     '@type': 'NewsArticle',
     headline: a.title,
     url: a.url,
     datePublished: a.datePublished,
-    inLanguage: 'fr',
+    inLanguage: data.jsonLd.inLanguage,
     image: new URL(`${a.image}.jpg`, SITE.url).href,
     about: { '@type': 'Person', name: 'Edouard Charles De Moor' },
     publisher: {
@@ -123,153 +46,49 @@ const personJsonLd = {
     },
   })),
 };
-
-// Grille 12 colonnes façon .ggrid, patron répété pour couvrir 12 photos
-const layout = [
-  's6 r2', 's3', 's3',
-  's3', 's3', 's6',
-  's4', 's4', 's4',
-  's6', 's3', 's3',
-];
 ---
 <Layout
-  title="Edouard Charles De Moor, Fondateur · CDM Motorsport"
-  description="La moto depuis l'âge de 5 ans, motocross, enduro (Husqvarna Trophy Belgique, Yamaha Belgique), puis le rallye-raid comme priorité. L'histoire du fondateur de CDM Motorsport."
-  ogImage={heroPhoto}
+  title={data.seoTitle}
+  description={data.seoDescription}
+  ogImage={data.heroPhoto}
+  lang={lang}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
-  <section class="phero" style={`background-image:url('${heroPhoto}')`}>
+  <section class="phero" style={`background-image:url('${data.heroPhoto}')`}>
     <div class="wrap c">
-      <div class="eyebrow" style="color:#e8c9a6">Le guide</div>
-      <h1>Edouard Charles<br /><em>De Moor</em></h1>
+      <div class="eyebrow" style="color:#e8c9a6">{data.heroEyebrow}</div>
+      <h1 set:html={data.heroTitle}></h1>
     </div>
   </section>
 
-  <section class="pad">
-    <div class="wrap article">
-      <div class="meta reveal">Portrait · Fondateur CDM Motorsport</div>
-      <div class="big reveal" style="margin-bottom:26px">
-        La moto, une <em>vie.</em>
+  {data.sections.map((s) => (
+    <section class="pad">
+      <div class="wrap article">
+        <div class="meta reveal">{s.meta}</div>
+        <div class="big reveal" style="margin-bottom:26px" set:html={s.bigTitle}></div>
+        <div class="reveal">
+          {s.paragraphs.map((p) => (
+            <p set:html={p}></p>
+          ))}
+        </div>
       </div>
-      <div class="reveal">
-        <p>J'ai 32 ans, et la moto fait partie de ma vie depuis l'âge de 5 ans.</p>
-        <p>
-          J'ai grandi sur deux roues et dans la compétition dès mon plus jeune âge,
-          avec de nombreuses années consacrées au motocross. À 19 ans, j'ai pris le
-          chemin de l'enduro, une discipline qui m'a permis de franchir une nouvelle
-          étape dans mon parcours sportif, notamment avec la chance d'intégrer le
-          Husqvarna Trophy en Championnat de Belgique, puis de poursuivre cette
-          aventure avec Yamaha Belgique.
-        </p>
-        <p>
-          Ces expériences m'ont progressivement amené vers une discipline qui est
-          aujourd'hui devenue ma seule et unique priorité dans la vie :
-          <em>le rallye-raid.</em>
-        </p>
-        <p>
-          En parallèle, je suis pilote d'essai pour les nouveaux modèles du média
-          belge <a href="https://onerace.be/" target="_blank" rel="noopener noreferrer">OneRace</a>.
-        </p>
-      </div>
-    </div>
-  </section>
+    </section>
+  ))}
 
-  <section class="pad" style="">
-    <div class="wrap article">
-      <div class="meta reveal">Le projet</div>
-      <div class="big reveal" style="margin-bottom:26px">
-        Pourquoi <em>CDM Motorsport ?</em>
-      </div>
-      <div class="reveal">
-        <p>
-          La création de CDM Motorsport est un projet mûrement réfléchi. L'objectif
-          était de créer ma propre activité tout en restant dans un environnement
-          qui correspond pleinement à ce que je souhaite continuer à faire : la
-          moto, le terrain, mais surtout la compétition.
-        </p>
-        <p>
-          Le rallye-raid représente pour moi le parfait équilibre entre ces
-          différents aspects. Il me permet de partager mon expérience avec mes
-          clients, de les accompagner dans leur découverte de cette discipline et
-          de leur faire vivre quelque chose de fort, tout en leur faisant découvrir
-          un pays que je connais particulièrement bien. Et il me permet de
-          continuer à consacrer une grande partie de mon temps à mon propre
-          entraînement et à mes objectifs sportifs.
-        </p>
-        <p>
-          Le Maroc est un terrain idéal, autant pour l'entraînement que pour la
-          course. La diversité de ses pistes et de ses paysages en fait un
-          véritable terrain de jeu pour découvrir le rallye-raid dans des
-          conditions exceptionnelles.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="pad">
-    <div class="wrap article">
-      <div class="meta reveal">L'état d'esprit</div>
-      <div class="big reveal" style="margin-bottom:26px">
-        L'esprit <em>CDM Motorsport.</em>
-      </div>
-      <div class="reveal">
-        <p>
-          À travers CDM Motorsport, mon objectif est avant tout de vous faire vivre
-          votre propre aventure : votre passion, le partage, et l'authenticité de
-          ce magnifique pays. Je serai heureux de vous accueillir au départ du raid
-          de votre choix, de vous accompagner tout au long de votre expérience, et
-          de vous transmettre une partie de ce que la compétition et mes années de
-          pratique m'ont appris.
-        </p>
-        <p>
-          L'idée n'est pas simplement de vous faire découvrir une destination à
-          moto, mais de vous transmettre un maximum de connaissances tout au long
-          de votre expérience. Comprendre le terrain, apprendre à évoluer sur les
-          pistes et vivre le rallye-raid de l'intérieur, chacun à son niveau, font
-          partie intégrante de l'aventure.
-        </p>
-        <p>
-          Mais le rallye-raid, c'est aussi le partage et la solidarité. Les moments
-          vécus ensemble, les échanges, les difficultés rencontrées sur le terrain
-          et la satisfaction de les surmonter contribuent pleinement à l'expérience.
-          L'objectif est de vous donner les clés pour progresser, prendre confiance
-          face aux difficultés, et surtout profiter de chaque instant dans un
-          environnement exceptionnel.
-        </p>
-        <p>
-          Et au-delà de la moto, il y a aussi les rencontres. Les personnes que
-          vous croiserez, celles avec qui vous roulerez et les liens qui se
-          créeront au fil des kilomètres font partie intégrante de ce que vous
-          retiendrez de votre raid. Parce qu'au final, ce ne sont pas uniquement
-          les kilomètres parcourus que l'on garde en mémoire, mais tout ce qui a
-          été vécu et partagé sur le chemin.
-        </p>
-        <p>
-          L'objectif de CDM Motorsport est avant tout de vous accompagner au mieux
-          tout au long de votre aventure, avec une priorité essentielle : vous voir
-          franchir la ligne d'arrivée en toute sécurité, mais surtout avec le
-          sourire. Au-delà des kilomètres parcourus et des difficultés rencontrées,
-          ma véritable satisfaction est de vous voir repartir heureux de votre
-          expérience, avec l'envie de revenir.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="pad press-section" style="">
+  <section class="pad press-section">
     <div class="wrap">
       <div class="reveal" style="margin-bottom:32px">
-        <div class="eyebrow" style="margin-bottom:16px">Presse &amp; médias</div>
-        <div class="big" style="font-size:clamp(24px,3vw,36px)">Ils en ont <em>parlé.</em></div>
+        <div class="eyebrow" style="margin-bottom:16px">{data.pressEyebrow}</div>
+        <div class="big" style="font-size:clamp(24px,3vw,36px)" set:html={data.pressTitle}></div>
       </div>
       <div class="press-list reveal">
-        {pressArticles.map((a) => (
+        {data.press.map((a) => (
           <a
             class="press-card"
             href={a.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${a.title}, ${a.source}, ${a.date} (nouvelle fenêtre)`}
+            aria-label={`${a.title}, ${a.source}, ${a.date} ${data.pressAriaNewTab}`}
           >
             <div class="press-cover">
               <img
@@ -290,7 +109,7 @@ const layout = [
               </div>
               <h3 class="press-title">« {a.title} »</h3>
               <span class="press-arrow" aria-hidden="true">
-                Lire l'article
+                {data.pressReadLabel}
                 <svg viewBox="0 0 16 16" width="14" height="14">
                   <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 3 L11 8 L6 13 M3.5 8 L11 8"/>
                 </svg>
@@ -299,19 +118,24 @@ const layout = [
           </a>
         ))}
       </div>
+      {data.pressFooterNote && (
+        <p style="margin-top:14px;color:#6b6255;font-size:13px;font-style:italic">
+          {data.pressFooterNote}
+        </p>
+      )}
     </div>
   </section>
 
   <section class="gal pad">
     <div class="wrap">
       <div class="reveal" style="margin-bottom:40px">
-        <div class="eyebrow" style="margin-bottom:16px">En images</div>
-        <div class="big">Sur les <em>pistes.</em></div>
+        <div class="eyebrow" style="margin-bottom:16px">{data.galleryEyebrow}</div>
+        <div class="big" set:html={data.galleryTitle}></div>
       </div>
       <div class="ggrid reveal">
-        {galleryPhotos.map((src, i) => (
-          <a class={layout[i] ?? 's4'} href={src} aria-label={`Photo ${i + 2} d'Edouard De Moor`}>
-            <img src={src} alt={`Edouard De Moor en action, photo ${i + 2}`} loading="lazy" />
+        {data.galleryPhotos.map((src, i) => (
+          <a class={layout[i] ?? 's4'} href={src} aria-label={data.galleryAriaPrefix.replace('{n}', String(i + 2))}>
+            <img src={src} alt={`${data.galleryAltPrefix} ${i + 2}`} loading="lazy" />
           </a>
         ))}
       </div>
@@ -422,13 +246,14 @@ const layout = [
   </style>
 
   <section class="cta pad">
-    <div class="bg" style={`background-image:url('${heroPhoto}')`}></div>
+    <div class="bg" style={`background-image:url('${data.heroPhoto}')`}></div>
     <div class="wrap reveal">
-      <div class="eyebrow" style="color:#e8c9a6;margin-bottom:16px">Prochaine étape</div>
-      <div class="big">Rouler avec <em>Edouard ?</em></div>
+      <div class="eyebrow" style="color:#e8c9a6;margin-bottom:16px">{data.ctaEyebrow}</div>
+      <div class="big" set:html={data.ctaTitle}></div>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px">
-        <a href="/#raids" class="btn">Voir les raids</a>
-        <a href="/reserver" class="btn">Réserver</a>
+        {data.ctaButtons.map((b) => (
+          <a href={b.href} class="btn">{b.label}</a>
+        ))}
       </div>
     </div>
   </section>

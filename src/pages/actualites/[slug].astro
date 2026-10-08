@@ -1,0 +1,76 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const lang = 'fr';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const {
+  title, description, hero, heroEyebrow, heroTitle,
+  meta, bigTitle, ctaIntro, ctaLabel, ctaHref,
+} = post.data;
+---
+<Layout title={title} description={description} ogImage={hero} lang={lang}>
+  <section class="phero short" style={`background-image:url('${hero}')`}>
+    <div class="wrap c">
+      <div class="eyebrow" style="color:#e8c9a6">{heroEyebrow}</div>
+      <h1 set:html={heroTitle}></h1>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap article">
+      <div class="meta reveal">{meta}</div>
+      <div class="big reveal" style="margin-bottom:24px" set:html={bigTitle}></div>
+      <div class="reveal blog-body">
+        <Content />
+
+        <p style="margin-top:28px">{ctaIntro}</p>
+        <a href={ctaHref} class="btn dark" style="margin-top:14px">{ctaLabel}</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .reco-video {
+    margin: 32px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .reco-video video {
+    width: 100%;
+    max-width: 360px;
+    max-height: 72vh;
+    aspect-ratio: 9 / 16;
+    background: #141008;
+    border-radius: 4px;
+    display: block;
+    object-fit: cover;
+  }
+  .reco-video figcaption {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: #7a7064;
+    text-align: center;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+  @media (max-width: 540px) {
+    .reco-video video {
+      max-width: 100%;
+      max-height: 80vh;
+    }
+  }
+</style>
