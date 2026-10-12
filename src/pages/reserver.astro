@@ -4,10 +4,8 @@ import { SITE } from '../config';
 import { getCollection } from 'astro:content';
 
 const raids = (await getCollection('raids')).sort((a, b) => a.data.n - b.data.n);
-const submitted = Astro.url.searchParams.get('ok') === '1';
 
 const formAction = `https://formspree.io/f/${SITE.formspreeId}`;
-const nextUrl = `${SITE.url}/reserver?ok=1`;
 
 const steps = [
   { n: '01', t: 'Demande',  d: 'Vous nous écrivez niveau & dates souhaitées.' },
@@ -45,14 +43,14 @@ const steps = [
 
       <div class="formwrap">
         <div class="reveal">
-          {submitted && (
-            <div class="note" style="border-left-color:var(--check);margin-bottom:20px;background:#f0f7f2;color:#3F7A57">
-              <b>Merci !</b> Votre demande a bien été envoyée. Nous vous répondrons sous 48h.
-            </div>
-          )}
-          <form action={formAction} method="POST">
-            <input type="hidden" name="_subject" value="Nouvelle demande de réservation, CDM Motorsport" />
-            <input type="hidden" name="_next" value={nextUrl} />
+          <div id="form-success" class="note form-success" hidden>
+            <b>Merci !</b> Votre demande d'information a bien été envoyée. Nous revenons vers vous très vite.
+          </div>
+          <div id="form-error" class="note form-error" hidden>
+            Une erreur est survenue, réessayez ou écrivez-nous directement à <a href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a>.
+          </div>
+          <form id="booking-form" action={formAction} method="POST">
+            <input type="hidden" name="_subject" value="Nouvelle demande – CDM Motorsport" />
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-5000px" aria-hidden="true" />
 
             <div class="row2">
@@ -123,4 +121,72 @@ const steps = [
       </div>
     </div>
   </section>
+
+  <style>
+    .form-success {
+      border-left-color: var(--check);
+      background: #f0f7f2;
+      color: #3F7A57;
+      font-size: 15px;
+      padding: 20px 24px;
+    }
+    .form-success b { color: var(--check); }
+    .form-error {
+      border-left-color: #b94a3b;
+      background: #fbf1ef;
+      color: #8a3324;
+      font-size: 15px;
+      padding: 20px 24px;
+    }
+    .form-error a { color: inherit; text-decoration: underline; }
+    #booking-form[aria-busy="true"] button[type="submit"] {
+      opacity: .6;
+      cursor: progress;
+    }
+  </style>
+
+  <script is:inline>
+    (function () {
+      const form = document.getElementById('booking-form');
+      if (!form) return;
+      const success = document.getElementById('form-success');
+      const error = document.getElementById('form-error');
+
+      form.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        if (success) success.hidden = true;
+        if (error) error.hidden = true;
+        form.setAttribute('aria-busy', 'true');
+
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { Accept: 'application/json' },
+          });
+
+          if (res.ok) {
+            form.reset();
+            form.hidden = true;
+            if (success) {
+              success.hidden = false;
+              success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          } else {
+            if (error) {
+              error.hidden = false;
+              error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+        } catch (_e) {
+          if (error) {
+            error.hidden = false;
+            error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } finally {
+          form.removeAttribute('aria-busy');
+        }
+      });
+    })();
+  </script>
 </Layout>
