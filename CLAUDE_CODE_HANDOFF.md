@@ -92,7 +92,7 @@ Intégrées dans `CGV_...html` à partir de la base fournie (Ténéré Spirit), 
 
 ## 6. Fonctionnalités à développer
 
-- [ ] **Formulaire de contact / réservation** fonctionnel (Netlify Forms) → email vers CDMotorsports.
+- [x] **Formulaire de contact / réservation** — Formspree (form ID `xdeadjao`, configuré via `SITE.formspreeId` dans `src/config.ts`). Soumission AJAX (`fetch` + `Accept: application/json`) depuis `/reserver` et `/en/reserver` : au succès le formulaire est masqué et une bannière de confirmation s'affiche ; en cas d'erreur, bannière invitant à écrire à `info@cdmmotorsport.com`. Hidden `_subject` : « Nouvelle demande – CDM Motorsport ». Notifications envoyées à `info@cdmmotorsport.com` (dashboard : https://formspree.io).
 - [ ] **Multilingue FR/EN** (contenu + `hreflang` + sélecteur).
 - [ ] **SEO** : `<title>`/meta uniques par page, Open Graph, **JSON-LD** (`LocalBusiness`, `TouristTrip` par raid, `FAQPage`, `Review`), `sitemap.xml`, `robots.txt`, alt d'images.
 - [ ] **Analytics** : GA4 + Search Console + fiche Google Business.
